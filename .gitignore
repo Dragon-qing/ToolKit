@@ -1,11 +1,9 @@
 .git
 .qtc_clangd
 moc/*
-!moc/.gitkeep
 obj/*
-!obj/.gitkeep
 ui/*
-!ui/.gitkeep
 build/*
 !build/*.pro
 !build/*.pro.user
+bin/*temptmpquvilk
