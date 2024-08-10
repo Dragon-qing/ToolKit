@@ -48,6 +48,5 @@ void MainWindow::InerstWidget(QWidget *widget, QAction *action, Bit32 widgetType
     }
 
     m_widgetContainer.append(widget);
-    Connect(action, SIGNAL(QAction::triggered, this, SLOT())
 }
 

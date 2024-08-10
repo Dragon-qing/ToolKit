@@ -13,23 +13,28 @@ UI_DIR = ../ui
 DESTDIR = ../bin
 
 INCLUDEPATH += \
-    ../src \
+    ../src ../src/widget\
 
 SOURCES += \
     ../src/common.cpp \
+    ../src/logdt.cpp \
     ../src/main.cpp \
     ../src/mainwindow.cpp \
-    ../src/wggeneratebugfolder.cpp \
+    ../src/widget/wggeneratebugfolder.cpp \
+    ../src/widget/wgtyproaimgcleaner.cpp
 
 HEADERS += \
     ../src/common.h \
     ../src/datadef.h \
+    ../src/logdt.h \
     ../src/mainwindow.h \
-    ../src/wggeneratebugfolder.h \
+    ../src/widget/wggeneratebugfolder.h \
+    ../src/widget/wgtyproaimgcleaner.h
 
 FORMS += \
     ../src/mainwindow.ui \
-    ../src/wggeneratebugfolder.ui \
+    ../src/widget/wggeneratebugfolder.ui \
+    ../src/widget/wgtyproaimgcleaner.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

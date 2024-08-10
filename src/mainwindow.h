@@ -25,7 +25,6 @@ public:
     void SetCurrentWidget(Bit32 idx);
 
 public slots:
-    void Set
 
 private:
     Ui::MainWindow *ui;
