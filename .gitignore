@@ -8,5 +8,4 @@ ui/*
 ui
 build/*
 !build/*.pro
-!build/*.pro.user
 bin/*temptmpquvilk
