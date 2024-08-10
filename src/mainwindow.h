@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "wggeneratebugfolder.h"
+#include "datadef.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -14,11 +14,24 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    enum{
+        GENERATE_BUG_FOLDER = 0,
+        TYPROA_IMG_CLEANER,
+
+        WIDGET_NUM
+    };
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void SetCurrentWidget(Bit32 idx);
+
+public slots:
+    void Set
 
 private:
     Ui::MainWindow *ui;
-    WgGenerateBugFolder *m_pBugFolder;
+    QList<QWidget*> m_widgetContainer;
+    Bit32 m_nCurrentWidgetIdx;
+
+    void InerstWidget(QWidget *widget, QAction *action, Bit32 widgetType);
 };
 #endif // MAINWINDOW_H

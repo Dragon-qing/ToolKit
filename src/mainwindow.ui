@@ -59,20 +59,22 @@
      <x>0</x>
      <y>0</y>
      <width>411</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
      <string>功能切换</string>
     </property>
-    <addaction name="action"/>
+    <addaction name="action_1"/>
     <addaction name="action_2"/>
+    <addaction name="separator"/>
+    <addaction name="action_4"/>
    </widget>
    <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="action">
+  <action name="action_1">
    <property name="text">
     <string>源码提取</string>
    </property>
@@ -80,6 +82,11 @@
   <action name="action_2">
    <property name="text">
     <string>升级包制作</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>Typroa图片整理</string>
    </property>
   </action>
  </widget>
