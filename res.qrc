@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>img/file.png</file>
         <file>img/folder.png</file>
+        <file>img/toolbox.ico</file>
     </qresource>
 </RCC>

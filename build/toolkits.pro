@@ -16,6 +16,7 @@ msvc {
     QMAKE_CFLAGS += /utf-8
     QMAKE_CXXFLAGS += /utf-8
 }
+RC_ICONS = ../img/toolbox.ico
 INCLUDEPATH += \
     ../src ../src/widget\
 LIBS += -luser32
