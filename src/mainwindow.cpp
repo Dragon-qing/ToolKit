@@ -1,4 +1,4 @@
-#include <QSize>
+﻿#include <QSize>
 
 #include "common.h"
 

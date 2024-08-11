@@ -1,4 +1,4 @@
-#ifndef WGGENERATEBUGFOLDER_H
+﻿#ifndef WGGENERATEBUGFOLDER_H
 #define WGGENERATEBUGFOLDER_H
 
 #include <QWidget>

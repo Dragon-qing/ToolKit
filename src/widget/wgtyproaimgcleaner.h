@@ -1,4 +1,4 @@
-#ifndef WGTYPROAIMGCLEANER_H
+﻿#ifndef WGTYPROAIMGCLEANER_H
 #define WGTYPROAIMGCLEANER_H
 
 #include <QWidget>

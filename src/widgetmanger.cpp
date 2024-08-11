@@ -1,4 +1,4 @@
-#include "common.h"
+﻿#include "common.h"
 #include "wggeneratebugfolder.h"
 #include "wgtyproaimgcleaner.h"
 #include "wgbtfmake.h"

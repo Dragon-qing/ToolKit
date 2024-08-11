@@ -1,4 +1,4 @@
-#ifndef WIDGETMANGER_H
+﻿#ifndef WIDGETMANGER_H
 #define WIDGETMANGER_H
 
 #include <QWidget>

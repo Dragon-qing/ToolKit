@@ -1,4 +1,4 @@
-#ifndef WGBTFMAKE_H
+﻿#ifndef WGBTFMAKE_H
 #define WGBTFMAKE_H
 
 #include <QWidget>

@@ -1,4 +1,4 @@
-#include "logdt.h"
+﻿#include "logdt.h"
 
 LogDt &LogDt::Instance()
 {

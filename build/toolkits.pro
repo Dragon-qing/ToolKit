@@ -12,6 +12,10 @@ MOC_DIR = ../moc
 UI_DIR = ../ui
 DESTDIR = ../bin
 
+msvc {
+    QMAKE_CFLAGS += /utf-8
+    QMAKE_CXXFLAGS += /utf-8
+}
 INCLUDEPATH += \
     ../src ../src/widget\
 LIBS += -luser32

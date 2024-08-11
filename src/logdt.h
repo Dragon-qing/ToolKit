@@ -1,4 +1,4 @@
-#ifndef LOGDT_H
+﻿#ifndef LOGDT_H
 #define LOGDT_H
 #include <QMap>
 

@@ -1,4 +1,4 @@
-#include <QDragEnterEvent>
+﻿#include <QDragEnterEvent>
 #include <QMimeData>
 #include <QDebug>
 #include <QFileInfo>
@@ -119,7 +119,7 @@ void WgBTFMake::dropEvent(QDropEvent *event)
 
 void WgBTFMake::on_selectDirBtn_clicked()
 {
-    QString path = QFileDialog::getExistingDirectory(this, "Select Folder");
+    QString path = QFileDialog::getExistingDirectory(this, "Select Folder", QCoreApplication::applicationDirPath());
     ui->lineEdit->setText(path);
 }
 
@@ -137,6 +137,7 @@ void WgBTFMake::on_startBtn_clicked()
         if (nameStr.trimmed() == "")
         {
             QMessageBox::warning(this, TR("注意"), TR("文件名为空"), QMessageBox::NoButton);
+            return;
         }
         QString dirPath = ui->lineEdit->text();
         if (dirPath.trimmed() != "")
@@ -180,7 +181,7 @@ void WgBTFMake::on_startBtn_clicked()
     }
     else
     {
-        QMessageBox::information(this, TR("提示"), TR("文件列表为空"), QMessageBox::NoButton);
+        QMessageBox::information(this, TR("提示"), TR("文件列表为空"), QMessageBox::NoButton, QMessageBox::NoButton);
     }
 
 }

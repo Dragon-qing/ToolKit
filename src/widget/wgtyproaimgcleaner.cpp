@@ -1,4 +1,4 @@
-#include "wgtyproaimgcleaner.h"
+﻿#include "wgtyproaimgcleaner.h"
 #include "ui_wgtyproaimgcleaner.h"
 
 WgTyproaImgCleaner::WgTyproaImgCleaner(QWidget *parent) :
