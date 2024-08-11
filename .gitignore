@@ -9,3 +9,4 @@ ui
 build/*
 !build/*.pro
 bin/*temptmpquvilk
+bin/*.BTF

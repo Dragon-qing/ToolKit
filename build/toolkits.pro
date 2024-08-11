@@ -14,29 +14,38 @@ DESTDIR = ../bin
 
 INCLUDEPATH += \
     ../src ../src/widget\
-
+LIBS += -luser32
 SOURCES += \
     ../src/common.cpp \
     ../src/logdt.cpp \
     ../src/main.cpp \
     ../src/mainwindow.cpp \
+    ../src/widget/wgbtfmake.cpp \
     ../src/widget/wggeneratebugfolder.cpp \
-    ../src/widget/wgtyproaimgcleaner.cpp
+    ../src/widget/wgtyproaimgcleaner.cpp \
+    ../src/widgetmanger.cpp
 
 HEADERS += \
     ../src/common.h \
     ../src/datadef.h \
     ../src/logdt.h \
     ../src/mainwindow.h \
+    ../src/widget/wgbtfmake.h \
     ../src/widget/wggeneratebugfolder.h \
-    ../src/widget/wgtyproaimgcleaner.h
+    ../src/widget/wgtyproaimgcleaner.h \
+    ../src/widgetmanger.h
 
 FORMS += \
     ../src/mainwindow.ui \
+    ../src/widget/wgbtfmake.ui \
     ../src/widget/wggeneratebugfolder.ui \
-    ../src/widget/wgtyproaimgcleaner.ui
+    ../src/widget/wgtyproaimgcleaner.ui \
+    ../src/widgetmanger.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    ../res.qrc
