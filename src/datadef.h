@@ -1,4 +1,4 @@
-#ifndef DATADEF_H
+﻿#ifndef DATADEF_H
 #define DATADEF_H
 typedef int Bit32;
 typedef long long Bit64;

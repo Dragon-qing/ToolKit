@@ -1,9 +1,9 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
 
-#include "wggeneratebugfolder.h"
+#include "widgetmanger.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -19,6 +19,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    WgGenerateBugFolder *m_pBugFolder;
+    WidgetManger *m_pWidgetManger;
 };
 #endif // MAINWINDOW_H
