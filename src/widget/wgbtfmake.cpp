@@ -163,8 +163,16 @@ void WgBTFMake::on_startBtn_clicked()
         QProcess runLogProcess;
         runLogProcess.start("cmd");
         runLogProcess.waitForStarted(-1);
-        QString _7zPath = QString("%1/7z.exe").arg(QCoreApplication::applicationDirPath());
-        QString cmdStr = QString("%1 a -ttar %2 %3\n").arg(_7zPath).arg(nameStr).arg(m_pathList.join(" "));
+        QString _7zPath = QString("\"%1/7z.exe\"").arg(QCoreApplication::applicationDirPath());
+        QString _md5ProgPath = QString("\"%1/md5ForBTF.exe\"").arg(QCoreApplication::applicationDirPath());
+        QStringList fileStrList;
+        fileStrList.clear();
+        foreach (QString file, m_pathList)
+        {
+            fileStrList.append(QString("\"%1\"").arg(file));
+        }
+        nameStr = "\"" + nameStr + "\"";
+        QString cmdStr = QString("%1 a -ttar %2 %3\n").arg(_7zPath).arg(nameStr).arg(fileStrList.join(" "));
         runLogProcess.write(cmdStr.toLocal8Bit().data());
         runLogProcess.write("exit\n");
         runLogProcess.waitForFinished(-1);
@@ -172,6 +180,12 @@ void WgBTFMake::on_startBtn_clicked()
         if (res.contains("Everything is Ok"))
         {
             SetTip(TR("已打包完成"), true);
+            runLogProcess.start("cmd");
+            runLogProcess.waitForStarted(-1);
+            cmdStr = QString("%1 %2\n").arg(_md5ProgPath, nameStr);
+            runLogProcess.write(cmdStr.toLocal8Bit().data());
+            runLogProcess.write("exit\n");
+            runLogProcess.waitForFinished(-1);
         }
         else
         {
