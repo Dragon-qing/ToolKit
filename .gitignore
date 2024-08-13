@@ -9,6 +9,4 @@ ui
 build/*
 !build/*.pro
 bin/*
-!bin/7z.dll
-!bin/7z.exe
-!bin/md5ForBTF.exe
+!bin/tools

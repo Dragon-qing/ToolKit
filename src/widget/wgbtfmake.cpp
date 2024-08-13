@@ -166,8 +166,8 @@ void WgBTFMake::on_startBtn_clicked()
         QProcess runLogProcess;
         runLogProcess.start("cmd");
         runLogProcess.waitForStarted(-1);
-        QString _7zPath = QString("\"%1/7z.exe\"").arg(QCoreApplication::applicationDirPath());
-        QString _md5ProgPath = QString("\"%1/md5ForBTF.exe\"").arg(QCoreApplication::applicationDirPath());
+        QString _7zPath = QString("\"%1/7z.exe\"").arg(TOOLS_PATH);
+        QString _md5ProgPath = QString("\"%1/md5ForBTF.exe\"").arg(TOOLS_PATH);
         QStringList fileStrList;
         fileStrList.clear();
         foreach (QString file, m_pathList)
