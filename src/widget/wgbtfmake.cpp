@@ -7,6 +7,7 @@
 #include <QProcess>
 
 #include "common.h"
+#include "hmiconfig.h"
 
 #include "wgbtfmake.h"
 #include "ui_wgbtfmake.h"
@@ -22,6 +23,7 @@ WgBTFMake::WgBTFMake(QWidget *parent) :
     m_nameList.clear();
     m_pathList.clear();
     m_timer = new QTimer(this);
+    ui->lineEdit->setText(HMIConfig::Instance().GetConfig("path", "btf_savepath"));
 
     connect(m_timer, SIGNAL(timeout()), this, SLOT(TimeoutHandler()));
     setAcceptDrops(true);
@@ -121,6 +123,7 @@ void WgBTFMake::on_selectDirBtn_clicked()
 {
     QString path = QFileDialog::getExistingDirectory(this, "Select Folder", QCoreApplication::applicationDirPath());
     ui->lineEdit->setText(path);
+    HMIConfig::Instance().SetConfig("path", "btf_savepath", path);
 }
 
 void WgBTFMake::on_clsBtn_clicked()
