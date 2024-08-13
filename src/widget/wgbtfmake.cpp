@@ -189,10 +189,12 @@ void WgBTFMake::on_startBtn_clicked()
             runLogProcess.write(cmdStr.toLocal8Bit().data());
             runLogProcess.write("exit\n");
             runLogProcess.waitForFinished(-1);
+            LogDt::Instance().AddLog(INFO_LOG, TR("%1已完成BTF打包").arg(nameStr));
         }
         else
         {
             QMessageBox::critical(this, TR("错误"), TR("已打包失败!!"), QMessageBox::NoButton);
+            LogDt::Instance().AddLog(CRITICAL_LOG, res);
         }
         runLogProcess.close();
     }
