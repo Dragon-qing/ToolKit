@@ -22,6 +22,7 @@ INCLUDEPATH += \
 LIBS += -luser32
 SOURCES += \
     ../src/common.cpp \
+    ../src/hmiconfig.cpp \
     ../src/logdt.cpp \
     ../src/main.cpp \
     ../src/mainwindow.cpp \
@@ -33,6 +34,7 @@ SOURCES += \
 HEADERS += \
     ../src/common.h \
     ../src/datadef.h \
+    ../src/hmiconfig.h \
     ../src/logdt.h \
     ../src/mainwindow.h \
     ../src/widget/wgbtfmake.h \

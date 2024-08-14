@@ -1,4 +1,5 @@
-﻿#include "logdt.h"
+﻿#include <QDebug>
+#include "logdt.h"
 
 LogDt &LogDt::Instance()
 {
@@ -13,16 +14,34 @@ LogDt::~LogDt()
 
 LogDt::LogDt()
 {
-    m_logStrList.clear();
 }
 
-Bit32 LogDt::InsertLog(Bit32 type, QString logStr)
+Bit32 LogDt::AddLog(Bit32 type, QString logStr)
 {
-    if (type <= INVALID_LOG_TYPE || type >= TYPE_NUM)
+    if (type <= DEBUG_LOG || type >= TYPE_NUM)
     {
         return -1;
     }
-    m_logStrList.insert(type, logStr);
+    switch (type)
+    {
+    case DEBUG_LOG:
+        qDebug() << logStr;
+        break;
+    case INFO_LOG:
+        qInfo() << logStr;
+        break;
+    case WARNING_LOG:
+        qWarning() << logStr;
+        break;
+    case CRITICAL_LOG:
+        qCritical() << logStr;
+        break;
+    case FATAL_LOG:
+        qFatal(logStr.toLatin1().data());
+        break;
+    default:
+        break;
+    }
 
     return 0;
 }

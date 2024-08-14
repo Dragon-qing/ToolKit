@@ -8,4 +8,5 @@ ui/*
 ui
 build/*
 !build/*.pro
-bin
+bin/*
+!bin/tools

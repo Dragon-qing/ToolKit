@@ -7,6 +7,7 @@
 #include <QProcess>
 
 #include "common.h"
+#include "hmiconfig.h"
 
 #include "wgbtfmake.h"
 #include "ui_wgbtfmake.h"
@@ -22,6 +23,7 @@ WgBTFMake::WgBTFMake(QWidget *parent) :
     m_nameList.clear();
     m_pathList.clear();
     m_timer = new QTimer(this);
+    ui->lineEdit->setText(HMIConfig::Instance().GetConfig("path", "btf_savepath"));
 
     connect(m_timer, SIGNAL(timeout()), this, SLOT(TimeoutHandler()));
     setAcceptDrops(true);
@@ -121,6 +123,7 @@ void WgBTFMake::on_selectDirBtn_clicked()
 {
     QString path = QFileDialog::getExistingDirectory(this, "Select Folder", QCoreApplication::applicationDirPath());
     ui->lineEdit->setText(path);
+    HMIConfig::Instance().SetConfig("path", "btf_savepath", path);
 }
 
 void WgBTFMake::on_clsBtn_clicked()
@@ -163,8 +166,16 @@ void WgBTFMake::on_startBtn_clicked()
         QProcess runLogProcess;
         runLogProcess.start("cmd");
         runLogProcess.waitForStarted(-1);
-        QString _7zPath = QString("%1/7z.exe").arg(QCoreApplication::applicationDirPath());
-        QString cmdStr = QString("%1 a -ttar %2 %3\n").arg(_7zPath).arg(nameStr).arg(m_pathList.join(" "));
+        QString _7zPath = QString("\"%1/7z.exe\"").arg(TOOLS_PATH);
+        QString _md5ProgPath = QString("\"%1/md5ForBTF.exe\"").arg(TOOLS_PATH);
+        QStringList fileStrList;
+        fileStrList.clear();
+        foreach (QString file, m_pathList)
+        {
+            fileStrList.append(QString("\"%1\"").arg(file));
+        }
+        nameStr = "\"" + nameStr + "\"";
+        QString cmdStr = QString("%1 a -ttar %2 %3\n").arg(_7zPath).arg(nameStr).arg(fileStrList.join(" "));
         runLogProcess.write(cmdStr.toLocal8Bit().data());
         runLogProcess.write("exit\n");
         runLogProcess.waitForFinished(-1);
@@ -172,10 +183,18 @@ void WgBTFMake::on_startBtn_clicked()
         if (res.contains("Everything is Ok"))
         {
             SetTip(TR("已打包完成"), true);
+            runLogProcess.start("cmd");
+            runLogProcess.waitForStarted(-1);
+            cmdStr = QString("%1 %2\n").arg(_md5ProgPath, nameStr);
+            runLogProcess.write(cmdStr.toLocal8Bit().data());
+            runLogProcess.write("exit\n");
+            runLogProcess.waitForFinished(-1);
+            LogDt::Instance().AddLog(INFO_LOG, TR("%1已完成BTF打包").arg(nameStr));
         }
         else
         {
             QMessageBox::critical(this, TR("错误"), TR("已打包失败!!"), QMessageBox::NoButton);
+            LogDt::Instance().AddLog(CRITICAL_LOG, res);
         }
         runLogProcess.close();
     }

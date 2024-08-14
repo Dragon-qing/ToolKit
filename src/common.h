@@ -9,6 +9,8 @@
 #define UTF8 QTextCodec::codecForName("UTF-8")
 #define TR(str) tr((UTF8->fromUnicode(str).data()))
 
+#define TOOLS_PATH "./tools"
+
 const Bit32 WINDOW_WIDTH =  800;
 const Bit32 WINDOW_HEIGHT = 600;
 
