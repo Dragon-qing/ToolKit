@@ -59,26 +59,11 @@
      <x>0</x>
      <y>0</y>
      <width>411</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="action_1">
-   <property name="text">
-    <string>源码提取</string>
-   </property>
-  </action>
-  <action name="action_2">
-   <property name="text">
-    <string>升级包制作</string>
-   </property>
-  </action>
-  <action name="action_4">
-   <property name="text">
-    <string>Typroa图片整理</string>
-   </property>
-  </action>
  </widget>
  <resources/>
  <connections/>
