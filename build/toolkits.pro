@@ -28,6 +28,7 @@ SOURCES += \
     ../src/mainwindow.cpp \
     ../src/widget/wgbtfmake.cpp \
     ../src/widget/wggeneratebugfolder.cpp \
+    ../src/widget/wgtestpython.cpp \
     ../src/widget/wgtyproaimgcleaner.cpp \
     ../src/widgetmanger.cpp
 
@@ -39,6 +40,7 @@ HEADERS += \
     ../src/mainwindow.h \
     ../src/widget/wgbtfmake.h \
     ../src/widget/wggeneratebugfolder.h \
+    ../src/widget/wgtestpython.h \
     ../src/widget/wgtyproaimgcleaner.h \
     ../src/widgetmanger.h
 
@@ -46,6 +48,7 @@ FORMS += \
     ../src/mainwindow.ui \
     ../src/widget/wgbtfmake.ui \
     ../src/widget/wggeneratebugfolder.ui \
+    ../src/widget/wgtestpython.ui \
     ../src/widget/wgtyproaimgcleaner.ui \
     ../src/widgetmanger.ui
 
@@ -56,3 +59,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     ../res.qrc
+
+# python environment config
+
+win32: LIBS += -L$$PWD/'../../../Program Files/python312/libs/' -lpython312
+
+INCLUDEPATH += $$PWD/'../../../Program Files/python312/include'
+DEPENDPATH += $$PWD/'../../../Program Files/python312/include'
+
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/'../../../Program Files/python312/libs/python312.lib'

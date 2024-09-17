@@ -52,7 +52,7 @@ void OutputMessage(QtMsgType type, const QMessageLogContext &context, const QStr
 
 int main(int argc, char *argv[])
 {
-    qInstallMessageHandler(OutputMessage);
+    // qInstallMessageHandler(OutputMessage);
 
     QApplication a(argc, argv);
     MainWindow w;

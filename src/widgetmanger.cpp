@@ -2,6 +2,7 @@
 #include "wggeneratebugfolder.h"
 #include "wgtyproaimgcleaner.h"
 #include "wgbtfmake.h"
+#include "wgtestpython.h"
 
 #include "widgetmanger.h"
 #include "ui_widgetmanger.h"
@@ -33,6 +34,7 @@ void WidgetManger::InitWidgetContainer()
     AddWidget(new WgBTFMake(this), TR("BTF包制作"));
     AddWidget(new WgGenerateBugFolder(this), TR("代码文件查找"));
     AddWidget(new WgTyproaImgCleaner(this), TR("Typroa图片清理"));
+    AddWidget(new WgTestPython(this), TR("测试python"));
 }
 
 void WidgetManger::AddWidget(QWidget *widget, const QString &name)

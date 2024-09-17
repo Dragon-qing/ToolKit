@@ -10,3 +10,4 @@ build/*
 !build/*.pro
 bin/*
 !bin/tools
+!bin/*.dll
