@@ -28,7 +28,6 @@ SOURCES += \
     ../src/mainwindow.cpp \
     ../src/widget/wgbtfmake.cpp \
     ../src/widget/wggeneratebugfolder.cpp \
-    ../src/widget/wgtestpython.cpp \
     ../src/widget/wgtyproaimgcleaner.cpp \
     ../src/widgetmanger.cpp
 
@@ -40,7 +39,6 @@ HEADERS += \
     ../src/mainwindow.h \
     ../src/widget/wgbtfmake.h \
     ../src/widget/wggeneratebugfolder.h \
-    ../src/widget/wgtestpython.h \
     ../src/widget/wgtyproaimgcleaner.h \
     ../src/widgetmanger.h
 
@@ -48,7 +46,6 @@ FORMS += \
     ../src/mainwindow.ui \
     ../src/widget/wgbtfmake.ui \
     ../src/widget/wggeneratebugfolder.ui \
-    ../src/widget/wgtestpython.ui \
     ../src/widget/wgtyproaimgcleaner.ui \
     ../src/widgetmanger.ui
 
