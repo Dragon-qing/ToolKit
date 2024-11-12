@@ -7,7 +7,10 @@
 
 #include "datadef.h"
 
-#define BTF_INFO_CLR_MAX_TIME (2000)
+#include "dlgbtfmakeinfo.h"
+
+#define BTF_INFO_CLR_MAX_TIME (3000)
+#define MAX_DISITEM_NUM (6)
 
 namespace Ui {
 class WgBTFMake;
@@ -34,16 +37,20 @@ protected:
 
 private:
     Ui::WgBTFMake *ui;
-    QString GetImage(const QString &path);
     QList<QLabel*> m_labelList;
     QStringList m_nameList;
     QStringList m_pathList;
-    QTimer *m_timer;
+    QTimer *m_pTimer;
+    DlgBTFMakeInfo *m_pDlgInfo;
+    QLabel *m_pMoreLabel;
+    bool m_bHasMoreLabel;
 
+    QLabel *CreateImgLabel(const QString &path);
     void ClearList();
     void RemoveItem(QLabel *label);
-    void RefreshWidget();
+    void Refresh();
     void SetTip(const QString &tipStr, bool isAutoClear = false, Bit32 mes = BTF_INFO_CLR_MAX_TIME);
+    bool ContainsWidget(QLabel *label);
 
 private slots:
     void TimeoutHandler();

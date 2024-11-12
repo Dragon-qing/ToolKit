@@ -3,5 +3,6 @@
         <file>img/file.png</file>
         <file>img/folder.png</file>
         <file>img/toolbox.ico</file>
+        <file>img/more.png</file>
     </qresource>
 </RCC>

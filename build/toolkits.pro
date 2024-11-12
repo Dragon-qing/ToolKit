@@ -26,6 +26,7 @@ SOURCES += \
     ../src/logdt.cpp \
     ../src/main.cpp \
     ../src/mainwindow.cpp \
+    ../src/widget/dlgbtfmakeinfo.cpp \
     ../src/widget/wgbtfmake.cpp \
     ../src/widget/wggeneratebugfolder.cpp \
     ../src/widget/wgtyproaimgcleaner.cpp \
@@ -37,6 +38,7 @@ HEADERS += \
     ../src/hmiconfig.h \
     ../src/logdt.h \
     ../src/mainwindow.h \
+    ../src/widget/dlgbtfmakeinfo.h \
     ../src/widget/wgbtfmake.h \
     ../src/widget/wggeneratebugfolder.h \
     ../src/widget/wgtyproaimgcleaner.h \
@@ -44,6 +46,7 @@ HEADERS += \
 
 FORMS += \
     ../src/mainwindow.ui \
+    ../src/widget/dlgbtfmakeinfo.ui \
     ../src/widget/wgbtfmake.ui \
     ../src/widget/wggeneratebugfolder.ui \
     ../src/widget/wgtyproaimgcleaner.ui \

@@ -13,29 +13,8 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="8,1,1,0">
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>保存路径：</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="QPushButton" name="clsBtn">
-     <property name="text">
-      <string>清空文件</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>文件名称:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="5">
+  <layout class="QGridLayout" name="gridLayout" rowstretch="0,8,1,0,0">
+   <item row="1" column="0" colspan="5">
     <widget class="QWidget" name="widget" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -59,27 +38,48 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QLineEdit" name="lineEdit"/>
-   </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="lineEdit_2"/>
-   </item>
-   <item row="2" column="2">
-    <widget class="QPushButton" name="startBtn">
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>开始打包</string>
+      <string>文件名称:</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="lineEdit"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>保存路径：</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
     <widget class="QPushButton" name="selectDirBtn">
      <property name="text">
       <string>选择</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="4">
+   <item row="3" column="2">
+    <widget class="QPushButton" name="startBtn">
+     <property name="text">
+      <string>开始打包</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="QPushButton" name="clsBtn">
+     <property name="text">
+      <string>清空文件</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="lineEdit_2"/>
+   </item>
+   <item row="4" column="0" colspan="4">
     <widget class="QLabel" name="label_tip">
      <property name="palette">
       <palette>
@@ -110,6 +110,16 @@
      </property>
      <property name="text">
       <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="4">
+    <widget class="QLabel" name="label_top">
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>

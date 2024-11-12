@@ -18,15 +18,19 @@ WgBTFMake::WgBTFMake(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->label_tip->setText("");
+    ui->label_top->setText("");
 
     m_labelList.clear();
     m_nameList.clear();
     m_pathList.clear();
-    m_timer = new QTimer(this);
+    m_pTimer = new QTimer(this);
     ui->lineEdit->setText(HMIConfig::Instance().GetConfig("btf_cfg", "btf_savepath"));
     ui->lineEdit_2->setText(HMIConfig::Instance().GetConfig("btf_cfg", "btf_savefilename"));
+    m_pDlgInfo = new DlgBTFMakeInfo(this);
+    m_bHasMoreLabel = false;
+    m_pMoreLabel = NULL;
 
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(TimeoutHandler()));
+    connect(m_pTimer, SIGNAL(timeout()), this, SLOT(TimeoutHandler()));
     setAcceptDrops(true);
 }
 
@@ -46,9 +50,25 @@ bool WgBTFMake::eventFilter(QObject *obj, QEvent *event)
             if (mouseEvent->button() == Qt::LeftButton)
             {
                 RemoveItem(label);
+                Refresh();
                 if (m_labelList.isEmpty())
                 {
                     ui->label->setVisible(true);
+                }
+                return true;
+            }
+        }
+    }
+    else if (event->type() == QEvent::MouseButtonPress)
+    {
+        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event);
+        if (label != NULL && mouseEvent != NULL)
+        {
+            if (mouseEvent->button() == Qt::LeftButton)
+            {
+                if (label->property("isMore").toBool())
+                {
+                    m_pDlgInfo->exec();
                 }
                 return true;
             }
@@ -88,19 +108,19 @@ void WgBTFMake::dropEvent(QDropEvent *event)
     {
         QString path = url.toLocalFile();
         QString name = QFileInfo(path).fileName();
-        QString imagePath = GetImage(path);
-        if (imagePath != "" && !m_nameList.contains(name))
+        if (!m_nameList.contains(name))
         {
-            QLabel *label = new QLabel(this);
-            QString html = QString("<html><body><p>%1</p><br><img src='%2'></body></html>")
-                           .arg(name, imagePath);
-            label->setAlignment(Qt::AlignCenter);
-            label->setText(html);
+            QLabel *label = NULL;
+            label = CreateImgLabel(path);
+            if (label == NULL)
+            {
+                continue;
+            }
             m_labelList.append(label);
             m_nameList.append(name);
             m_pathList.append(path);
         }
-        else if (m_nameList.contains(name))
+        else
         {
             errNameList << name;
         }
@@ -117,7 +137,50 @@ void WgBTFMake::dropEvent(QDropEvent *event)
     {
         ui->label->setVisible(false);
     }
-    RefreshWidget();
+    Refresh();
+}
+
+/**
+ * @brief WgBTFMake::CreateImgLabel 创建图片组件
+ * @param [in] path 文件或文件夹路径
+ * @return 图像label指针
+ */
+QLabel *WgBTFMake::CreateImgLabel(const QString &path)
+{
+    if (path.isEmpty())
+    {
+        return NULL;
+    }
+    QString imagePath = "";
+    QString fileName = "";
+    bool isMore = false;
+    if (path == "more")
+    {
+        imagePath = QString(":/img/more.png");
+        fileName = TR("其他");
+        isMore = true;
+    }
+    else
+    {
+        QFileInfo file(path);
+        if (file.isDir())
+        {
+            imagePath = QString(":/img/folder.png");
+        }
+        else if (file.isFile())
+        {
+            imagePath = QString(":/img/file.png");
+        }
+        fileName = file.fileName();
+    }
+    QLabel *label = new QLabel(this);
+    QString html = QString("<html><body><p>%1</p><br><img src='%2'></body></html>")
+                       .arg(fileName, imagePath);
+    label->setAlignment(Qt::AlignCenter);
+    label->setText(html);
+    label->setProperty("isMore", isMore);
+
+    return label;
 }
 
 void WgBTFMake::on_selectDirBtn_clicked()
@@ -207,21 +270,6 @@ void WgBTFMake::on_startBtn_clicked()
 
 }
 
-QString WgBTFMake::GetImage(const QString &path)
-{
-    QFileInfo file(path);
-    if (file.isDir())
-    {
-        return QString(":/img/folder.png");
-    }
-    else if (file.isFile())
-    {
-        return QString(":/img/file.png");
-    }
-
-    return QString();
-}
-
 void WgBTFMake::ClearList()
 {
     foreach (QLabel *label, m_labelList)
@@ -234,7 +282,8 @@ void WgBTFMake::ClearList()
             label = NULL;
         }
     }
-
+    ui->horizontalLayout->removeWidget(m_pMoreLabel);
+    m_pMoreLabel->setVisible(false);
     m_labelList.clear();
     m_nameList.clear();
     m_pathList.clear();
@@ -259,17 +308,52 @@ void WgBTFMake::RemoveItem(QLabel *label)
         delete label;
         label = NULL;
     }
+    Bit32 totalCount = m_labelList.count();
+    if (totalCount != 0)
+    {
+        ui->label_top->setText(TR("已选择%1个文件或文件夹").arg(m_labelList.count()));
+    }
+    else
+    {
+        ui->label_top->setText("");
+    }
 
 }
 
-void WgBTFMake::RefreshWidget()
+void WgBTFMake::Refresh()
 {
+    if (m_bHasMoreLabel)
+    {
+        ui->horizontalLayout->removeWidget(m_pMoreLabel);
+        m_pMoreLabel->setVisible(false);
+    }
     foreach (QLabel *label, m_labelList)
     {
-        if (label != NULL)
+        if (ContainsWidget(label))
+        {
+            continue;
+        }
+        else if (ui->horizontalLayout->count() == MAX_DISITEM_NUM)
+        {
+            if (m_pMoreLabel == NULL)
+            {
+                m_pMoreLabel = CreateImgLabel("more");
+                m_pMoreLabel->installEventFilter(this);
+            }
+            ui->horizontalLayout->addWidget(m_pMoreLabel);
+            m_pMoreLabel->setVisible(true);
+            m_bHasMoreLabel = true;
+            break;
+        }
+        else if (label != NULL)
         {
             ui->horizontalLayout->addWidget(label);
         }
+    }
+    Bit32 totalCount = m_labelList.count();
+    if (totalCount != 0)
+    {
+        ui->label_top->setText(TR("已选择%1个文件或文件夹").arg(m_labelList.count()));
     }
 }
 
@@ -278,15 +362,34 @@ void WgBTFMake::SetTip(const QString &tipStr, bool isAutoClear, Bit32 mes)
     ui->label_tip->setText(tipStr);
     if (isAutoClear)
     {
-        m_timer->start(mes);
+        m_pTimer->start(mes);
     }
+}
+
+bool WgBTFMake::ContainsWidget(QLabel *label)
+{
+    if (label == NULL)
+    {
+        return false;
+    }
+    QWidget *targetWg = dynamic_cast<QWidget *>(label);
+    for (Bit32 i = 0; i < ui->horizontalLayout->count(); i++)
+    {
+        QWidget *wg = ui->horizontalLayout->itemAt(i)->widget();
+        if (wg == targetWg)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void WgBTFMake::TimeoutHandler()
 {
-    if (m_timer->isActive())
+    if (m_pTimer->isActive())
     {
-        m_timer->stop();
+        m_pTimer->stop();
     }
     ui->label_tip->setText("");
 }
