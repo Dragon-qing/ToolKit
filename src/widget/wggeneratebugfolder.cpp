@@ -1,5 +1,4 @@
 ﻿#include "QMessageBox"
-#include "QDebug"
 #include "QFileDialog"
 #include "QPushButton"
 
@@ -99,7 +98,6 @@ void WgGenerateBugFolder::BtnStartClicked()
 void WgGenerateBugFolder::CkbIsSaveUI(int arg1)
 {
     m_bIsSaveUI = arg1 == 0?false:true;
-    qDebug()<<m_bIsSaveUI<<endl;
 }
 
 bool WgGenerateBugFolder::CheckFolder(QString path)
