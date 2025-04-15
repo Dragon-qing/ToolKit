@@ -31,8 +31,8 @@ WidgetManger::~WidgetManger()
 void WidgetManger::InitWidgetContainer()
 {
     AddWidget(new WgBTFMake(this), TR("BTF包制作"));
-    AddWidget(new WgGenerateBugFolder(this), TR("代码文件查找"));
-    AddWidget(new WgTyproaImgCleaner(this), TR("Typroa图片清理"));
+    // AddWidget(new WgGenerateBugFolder(this), TR("代码文件查找"));
+    // AddWidget(new WgTyproaImgCleaner(this), TR("Typroa图片清理"));
 }
 
 void WidgetManger::AddWidget(QWidget *widget, const QString &name)

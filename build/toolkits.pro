@@ -22,7 +22,9 @@ INCLUDEPATH += \
 LIBS += -luser32
 SOURCES += \
     ../src/common.cpp \
+    ../src/dataservice.cpp \
     ../src/hmiconfig.cpp \
+    ../src/hmipainter.cpp \
     ../src/logdt.cpp \
     ../src/main.cpp \
     ../src/mainwindow.cpp \
@@ -35,7 +37,9 @@ SOURCES += \
 HEADERS += \
     ../src/common.h \
     ../src/datadef.h \
+    ../src/dataservice.h \
     ../src/hmiconfig.h \
+    ../src/hmipainter.h \
     ../src/logdt.h \
     ../src/mainwindow.h \
     ../src/widget/dlgbtfmakeinfo.h \
@@ -45,6 +49,7 @@ HEADERS += \
     ../src/widgetmanger.h
 
 FORMS += \
+    ../src/hmipainter.ui \
     ../src/mainwindow.ui \
     ../src/widget/dlgbtfmakeinfo.ui \
     ../src/widget/wgbtfmake.ui \
