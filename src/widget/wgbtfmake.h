@@ -1,10 +1,10 @@
 ﻿#ifndef WGBTFMAKE_H
 #define WGBTFMAKE_H
 
-#include <QWidget>
 #include <QLabel>
 #include <QTimer>
 
+#include "basewidget.h"
 #include "datadef.h"
 
 #include "dlgbtfmakeinfo.h"
@@ -16,7 +16,7 @@ namespace Ui {
 class WgBTFMake;
 }
 
-class WgBTFMake : public QWidget
+class WgBTFMake : public BaseWidget
 {
     Q_OBJECT
 

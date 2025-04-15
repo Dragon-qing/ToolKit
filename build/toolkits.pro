@@ -1,4 +1,5 @@
 QT       += core gui
+QT       += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -19,43 +20,54 @@ msvc {
 RC_ICONS = ../img/toolbox.ico
 INCLUDEPATH += \
     ../src ../src/widget\
+    ../src/hmi ../src/service\
 LIBS += -luser32
 SOURCES += \
+    ../src/basewidget.cpp \
     ../src/common.cpp \
-    ../src/dataservice.cpp \
-    ../src/hmiconfig.cpp \
-    ../src/hmipainter.cpp \
     ../src/logdt.cpp \
     ../src/main.cpp \
     ../src/mainwindow.cpp \
+    ../src/msgdata.cpp \
+    ../src/service/dataservice.cpp \
+    ../src/hmi/hmiconfig.cpp \
+    ../src/hmi/hmipainter.cpp \
+    ../src/hmi/hmixmleditor.cpp \
     ../src/widget/dlgbtfmakeinfo.cpp \
     ../src/widget/wgbtfmake.cpp \
     ../src/widget/wggeneratebugfolder.cpp \
     ../src/widget/wgtyproaimgcleaner.cpp \
-    ../src/widgetmanger.cpp
+    ../src/widget/wgxmleditor.cpp \
+    ../src/widget/widgetmanger.cpp
 
 HEADERS += \
+    ../src/basewidget.h \
     ../src/common.h \
     ../src/datadef.h \
-    ../src/dataservice.h \
-    ../src/hmiconfig.h \
-    ../src/hmipainter.h \
     ../src/logdt.h \
     ../src/mainwindow.h \
+    ../src/msgdata.h \
+    ../src/service/dataservice.h \
+    ../src/hmi/hmiconfig.h \
+    ../src/hmi/hmipainter.h \
+    ../src/hmi/hmixmleditor.h \
     ../src/widget/dlgbtfmakeinfo.h \
     ../src/widget/wgbtfmake.h \
     ../src/widget/wggeneratebugfolder.h \
     ../src/widget/wgtyproaimgcleaner.h \
-    ../src/widgetmanger.h
+    ../src/widget/wgxmleditor.h \
+    ../src/widget/widgetmanger.h
 
 FORMS += \
-    ../src/hmipainter.ui \
+    ../src/basewidget.ui \
     ../src/mainwindow.ui \
+    ../src/hmi/hmipainter.ui \
     ../src/widget/dlgbtfmakeinfo.ui \
     ../src/widget/wgbtfmake.ui \
     ../src/widget/wggeneratebugfolder.ui \
     ../src/widget/wgtyproaimgcleaner.ui \
-    ../src/widgetmanger.ui
+    ../src/widget/wgxmleditor.ui \
+    ../src/widget/widgetmanger.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

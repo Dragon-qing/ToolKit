@@ -1,21 +1,19 @@
 ﻿#ifndef WGGENERATEBUGFOLDER_H
 #define WGGENERATEBUGFOLDER_H
 
-#include <QWidget>
+#include "basewidget.h"
 
 namespace Ui {
 class WgGenerateBugFolder;
 }
 
-class WgGenerateBugFolder : public QWidget
+class WgGenerateBugFolder : public BaseWidget
 {
     Q_OBJECT
 
 public:
     explicit WgGenerateBugFolder(QWidget *parent = nullptr);
     ~WgGenerateBugFolder();
-
-
 
 private:
     Ui::WgGenerateBugFolder *ui;

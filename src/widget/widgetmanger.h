@@ -14,6 +14,7 @@ class WidgetManger : public QWidget
 public:
     explicit WidgetManger(QWidget *parent = nullptr);
     ~WidgetManger();
+    QWidget *GetCurrentWidget();
 
 private:
     Ui::WidgetManger *ui;

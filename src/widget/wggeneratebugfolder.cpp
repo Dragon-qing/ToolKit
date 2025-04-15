@@ -6,7 +6,7 @@
 #include "ui_wggeneratebugfolder.h"
 
 WgGenerateBugFolder::WgGenerateBugFolder(QWidget *parent) :
-    QWidget(parent),
+    BaseWidget(parent),
     ui(new Ui::WgGenerateBugFolder)
 {
     ui->setupUi(this);

@@ -28,6 +28,18 @@ WidgetManger::~WidgetManger()
     delete ui;
 }
 
+QWidget *WidgetManger::GetCurrentWidget()
+{
+    Bit32 idx = ui->tabWidget->currentIndex();
+
+    if (idx < 0 || idx >= m_widgetContainer.count())
+    {
+        return NULL;
+    }
+
+    return m_widgetContainer.at(idx);
+}
+
 void WidgetManger::InitWidgetContainer()
 {
     AddWidget(new WgBTFMake(this), TR("BTF包制作"));
