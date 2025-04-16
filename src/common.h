@@ -21,4 +21,6 @@ void ComDebug(const QStringList content, const QString &title = "");
 
 Bit32 GetXmlDoc(QString path, QDomDocument &doc);
 Bit32 SaveXmlDoc(QString path, const QDomDocument &doc);
+
+QByteArray StrToQByte(QString str, const Bit8 *unicode); // QString按指定编码转换为QByte
 #endif // COMMON_H

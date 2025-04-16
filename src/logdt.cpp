@@ -1,5 +1,13 @@
-﻿#include <QDebug>
+﻿#include <QFileInfo>
+#include <QDateTime>
+#include <QDir>
+#include <QTextStream>
+
 #include "logdt.h"
+
+#define LOG_FILE_BASE_NAME "syslog"
+#define FILE_BAK_MAX_NUM (10) // 日志文件最大备份个数
+#define FILE_MAX_SIZE (50 * 1024 * 1024) // 单个文件最大为50MB
 
 LogDt &LogDt::Instance()
 {
@@ -16,33 +24,103 @@ LogDt::LogDt()
 {
 }
 
-Bit32 LogDt::AddLog(Bit32 type, QString logStr)
+void LogDt::WriteLog(QString type, QString logStr)
+{
+    if (type.isEmpty() || logStr.isEmpty())
+    {
+        return;
+    }
+
+    QString filePath = GetAvailableFilePath();
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+    {
+        return;
+    }
+
+    QTextStream textStream(&file);
+    textStream.setCodec("UTF-8");
+    textStream.reset();
+    QString currentTime = QDateTime::currentDateTime().toString("[yyyy-MM-dd HH:mm:ss]");
+    textStream << QString("%1(%2):%3\n").arg(currentTime).arg(type).arg(logStr);
+    file.flush();
+    file.close();
+}
+
+QString LogDt::GetAvailableFilePath()
+{
+    QDir logDir("../log");
+    QString path = "";
+    QDateTime modifyTime = QDateTime::currentDateTime();
+    Bit32 oldestIdx = 0; // 最旧的log文件序号；
+    if (!logDir.exists())
+    {
+        logDir.mkpath(logDir.absolutePath());
+    }
+
+    for (Bit32 i = 0; i < FILE_BAK_MAX_NUM; i++)
+    {
+        QString filename = QString("%1_%2.txt").arg(LOG_FILE_BASE_NAME).arg(i, 2, 10, QChar('0'));
+        QString tmpPath = QDir::toNativeSeparators(logDir.filePath(filename));
+        QFileInfo info(tmpPath);
+        if (!info.exists()) // 不存在
+        {
+            path = tmpPath;
+            break;
+        }
+        else
+        {
+            if (info.size() < FILE_MAX_SIZE)
+            {
+                path = tmpPath;
+                break;
+            }
+            // 超过单文件最大大小
+            if(info.lastModified() < modifyTime)
+            {
+                modifyTime = info.lastModified();
+                oldestIdx = i;
+            }
+
+        }
+    }
+    if (path.isEmpty())
+    {
+        path = QString("%1_%2.txt").arg(LOG_FILE_BASE_NAME).arg(oldestIdx, 2, 10, QChar('0')); // 取最旧的文件名
+    }
+
+    return path;
+}
+
+Bit32 LogDt::AddLog(LogDataType type, QString logStr)
 {
     if (type <= DEBUG_LOG || type >= TYPE_NUM)
     {
         return -1;
     }
+    QString typeStr = "";
     switch (type)
     {
     case DEBUG_LOG:
-        qDebug() << logStr;
+        typeStr = "D";
         break;
     case INFO_LOG:
-        qInfo() << logStr;
+        typeStr = "I";
         break;
     case WARNING_LOG:
-        qWarning() << logStr;
+        typeStr = "W";
         break;
     case CRITICAL_LOG:
-        qCritical() << logStr;
+        typeStr = "C";
         break;
     case FATAL_LOG:
-        qFatal(logStr.toLatin1().data());
+        typeStr = "F";
         break;
     default:
         break;
     }
-
+    WriteLog(typeStr, logStr);
     return 0;
 }
 

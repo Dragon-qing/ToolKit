@@ -6,11 +6,11 @@
 
 
 enum LogDataType{
-    DEBUG_LOG = 0,
-    INFO_LOG,
-    WARNING_LOG,
-    CRITICAL_LOG,
-    FATAL_LOG,
+    DEBUG_LOG = 0,      // 调试日志
+    INFO_LOG,           // 提示日志
+    WARNING_LOG,        // 警告日志
+    CRITICAL_LOG,       // 严重日志
+    FATAL_LOG,          // 致命日志
 
     TYPE_NUM
 };
@@ -21,9 +21,11 @@ public:
     static LogDt& Instance();
     ~LogDt();
 
-    Bit32 AddLog(Bit32 type, QString logStr);
+    Bit32 AddLog(LogDataType type, QString logStr);
 private:
     explicit LogDt();
+    void WriteLog(QString type, QString logStr);
+    QString GetAvailableFilePath();
 };
 
 #endif // LOGDT_H

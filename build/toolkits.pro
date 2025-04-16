@@ -79,9 +79,9 @@ RESOURCES += \
 
 # python environment config
 
-win32: LIBS += -L$$PWD/'../../../Program Files/python312/libs/' -lpython312
+# win32: LIBS += -L$$PWD/'../../../Program Files/python312/libs/' -lpython312
 
-INCLUDEPATH += $$PWD/'../../../Program Files/python312/include'
-DEPENDPATH += $$PWD/'../../../Program Files/python312/include'
+# INCLUDEPATH += $$PWD/'../../../Program Files/python312/include'
+# DEPENDPATH += $$PWD/'../../../Program Files/python312/include'
 
-win32:!win32-g++: PRE_TARGETDEPS += $$PWD/'../../../Program Files/python312/libs/python312.lib'
+# win32:!win32-g++: PRE_TARGETDEPS += $$PWD/'../../../Program Files/python312/libs/python312.lib'

@@ -94,3 +94,17 @@ Bit32 SaveXmlDoc(QString path, const QDomDocument &doc)
     file.close();
     return 0;
 }
+
+/**
+ * @brief StrToQByte 按指定编码转换字符串
+ * @param str 待转换的字符串
+ * @param unicode 编码格式：UTF-8、GBK、Shift-JIS 等。
+ * @return
+ */
+QByteArray StrToQByte(QString str, const Bit8 *unicode)
+{
+    QTextCodec *codec = QTextCodec::codecForName(unicode);
+    QByteArray bytearr;
+    bytearr = codec->fromUnicode(str);
+    return bytearr;
+}

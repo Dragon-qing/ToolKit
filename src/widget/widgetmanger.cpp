@@ -2,9 +2,12 @@
 #include "wggeneratebugfolder.h"
 #include "wgtyproaimgcleaner.h"
 #include "wgbtfmake.h"
+#include "wgxmleditor.h"
 
 #include "widgetmanger.h"
 #include "ui_widgetmanger.h"
+
+#define GENERATE_WIDGET(classname, parent) new classname(parent)
 
 WidgetManger::WidgetManger(QWidget *parent) :
     QWidget(parent),
@@ -42,7 +45,8 @@ QWidget *WidgetManger::GetCurrentWidget()
 
 void WidgetManger::InitWidgetContainer()
 {
-    AddWidget(new WgBTFMake(this), TR("BTF包制作"));
+    AddWidget(GENERATE_WIDGET(WgBTFMake, this), TR("BTF包制作"));
+    AddWidget(GENERATE_WIDGET(WgXmlEditor, this), TR("XML编辑器"));
     // AddWidget(new WgGenerateBugFolder(this), TR("代码文件查找"));
     // AddWidget(new WgTyproaImgCleaner(this), TR("Typroa图片清理"));
 }
