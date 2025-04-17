@@ -1,7 +1,16 @@
-﻿#include <QFileInfo>
+﻿/*!
+ * @brief 日志模块
+ * @file logdt.cpp
+ * @author Dragon_qing
+ * @date 2025/04/16
+ */
+
+#include <QFileInfo>
 #include <QDateTime>
 #include <QDir>
 #include <QTextStream>
+
+#include "common.h"
 
 #include "logdt.h"
 
@@ -88,6 +97,7 @@ QString LogDt::GetAvailableFilePath()
     if (path.isEmpty())
     {
         path = QString("%1_%2.txt").arg(LOG_FILE_BASE_NAME).arg(oldestIdx, 2, 10, QChar('0')); // 取最旧的文件名
+        ClearFile(path);
     }
 
     return path;
@@ -95,7 +105,7 @@ QString LogDt::GetAvailableFilePath()
 
 Bit32 LogDt::AddLog(LogDataType type, QString logStr)
 {
-    if (type <= DEBUG_LOG || type >= TYPE_NUM)
+    if (type < DEBUG_LOG || type >= TYPE_NUM)
     {
         return -1;
     }
@@ -122,5 +132,22 @@ Bit32 LogDt::AddLog(LogDataType type, QString logStr)
     }
     WriteLog(typeStr, logStr);
     return 0;
+}
+
+/**
+ * @brief LogDt::ClearFile 清空文件内容
+ * @param filePath 文件路径
+ * @return 执行结果
+ */
+bool LogDt::ClearFile(const QString &filePath)
+{
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        file.flush();
+        file.close();  // 文件已经被清空，立即关闭
+        return true;
+    } else {
+        return false;
+    }
 }
 

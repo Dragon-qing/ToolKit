@@ -18,7 +18,7 @@ enum LogDataType{
 class LogDt
 {
 public:
-    static LogDt& Instance();
+    static LogDt& Instance();   // 单例
     ~LogDt();
 
     Bit32 AddLog(LogDataType type, QString logStr);
@@ -26,6 +26,7 @@ private:
     explicit LogDt();
     void WriteLog(QString type, QString logStr);
     QString GetAvailableFilePath();
+    bool ClearFile(const QString &filePath);
 };
 
 #endif // LOGDT_H

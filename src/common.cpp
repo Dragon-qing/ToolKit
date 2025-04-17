@@ -56,7 +56,13 @@ Bit32 GetXmlDoc(QString path, QDomDocument &doc)
     }
     if (!doc.setContent(&file, false, &errorMsg, &errorLine, &errorColumn))
     {
+        errorMsg = QObject::TR("common:%1文件格式错误,Msg:%2,line:%3,column:%4").arg(absPath)
+                       .arg(errorMsg).arg(errorLine).arg(errorColumn);
         return -3;
+    }
+    if (!errorMsg.isEmpty())
+    {
+        LogDt::Instance().AddLog(WARNING_LOG, errorMsg);
     }
 
     file.close();

@@ -13,8 +13,8 @@
 
 #define TOOLS_PATH "./tools"
 
-const Bit32 WINDOW_WIDTH =  800;
-const Bit32 WINDOW_HEIGHT = 600;
+const Bit32 WINDOW_WIDTH =  1024;
+const Bit32 WINDOW_HEIGHT = 768;
 
 void ComDebug(const QString &content, const QString &title = "");
 void ComDebug(const QStringList content, const QString &title = "");

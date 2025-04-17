@@ -2,6 +2,7 @@
 #define WGXMLEDITOR_H
 
 #include <QStandardItemModel>
+#include <QStringListModel>
 
 #include "basewidget.h"
 #include "hmixmleditor.h"
@@ -20,12 +21,18 @@ public:
 
 private:
     Ui::WgXmlEditor *ui;
-    QStandardItemModel *m_pModel;
+    QStandardItemModel *m_pTreeModel;
+    QStringListModel *m_pListModel;
+    QModelIndex m_currentIndex;
+
 
     void InitModel();
 
 private slots:
     void on_pushButton_clicked();
+    void on_selectBtn_clicked();
+    void HandleTreeViewClicked(const QModelIndex &index);
+    void HandleListDataChange(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 };
 
 #endif // WGXMLEDITOR_H
