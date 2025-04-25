@@ -76,3 +76,9 @@ void WgXmlEditor::HandleListDataChange(const QModelIndex &topLeft, const QModelI
     HmiXmlEditor::Instance().SyncAttrList(m_pTreeModel, m_currentIndex, m_pListModel->stringList());
 }
 
+
+void WgXmlEditor::on_saveBtn_clicked()
+{
+    HmiXmlEditor::Instance().Save();
+}
+

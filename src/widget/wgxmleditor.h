@@ -33,6 +33,7 @@ private slots:
     void on_selectBtn_clicked();
     void HandleTreeViewClicked(const QModelIndex &index);
     void HandleListDataChange(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    void on_saveBtn_clicked();
 };
 
 #endif // WGXMLEDITOR_H
