@@ -16,6 +16,9 @@
 const Bit32 WINDOW_WIDTH =  1024;
 const Bit32 WINDOW_HEIGHT = 768;
 
+const Bit32 DLG_WIDTH =  400;   // 对话框宽度
+const Bit32 DLG_HEIGHT = 200;   // 对话框高度
+
 void ComDebug(const QString &content, const QString &title = "");
 void ComDebug(const QStringList content, const QString &title = "");
 

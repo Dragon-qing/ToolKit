@@ -34,6 +34,7 @@ SOURCES += \
     ../src/hmi/hmipainter.cpp \
     ../src/hmi/hmixmleditor.cpp \
     ../src/widget/dlgbtfmakeinfo.cpp \
+    ../src/widget/dlgprompt.cpp \
     ../src/widget/wgbtfmake.cpp \
     ../src/widget/wggeneratebugfolder.cpp \
     ../src/widget/wgtyproaimgcleaner.cpp \
@@ -52,6 +53,7 @@ HEADERS += \
     ../src/hmi/hmipainter.h \
     ../src/hmi/hmixmleditor.h \
     ../src/widget/dlgbtfmakeinfo.h \
+    ../src/widget/dlgprompt.h \
     ../src/widget/wgbtfmake.h \
     ../src/widget/wggeneratebugfolder.h \
     ../src/widget/wgtyproaimgcleaner.h \
@@ -63,6 +65,7 @@ FORMS += \
     ../src/mainwindow.ui \
     ../src/hmi/hmipainter.ui \
     ../src/widget/dlgbtfmakeinfo.ui \
+    ../src/widget/dlgprompt.ui \
     ../src/widget/wgbtfmake.ui \
     ../src/widget/wggeneratebugfolder.ui \
     ../src/widget/wgtyproaimgcleaner.ui \

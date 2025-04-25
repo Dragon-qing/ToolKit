@@ -29,6 +29,8 @@ WgXmlEditor::WgXmlEditor(QWidget *parent)
 
     connect(ui->treeView, &QTreeView::clicked, this, &WgXmlEditor::HandleTreeViewClicked);
     connect(m_pListModel, &QStringListModel::dataChanged, this, &WgXmlEditor::HandleListDataChange);
+
+    m_pDlg = new DlgPrompt(DlgPrompt::OK_BUTTON, this);
 }
 
 WgXmlEditor::~WgXmlEditor()
@@ -45,8 +47,9 @@ void WgXmlEditor::InitModel()
 
 void WgXmlEditor::on_pushButton_clicked()
 {
-    m_pTreeModel->removeRows(0, m_pTreeModel->rowCount());
-    m_pListModel->removeRows(0, m_pListModel->rowCount());
+    m_pDlg->ExecAndRet("test");
+    // m_pTreeModel->removeRows(0, m_pTreeModel->rowCount());
+    // m_pListModel->removeRows(0, m_pListModel->rowCount());
 }
 
 void WgXmlEditor::on_selectBtn_clicked()
@@ -80,5 +83,6 @@ void WgXmlEditor::HandleListDataChange(const QModelIndex &topLeft, const QModelI
 void WgXmlEditor::on_saveBtn_clicked()
 {
     HmiXmlEditor::Instance().Save();
+    m_pDlg->ExecAndRet(TR("保存完成"));
 }
 
