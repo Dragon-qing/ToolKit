@@ -1,13 +1,13 @@
 ﻿#ifndef WGTYPROAIMGCLEANER_H
 #define WGTYPROAIMGCLEANER_H
 
-#include <QWidget>
+#include "basewidget.h"
 
 namespace Ui {
 class WgTyproaImgCleaner;
 }
 
-class WgTyproaImgCleaner : public QWidget
+class WgTyproaImgCleaner : public BaseWidget
 {
     Q_OBJECT
 

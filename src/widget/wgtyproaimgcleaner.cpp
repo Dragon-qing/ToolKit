@@ -2,7 +2,7 @@
 #include "ui_wgtyproaimgcleaner.h"
 
 WgTyproaImgCleaner::WgTyproaImgCleaner(QWidget *parent) :
-    QWidget(parent),
+    BaseWidget(parent),
     ui(new Ui::WgTyproaImgCleaner)
 {
     ui->setupUi(this);

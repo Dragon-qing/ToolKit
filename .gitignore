@@ -10,3 +10,5 @@ build/*
 !build/*.pro
 bin/*
 !bin/tools
+!bin/style.qss
+log

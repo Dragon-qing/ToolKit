@@ -13,7 +13,7 @@
 #include "ui_wgbtfmake.h"
 
 WgBTFMake::WgBTFMake(QWidget *parent) :
-    QWidget(parent),
+    BaseWidget(parent),
     ui(new Ui::WgBTFMake)
 {
     ui->setupUi(this);
