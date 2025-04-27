@@ -11,6 +11,7 @@
 #include <QTextStream>
 
 #include "common.h"
+#include "syspathmanager.h"
 
 #include "logdt.h"
 
@@ -59,7 +60,7 @@ void LogDt::WriteLog(QString type, QString logStr)
 
 QString LogDt::GetAvailableFilePath()
 {
-    QDir logDir("../log");
+    QDir logDir(GetSysPath(LOG_PATH));
     QString path = "";
     QDateTime modifyTime = QDateTime::currentDateTime();
     Bit32 oldestIdx = 0; // 最旧的log文件序号；
@@ -132,6 +133,31 @@ Bit32 LogDt::AddLog(LogDataType type, QString logStr)
     }
     WriteLog(typeStr, logStr);
     return 0;
+}
+
+/**
+ * @brief LogDt::GetLogFiles 获取所有的log文件路径
+ * @return
+ */
+QStringList LogDt::GetLogFiles()
+{
+    QDir logDir(GetSysPath(LOG_PATH));
+    QStringList fileList;
+    if (!logDir.exists())   // log目录不存在
+    {
+        return fileList;
+    }
+
+    QStringList files = logDir.entryList();
+    foreach(const QString &str, files)
+    {
+        if (str.startsWith(LOG_FILE_BASE_NAME))
+        {
+            fileList.append(logDir.absoluteFilePath(str));
+        }
+    }
+
+    return fileList;
 }
 
 /**

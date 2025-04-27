@@ -1,6 +1,7 @@
 QT       += core gui
 QT       += xml
 
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -25,6 +26,8 @@ LIBS += -luser32
 SOURCES += \
     ../src/basewidget.cpp \
     ../src/common.cpp \
+    ../src/hmi/hmilog.cpp \
+    ../src/hmi/syspathmanager.cpp \
     ../src/logdt.cpp \
     ../src/main.cpp \
     ../src/mainwindow.cpp \
@@ -37,6 +40,7 @@ SOURCES += \
     ../src/widget/dlgprompt.cpp \
     ../src/widget/wgbtfmake.cpp \
     ../src/widget/wggeneratebugfolder.cpp \
+    ../src/widget/wglog.cpp \
     ../src/widget/wgtyproaimgcleaner.cpp \
     ../src/widget/wgxmleditor.cpp \
     ../src/widget/widgetmanger.cpp
@@ -45,6 +49,8 @@ HEADERS += \
     ../src/basewidget.h \
     ../src/common.h \
     ../src/datadef.h \
+    ../src/hmi/hmilog.h \
+    ../src/hmi/syspathmanager.h \
     ../src/logdt.h \
     ../src/mainwindow.h \
     ../src/msgdata.h \
@@ -56,6 +62,7 @@ HEADERS += \
     ../src/widget/dlgprompt.h \
     ../src/widget/wgbtfmake.h \
     ../src/widget/wggeneratebugfolder.h \
+    ../src/widget/wglog.h \
     ../src/widget/wgtyproaimgcleaner.h \
     ../src/widget/wgxmleditor.h \
     ../src/widget/widgetmanger.h
@@ -68,6 +75,7 @@ FORMS += \
     ../src/widget/dlgprompt.ui \
     ../src/widget/wgbtfmake.ui \
     ../src/widget/wggeneratebugfolder.ui \
+    ../src/widget/wglog.ui \
     ../src/widget/wgtyproaimgcleaner.ui \
     ../src/widget/wgxmleditor.ui \
     ../src/widget/widgetmanger.ui

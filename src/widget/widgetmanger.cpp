@@ -3,6 +3,7 @@
 #include "wgtyproaimgcleaner.h"
 #include "wgbtfmake.h"
 #include "wgxmleditor.h"
+#include "wglog.h"
 
 #include "widgetmanger.h"
 #include "ui_widgetmanger.h"
@@ -49,6 +50,7 @@ void WidgetManger::InitWidgetContainer()
     AddWidget(GENERATE_WIDGET(WgXmlEditor, this), TR("XML编辑器"));
     // AddWidget(new WgGenerateBugFolder(this), TR("代码文件查找"));
     // AddWidget(new WgTyproaImgCleaner(this), TR("Typroa图片清理"));
+    AddWidget(GENERATE_WIDGET(WgLog, this), TR("日志"));
 }
 
 void WidgetManger::AddWidget(QWidget *widget, const QString &name)
