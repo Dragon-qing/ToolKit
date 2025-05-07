@@ -5,6 +5,7 @@
 
 #include "common.h"
 
+QStatusBar *GLOBAL_STATUSBAR = NULL;
 
 void ComDebug(const QString &content, const QString &title)
 {
@@ -113,4 +114,24 @@ QByteArray StrToQByte(QString str, const Bit8 *unicode)
     QByteArray bytearr;
     bytearr = codec->fromUnicode(str);
     return bytearr;
+}
+
+void InitStatusBar(QStatusBar *statusBar)
+{
+    GLOBAL_STATUSBAR = statusBar;
+}
+
+/**
+ * @brief PromptOut 设置下方状态栏文本
+ * @param content 文本内容
+ * @param outtime 多久后自动清除（0：为不清除）
+ */
+void PromptOut(const QString &content, Bit32 outtime)
+{
+    if (GLOBAL_STATUSBAR == nullptr)
+    {
+        return;
+    }
+
+    GLOBAL_STATUSBAR->showMessage(content, outtime);
 }

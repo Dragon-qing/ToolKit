@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>650</width>
+    <height>370</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,6 +38,26 @@
         </widget>
        </item>
        <item>
+        <widget class="QComboBox" name="xAxisComboBox"/>
+       </item>
+       <item>
+        <widget class="QComboBox" name="yAxisComboBox"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="drawBtn">
+         <property name="text">
+          <string>绘制</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -50,10 +70,17 @@
          </property>
         </spacer>
        </item>
+       <item>
+        <widget class="QProgressBar" name="progressBar">
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
-      <widget class="QCustomPlot" name="widget" native="true"/>
+      <widget class="QCustomPlot" name="plot" native="true"/>
      </item>
     </layout>
    </item>

@@ -3,6 +3,7 @@
 #include <QTextCodec>
 #include <QString>
 #include <QDomDocument>
+#include <QStatusBar>
 
 #include "datadef.h"
 #include "logdt.h"
@@ -26,4 +27,7 @@ Bit32 GetXmlDoc(QString path, QDomDocument &doc);
 Bit32 SaveXmlDoc(QString path, const QDomDocument &doc);
 
 QByteArray StrToQByte(QString str, const Bit8 *unicode); // QString按指定编码转换为QByte
+
+void InitStatusBar(QStatusBar *statusBar);
+void PromptOut(const QString &content, Bit32 outtime = 0);
 #endif // COMMON_H

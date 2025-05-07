@@ -12,6 +12,13 @@ QT_BEGIN_NAMESPACE
 class ReadFileThread;
 QT_END_NAMESPACE
 
+enum _Context_Type{
+    INVALID = 0,    // 无效
+    INFO_PART = 1,  // 文件头部分
+    CONFIG_PART,    // 配置部分
+    DATA_PART       // 数据部分
+};
+
 class HmiComRpt : public QObject
 {
     Q_OBJECT
@@ -20,6 +27,11 @@ public:
     ~HmiComRpt();
     static HmiComRpt &Instance();
     void SetPath(QString path);
+    ReadFileThread *GetThreadClass();
+    Bit32 GetTotalPosNum();
+    QVariant GetValue(Bit32 type, QVariant key = QVariant(), QVariant subKey = QVariant());
+    void Test();
+    QString GetFileName();
 private:
     QString m_sPath; // 数据文件路径
     QMap<QString, QVariant> m_infoMap; // 文件头数据
@@ -38,17 +50,14 @@ class ReadFileThread : public QThread
 public:
     ReadFileThread(QObject *parent = nullptr);
     void SetConfig(QString path, QMap<QString, QVariant>* info, QMap<QString, QVariant>* config, QList<QVector<Bit64>>* data);
+
+signals:
+    void ProcessSignal(int eta);
+
 protected:
     void run() override;
 
 private:
-    enum _Context_Type{
-        INVALID = 0,    // 无效
-        INFO_PART = 1,  // 文件头部分
-        CONFIG_PART,    // 配置部分
-        DATA_PART       // 数据部分
-    };
-
     QString m_sPath; // 数据文件路径
     QMap<QString, QVariant>* m_pInfoMap; // 文件头数据
     QMap<QString, QVariant>* m_pConfigMap; // 配置数据
@@ -56,6 +65,7 @@ private:
 
     Bit32 ProcessFile(); // 处理解析数据文件
     void ParseLine(Bit32 type, QString tmp);
+    void ParseLines(Bit32 type, QStringList list);
 };
 
 #endif // HMICOMRPT_H

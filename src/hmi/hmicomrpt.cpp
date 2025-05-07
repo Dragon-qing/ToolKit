@@ -25,7 +25,7 @@ HmiComRpt::HmiComRpt(QObject *parent)
 
 HmiComRpt::~HmiComRpt()
 {
-
+    m_pThread->terminate();
 }
 
 HmiComRpt &HmiComRpt::Instance()
@@ -52,6 +52,73 @@ void HmiComRpt::SetPath(QString path)
     m_pThread->start();
 }
 
+ReadFileThread *HmiComRpt::GetThreadClass()
+{
+    return m_pThread;
+}
+
+/**
+ * @brief HmiComRpt::GetTotalPosNum 获取数据点总数(单种采样)
+ * @return 数据点总数
+ */
+Bit32 HmiComRpt::GetTotalPosNum()
+{
+    if (m_dataList.isEmpty())
+    {
+        return 0;
+    }
+
+    return m_dataList.first().size();
+}
+
+/**
+ * @brief HmiComRpt::GetValue 获取数据接口
+ * @param type 数据种类
+ * @param key 键值索引
+ * @param subKey 子键值索引
+ * @return 返回数据值
+ */
+QVariant HmiComRpt::GetValue(Bit32 type, QVariant key, QVariant subKey)
+{
+    if (type == INFO_PART)
+    {
+        return m_infoMap.value(key.toString());
+    }
+    else if (type == CONFIG_PART)
+    {
+        return m_configMap.value(key.toString());
+    }
+    else if (type == DATA_PART)
+    {
+        Bit32 row = key.toInt();
+        if (row < 0 || row >= m_dataList.count())
+        {
+            return QVariant();
+        }
+        Bit32 index = subKey.toInt();
+        Bit64 rawValue = m_dataList.value(row).value(index);
+        return QVariant(rawValue);
+    }
+
+    return QVariant();
+}
+
+void HmiComRpt::Test()
+{
+    Bit32 total = m_dataList.at(1).size();
+    QString context = "";
+    for (Bit32 i = 0; i < total; i++)
+    {
+        context += QString::number(m_dataList.at(1).value(i));
+    }
+    ComDebug(context);
+}
+
+QString HmiComRpt::GetFileName()
+{
+    return QFileInfo(m_sPath).fileName();
+}
+
 void HmiComRpt::Clear()
 {
     m_sPath = "";
@@ -68,14 +135,46 @@ Bit32 ReadFileThread::ProcessFile()
         LogDt::Instance().AddLog(WARNING_LOG, QObject::TR("文件打开失败"));
         return -1;
     }
+    Bit64 totalSize = QFileInfo(m_sPath).size();
+    if (totalSize == 0)
+    {
+        LogDt::Instance().AddLog(WARNING_LOG, QObject::TR("文件为空"));
+        return -1;
+    }
+
+    Bit64 currentSize = 0;
     QTextStream in(&file);
     Bit32 type = INVALID; // 文件中的part类型
     QRegularExpression re("^\\[.*\\]$");
+
+    Bit32 count = 0;
+    QStringList batch;
     in.setCodec(UTF_8);
     while(!in.atEnd())
     {
-        QString tmp = in.readLine();
+
+        QString tmp = "";
+        if (type == DATA_PART)
+        {
+            batch << in.readLine();
+            if (count % 1000 == 0)
+            {
+                ParseLines(type, batch);
+                batch.clear();
+            }
+        }
+        else
+        {
+            tmp = in.readLine();
+            ParseLine(type, tmp);
+        }
         ParseLine(type, tmp);
+        currentSize = file.pos();
+        int eta = static_cast<int>(currentSize * 1.0 / totalSize * 100);
+        if (++count % 1000 == 0)
+        {
+            emit ProcessSignal(eta);
+        }
         if (tmp.contains("[INFO]"))
         {
             type = INFO_PART;
@@ -93,13 +192,19 @@ Bit32 ReadFileThread::ProcessFile()
             type = INVALID;
         }
     }
+    if (!batch.isEmpty())
+    {
+        ParseLines(type, batch);
+        batch.clear();
+    }
+    emit ProcessSignal(100);
     file.close();
     return 0;
 }
 
 void ReadFileThread::ParseLine(Bit32 type, QString tmp)
 {
-    if (type == INVALID || tmp.isEmpty())
+    if (type == INVALID || tmp.isEmpty() || tmp.startsWith("["))
     {
         return;
     }
@@ -171,8 +276,17 @@ void ReadFileThread::ParseLine(Bit32 type, QString tmp)
     }
 }
 
+void ReadFileThread::ParseLines(Bit32 type, QStringList list)
+{
+    foreach(QString str, list)
+    {
+        ParseLine(type, str);
+    }
+}
+
 void ReadFileThread::run()
 {
+    emit ProcessSignal(0);
     ProcessFile();
 }
 
