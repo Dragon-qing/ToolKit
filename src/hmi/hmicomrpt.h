@@ -30,18 +30,15 @@ public:
     ReadFileThread *GetThreadClass();
     Bit32 GetTotalPosNum();
     QVariant GetValue(Bit32 type, QVariant key = QVariant(), QVariant subKey = QVariant());
-    void Test();
     QString GetFileName();
 private:
     QString m_sPath; // 数据文件路径
     QMap<QString, QVariant> m_infoMap; // 文件头数据
     QMap<QString, QVariant> m_configMap; // 配置数据
-    QList<QVector<Bit64>> m_dataList; // 数据部分
+    QList<QVector<Bit64>*> m_dataList; // 数据部分
     ReadFileThread *m_pThread;
 
     void Clear();
-
-
 };
 
 class ReadFileThread : public QThread
@@ -49,7 +46,7 @@ class ReadFileThread : public QThread
     Q_OBJECT
 public:
     ReadFileThread(QObject *parent = nullptr);
-    void SetConfig(QString path, QMap<QString, QVariant>* info, QMap<QString, QVariant>* config, QList<QVector<Bit64>>* data);
+    void SetConfig(QString path, QMap<QString, QVariant>* info, QMap<QString, QVariant>* config, QList<QVector<Bit64>*>* data);
 
 signals:
     void ProcessSignal(int eta);
@@ -61,9 +58,9 @@ private:
     QString m_sPath; // 数据文件路径
     QMap<QString, QVariant>* m_pInfoMap; // 文件头数据
     QMap<QString, QVariant>* m_pConfigMap; // 配置数据
-    QList<QVector<Bit64>>* m_pDataList; // 数据部分
+    QList<QVector<Bit64>*>* m_pDataList; // 数据部分
 
-    Bit32 ProcessFile(); // 处理解析数据文件
+    Bit32 ProcessFileBatch();// 处理解析数据文件(一次读取)
     void ParseLine(Bit32 type, QString tmp);
     void ParseLines(Bit32 type, QStringList list);
 };

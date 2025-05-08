@@ -58,6 +58,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QRadioButton" name="defaultRaido">
+         <property name="text">
+          <string>使用预设</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -80,7 +87,15 @@
       </layout>
      </item>
      <item>
-      <widget class="QCustomPlot" name="plot" native="true"/>
+      <widget class="QStackedWidget" name="stackedWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QCustomPlot" name="plot"/>
+       <widget class="QWidget" name="defaultPlot">
+        <layout class="QVBoxLayout" name="verticalLayout_3"/>
+       </widget>
+      </widget>
      </item>
     </layout>
    </item>

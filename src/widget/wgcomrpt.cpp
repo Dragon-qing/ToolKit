@@ -27,9 +27,7 @@ WgComRpt::WgComRpt(QWidget *parent)
     m_yAxisRange = QPair<fBit64, fBit64>(0, 10);
     InitDict();
     ui->label->setText("");
-
-    ReadFileThread *threadp = HmiComRpt::Instance().GetThreadClass();
-    connect(threadp, &ReadFileThread::ProcessSignal, ui->progressBar, &QProgressBar::setValue);
+    connect(ui->defaultRaido, &QRadioButton::toggled, this, &WgComRpt::DefaultRadioHandle);
     connect(ui->progressBar, &QProgressBar::valueChanged, this, &WgComRpt::ProcessChangeHandle);
 }
 
@@ -57,6 +55,8 @@ void WgComRpt::InitDict()
         {"FOLLOW_ERR", TR("跟踪误差")},
         {"AXIS_ACT", TR("实际位置")},
         {"AXIS_CMD", TR("指令位置")},
+        {"ACT_TRQ", TR("负载电流")},
+        {"LINE_NUM", TR("行号")},
         {"MC_0", TR("位置环")},
         {"MC_1", TR("速度环")},
         {"MC_2", TR("圆度测试")},
@@ -67,6 +67,48 @@ void WgComRpt::InitDict()
         {"MC_23", TR("主轴波动")},
         {"MC_24", TR("主轴定向")},
     });
+}
+
+void WgComRpt::BuildUnioPlot(QString mask)
+{
+    QList<QVector<fBit64>> xdata;
+    QList<QVector<fBit64>> ydata;
+    if (mask == "MC_16") // 全程电流
+    {
+        if (m_pJour == NULL)
+        {
+            m_pJour = new UnionPlot(UnionPlot::VERTICAL_LAYOUT, 4, this);
+            m_pJour->SetAxisLabel(QStringList() << TR("位置(mm)") << TR("位置(mm)") << TR("位置(mm)") << TR("位置(mm)"),
+                                  QStringList() << TR("正向负载电流(mm/min)") << TR("负向负载电流(mm/min)") << TR("正向进给速度(mm/min)") << TR("负向进给速度(mm/min)"));
+        }
+        QVector<fBit64, fBit64> posX;
+        QVector<fBit64, fBit64> negX;
+        QVector<fBit64, fBit64> posJour;
+        QVector<fBit64, fBit64> negJour;
+        QVector<fBit64, fBit64> posV;
+        QVector<fBit64, fBit64> negV;
+        Bit32 totalNum = HmiComRpt::GetTotalPosNum();
+        QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+        for (Bit32 i = 0; i < totalNum; i++)
+        {
+            fBit64 positionCoef = coefList.at(0).toDouble();
+            fBit64 position = HmiComRpt::Instance().GetValue(DATA_PART, i, "AXIS_ACT");
+        }
+
+
+        xdata << posX << negX << posX << negX;
+        ydata << posJour << negJour << posV << negV;
+        m_pJour->SetData(xdata, ydata);
+        m_pCurr = m_pJour;
+    }
+}
+
+void WgComRpt::UnionReplot()
+{
+    if (m_pCurr != NULL)
+    {
+        m_pCurr->RePlot();
+    }
 }
 
 void WgComRpt::on_OpenBtn_clicked()
@@ -80,12 +122,16 @@ void WgComRpt::on_OpenBtn_clicked()
     }
 
     HmiComRpt::Instance().SetPath(filePath);
+    ReadFileThread *threadp = HmiComRpt::Instance().GetThreadClass();
+    connect(threadp, &ReadFileThread::ProcessSignal, ui->progressBar, &QProgressBar::setValue);
 }
 
 void WgComRpt::ProcessChangeHandle(int changeValue)
 {
     if (changeValue == 100)
     {
+        // 解绑信号
+        disconnect(HmiComRpt::Instance().GetThreadClass(), &ReadFileThread::ProcessSignal, ui->progressBar, &QProgressBar::setValue);
         ui->OpenBtn->setEnabled(true);
         QString smplType = HmiComRpt::Instance().GetValue(CONFIG_PART, "SMPL_TYPE").toString();
         if (smplType.endsWith(";"))
@@ -269,5 +315,28 @@ void WgComRpt::on_drawBtn_clicked()
     ui->plot->graph(0)->setData(xVec, yVec);
     ui->plot->replot();
     connect(ui->plot, &QCustomPlot::mouseMove, this, &WgComRpt::MouseMoveEventHandle);
+    PromptOut(TR("绘制完成"), 3);
+}
+
+void WgComRpt::DefaultRadioHandle(bool checked)
+{
+    if (checked) // 使用预定组合图
+    {
+        QString fileName = HmiComRpt::Instance().GetFileName();
+        QRegularExpression re("^(?<type>MC_\\d+)_.*$");
+        QRegularExpressionMatch match = re.match(fileName);
+        QString mask = "";
+        if (match.hasMatch())
+        {
+            mask = match.captured("type");
+        }
+        BuildUnioPlot(mask);
+        UnionReplot();
+        ui->stackedWidget->setCurrentIndex(1);
+    }
+    else // 使用自定义图像
+    {
+        ui->stackedWidget->setCurrentIndex(0);
+    }
 }
 

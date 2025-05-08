@@ -30,4 +30,6 @@ QByteArray StrToQByte(QString str, const Bit8 *unicode); // QString按指定编�
 
 void InitStatusBar(QStatusBar *statusBar);
 void PromptOut(const QString &content, Bit32 outtime = 0);
+// 获取数据的范围
+QPair<fBit64, fBit64> GetRange(const QVector<fBit64> &in);
 #endif // COMMON_H

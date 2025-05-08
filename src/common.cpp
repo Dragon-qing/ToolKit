@@ -135,3 +135,27 @@ void PromptOut(const QString &content, Bit32 outtime)
 
     GLOBAL_STATUSBAR->showMessage(content, outtime);
 }
+
+/**
+ * @brief GetRange 获取范围
+ * @note QVector<fBit64>数组的范围
+ * @param in
+ * @return
+ */
+QPair<fBit64, fBit64> GetRange(const QVector<fBit64> &in)
+{
+    if (in.isEmpty())
+    {
+        return QPair<fBit64, fBit64>();
+    }
+
+    fBit64 min = in.first();
+    fBit64 max = min;
+    foreach (fBit64 v, in)
+    {
+        min = qMin(v, min);
+        max = qMax(v, max);
+    }
+
+    return QPair<fBit64, fBit64>(min, max);
+}
