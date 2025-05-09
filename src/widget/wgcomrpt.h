@@ -31,6 +31,8 @@ private:
     QPair<fBit64, fBit64> m_xAxisRange;
     QPair<fBit64, fBit64> m_yAxisRange;
     QMap<QString, QString> *m_pDictMap;
+    QCPItemTracer *m_pTracer;
+    QCPItemText *m_pQCPText;
 
     // 组合图像
     UnionPlot *m_pCurr; // 当前图像

@@ -124,7 +124,7 @@ void InitStatusBar(QStatusBar *statusBar)
 /**
  * @brief PromptOut 设置下方状态栏文本
  * @param content 文本内容
- * @param outtime 多久后自动清除（0：为不清除）
+ * @param outtime 多久后自动清除（0：为不清除）ms
  */
 void PromptOut(const QString &content, Bit32 outtime)
 {

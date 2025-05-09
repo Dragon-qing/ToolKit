@@ -39,11 +39,31 @@ UnionPlot::UnionPlot(Layout_Type layout, Bit32 plotNum, QWidget *parent)
             Bit32 col = i % columMax;
             ui->gridLayout->addWidget(plotp, row, col);
         }
+        plotp->installEventFilter(this);
         m_plotList << plotp;
+        // 初始化跟踪点
+        QCPItemTracer *tracer = new QCPItemTracer(plotp);
+        tracer->setBrush(Qt::red);
+        tracer->setPen(QPen(Qt::red));
+        tracer->setStyle(QCPItemTracer::tsCircle);
+        tracer->setSize(7);
+        tracer->setVisible(false);
+        m_pTracer << tracer;
+        // 初始化文本信息
+        QCPItemText *text = new QCPItemText(plotp);
+        text->setColor(QColor(Qt::red));
+        text->setFont(QFont(FONT_STYLE, 9));
+        text->setLayer("overlay");
+        text->setVisible(false);
+        m_pText << text;
     }
 
     m_xRangeList.clear();
     m_yRangeList.clear();
+    m_nCurBlock = 0;
+    m_nPreBlock = 0;
+    this->setMouseTracking(true);
+    installEventFilter(this);
 }
 
 UnionPlot::~UnionPlot()
@@ -63,7 +83,7 @@ UnionPlot::~UnionPlot()
  * @param xdata
  * @param ydata
  */
-void UnionPlot::SetData(QList<QVector<fBit64> > xdata, QList<QVector<fBit64> > ydata)
+void UnionPlot::SetData(QList<QVector<fBit64> > *xdata, QList<QVector<fBit64> > *ydata)
 {
     m_xRangeList.clear();
     m_yRangeList.clear();
@@ -72,9 +92,9 @@ void UnionPlot::SetData(QList<QVector<fBit64> > xdata, QList<QVector<fBit64> > y
         QCustomPlot *plot = m_plotList.at(i);
         plot->clearGraphs();
         plot->addGraph();
-        plot->graph(0)->setData(xdata.at(i), ydata.at(i));
-        m_xRangeList << GetRange(xdata.at(i));
-        m_yRangeList << GetRange(ydata.at(i));
+        plot->graph(0)->setData(xdata->at(i), ydata->at(i));
+        m_xRangeList << GetRange(xdata->at(i));
+        m_yRangeList << GetRange(ydata->at(i));
     }
 }
 
@@ -109,8 +129,217 @@ void UnionPlot::RePlot()
         QPair<fBit64, fBit64> xRange = m_xRangeList.at(i);
         QPair<fBit64, fBit64> yRange = m_yRangeList.at(i);
 
-        plot->xAxis->setRange(xRange.first - 50, xRange.second + 50);
-        plot->yAxis->setRange(yRange.first - 50, yRange.second + 50);
+        fBit64 xOffset = (xRange.second - xRange.first) * 0.1;
+        fBit64 yOffset = (yRange.second - yRange.first) * 0.1;
+
+        plot->xAxis->setRange(xRange.first - xOffset, xRange.second + xOffset);
+        plot->yAxis->setRange(yRange.first - yOffset, yRange.second + yOffset);
+        plot->replot();
+    }
+}
+
+bool UnionPlot::eventFilter(QObject *obj, QEvent *event)
+{
+
+    if (event->type() == QEvent::MouseMove)
+    {
+        Bit32 block = -1;
+        for (Bit32 i = 0; i < m_plotList.count(); i++)
+        {
+            if (obj == m_plotList.at(i))
+            {
+                block = i;
+                break;
+            }
+        }
+        if (block >= 0)
+        {
+            m_nCurBlock = block;
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+            MouseMoveHandleSlot(mouseEvent, block);
+        }
+        if (m_nPreBlock != m_nCurBlock)
+        {
+            m_nPreBlock = m_nCurBlock;
+            for(Bit32 i = 0; i < m_pTracer.count(); i++)
+            {
+                if (i != m_nCurBlock)
+                {
+                    m_pTracer.at(i)->setVisible(false);
+                    m_pText.at(i)->setVisible(false);
+                    m_plotList.at(i)->replot();
+                }
+            }
+        }
+    }
+
+    return BaseWidget::eventFilter(obj, event);
+}
+
+void UnionPlot::MouseMoveHandleSlot(QMouseEvent *event, Bit32 block)
+{
+    QCustomPlot *plot = m_plotList.value(block);
+    QCPItemTracer *tracer = m_pTracer.value(block);
+    QCPItemText *text = m_pText.value(block);
+
+    if (plot == NULL || plot->graphCount() == 0)
+    {
+        return;
+    }
+
+    //获取鼠标坐标，相对父窗体坐标
+    Bit32 x_pos = event->pos().x();
+    Bit32 y_pos = event->pos().y();
+
+    //鼠标坐标转化为CustomPlot内部坐标
+    fBit32 x_val = plot->xAxis->pixelToCoord(x_pos);
+    fBit32 y_val = plot->yAxis->pixelToCoord(y_pos);
+
+    //通过坐标轴范围判断光标是否在点附近
+    fBit32 x_begin = plot->xAxis->range().lower;
+    fBit32 x_end = plot->xAxis->range().upper;
+    fBit32 y_begin = plot->yAxis->range().lower;
+    fBit32 y_end = plot->yAxis->range().upper;
+    fBit32 x_tolerate = (x_end - x_begin) / 40;//光标与最近点距离在此范围内，便显示该最近点的值
+    fBit32 y_tolerate = (y_end - y_begin) / 40;
+
+    //判断有没有超出坐标轴范围
+    if (x_val < x_begin || x_val > x_end)
+    {
+        text->setVisible(false);
+        return;
+    }
+
+    //通过x值查找离曲线最近的一个key值索引
+    Bit32 index = 0;
+    Bit32 index_left = plot->graph(0)->findBegin(x_val, true);//左边最近的一个key值索引
+    Bit32 index_right = plot->graph(0)->findEnd(x_val, true);//右边
+    fBit32 dif_left = fabs(plot->graph(0)->data()->at(index_left)->key - x_val);
+    fBit32 dif_right = fabs(plot->graph(0)->data()->at(index_right)->key - x_val);
+    index = ((dif_left < dif_right) ? index_left : index_right);
+
+    double x_posval = plot->graph(0)->data()->at(index)->key;//通过得到的索引获取key值
+    double y_posval = plot->graph(0)->data()->at(index)->value;//通过得到的索引获取value值
+
+    fBit32 dx = fabs(x_posval - x_val);
+    fBit32 dy = fabs(y_posval - y_val);
+
+    Bit32 graphIndex = 0;//curve index closest to the cursor
+    //通过遍历每条曲线在index处的value值，得到离光标点最近的value及对应曲线索引
+    for (Bit32 i = 0, n = plot->xAxis->graphs().count(); i < n; i++)
+    {
+        y_posval = fabs(plot->graph(i)->data()->at(index)->value - y_val);
+        if (y_posval < dy)
+        {
+            dy = y_posval;
+            graphIndex = i;
+        }
+    }
+
+    //判断光标点与最近点的距离是否在设定范围内
+    if (dx <= x_tolerate && dy <= y_tolerate)
+    {
+        y_posval = plot->graph(graphIndex)->data()->at(index)->value;
+
+        QString strToolTip = QString("x=%1\ny=%2").arg(x_posval).arg(y_posval);
+        tracer->setGraph(plot->graph(0));
+        tracer->setGraphKey(x_posval);
+        tracer->setVisible(true);
+        text->position->setParentAnchor(tracer->position);
+        text->setText(strToolTip);
+        text->setTextAlignment(Qt::AlignLeft);
+        text->setPositionAlignment(Qt::AlignBottom | Qt::AlignHCenter);  // 文本底部对齐到 tracer
+        text->position->setCoords(0, -10);
+        text->setVisible(true);
+    }
+    else
+    {
+        text->setVisible(false);
+        tracer->setVisible(false);
+
+    }
+    plot->replot();
+}
+
+void UnionPlot::keyPressEvent(QKeyEvent *event)
+{
+    if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_Z)
+    {
+        RePlot();
+    }
+    else if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_Plus)
+    {
+        EnlargeGraph(m_nCurBlock, 0);
+    }
+    else if (event->key() == Qt::Key_Plus)
+    {
+        EnlargeGraph(m_nCurBlock, 1);
+    }
+    else if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_Minus)
+    {
+        ReduceGraph(m_nCurBlock, 0);
+    }
+    else if (event->key() == Qt::Key_Minus)
+    {
+        ReduceGraph(m_nCurBlock, 1);
+    }
+
+}
+
+void UnionPlot::EnlargeGraph(Bit32 block, Bit16 axis)
+{
+    if (block < 0 || block >= m_plotList.count())
+    {
+        return;
+    }
+    QCustomPlot * plot = m_plotList.at(block);
+    if (axis == 0)
+    {
+        QCPAxis *xAxis = plot->xAxis;
+        QCPRange range = xAxis->range();
+        fBit64 center = range.center();
+        fBit64 scaleFactor = 0.9;  // 缩小范围即为放大
+        fBit64 newSize = range.size() * scaleFactor;
+        xAxis->setRange(center - newSize / 2, center + newSize / 2);
+        plot->replot();
+    }
+    else if (axis == 1)
+    {
+        QCPAxis *yAxis = plot->yAxis;
+        QCPRange range = yAxis->range();
+        fBit64 center = range.center();
+        fBit64 scaleFactor = 0.9;  // 缩小范围即为放大
+        fBit64 newSize = range.size() * scaleFactor;
+        yAxis->setRange(center - newSize / 2, center + newSize / 2);
+        plot->replot();
+    }
+}
+
+void UnionPlot::ReduceGraph(Bit32 block, Bit16 axis)
+{
+    if (block < 0 || block >= m_plotList.count())
+    {
+        return;
+    }
+    QCustomPlot * plot = m_plotList.at(block);
+    if (axis == 0)
+    {
+        QCPAxis *xAxis = plot->xAxis;
+        QCPRange range = xAxis->range();
+        fBit64 center = range.center();
+        fBit64 scaleFactor = 1.1;  // 放大范围即为缩小
+        fBit64 newSize = range.size() * scaleFactor;
+        xAxis->setRange(center - newSize / 2, center + newSize / 2);
+        plot->replot();
+    }
+    else if (axis == 1)
+    {
+        QCPAxis *yAxis = plot->yAxis;
+        QCPRange range = yAxis->range();
+        fBit64 center = range.center();
+        fBit64 scaleFactor = 1.1;  // 放大范围即为缩小
+        fBit64 newSize = range.size() * scaleFactor;
+        yAxis->setRange(center - newSize / 2, center + newSize / 2);
         plot->replot();
     }
 }

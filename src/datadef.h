@@ -1,5 +1,6 @@
 ﻿#ifndef DATADEF_H
 #define DATADEF_H
+typedef short Bit16;
 typedef int Bit32;
 typedef long long Bit64;
 typedef unsigned int uBit32;

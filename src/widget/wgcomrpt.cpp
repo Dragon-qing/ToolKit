@@ -29,6 +29,18 @@ WgComRpt::WgComRpt(QWidget *parent)
     ui->label->setText("");
     connect(ui->defaultRaido, &QRadioButton::toggled, this, &WgComRpt::DefaultRadioHandle);
     connect(ui->progressBar, &QProgressBar::valueChanged, this, &WgComRpt::ProcessChangeHandle);
+    m_pJour = NULL;
+    m_pTracer = new QCPItemTracer(ui->plot);
+    m_pTracer->setStyle(QCPItemTracer::tsCircle);
+    m_pTracer->setPen(QPen(Qt::red));
+    m_pTracer->setBrush(Qt::red);
+    m_pTracer->setSize(7);
+    m_pTracer->setVisible(false);
+    m_pQCPText = new QCPItemText(ui->plot);
+    m_pQCPText->setColor(QColor(Qt::red));
+    m_pQCPText->setFont(QFont(FONT_STYLE, 9));
+    m_pQCPText->setLayer("overlay");
+    m_pQCPText->setVisible(false);
 }
 
 WgComRpt::~WgComRpt()
@@ -81,25 +93,66 @@ void WgComRpt::BuildUnioPlot(QString mask)
             m_pJour->SetAxisLabel(QStringList() << TR("位置(mm)") << TR("位置(mm)") << TR("位置(mm)") << TR("位置(mm)"),
                                   QStringList() << TR("正向负载电流(mm/min)") << TR("负向负载电流(mm/min)") << TR("正向进给速度(mm/min)") << TR("负向进给速度(mm/min)"));
         }
-        QVector<fBit64, fBit64> posX;
-        QVector<fBit64, fBit64> negX;
-        QVector<fBit64, fBit64> posJour;
-        QVector<fBit64, fBit64> negJour;
-        QVector<fBit64, fBit64> posV;
-        QVector<fBit64, fBit64> negV;
-        Bit32 totalNum = HmiComRpt::GetTotalPosNum();
+        QVector<fBit64> posX;
+        QVector<fBit64> negX;
+        QVector<fBit64> posJour;
+        QVector<fBit64> negJour;
+        QVector<fBit64> posV;
+        QVector<fBit64> negV;
+        Bit32 totalNum = HmiComRpt::Instance().GetTotalPosNum();
         QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+        fBit64 perVel = 1;
+        bool reverseFlag = false;   // 反向标志
+        bool beginFlag = true;  // 开始段标志
+        Bit32 ignoreCount = totalNum * 0.05; // 忽略前5%的数据开始寻找反向点。
         for (Bit32 i = 0; i < totalNum; i++)
         {
             fBit64 positionCoef = coefList.at(0).toDouble();
-            fBit64 position = HmiComRpt::Instance().GetValue(DATA_PART, i, "AXIS_ACT");
+            fBit64 position = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * positionCoef;
+            fBit64 jourCoef = coefList.at(1).toDouble();
+            fBit64 jour = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * jourCoef;
+            fBit64 actVelCoef = coefList.at(2).toDouble();
+            fBit64 actVel = HmiComRpt::Instance().GetValue(DATA_PART, 2, i).toLongLong() * actVelCoef;
+            fBit64 cmdVelCoef = coefList.at(4).toDouble();
+            fBit64 cmdVel = HmiComRpt::Instance().GetValue(DATA_PART, 4, i).toLongLong() * cmdVelCoef;
+
+            if (!beginFlag && perVel * actVel < 0)
+            {
+                // 当前开始反向运动
+                reverseFlag = true;
+            }
+            if (!reverseFlag)
+            {
+                posX << position;
+                posJour << jour;
+                posV << actVel;
+            }
+            else
+            {
+                negX << position;
+                negJour << jour;
+                negV << actVel;
+            }
+
+            if (actVel != 0.0 && beginFlag && (i > ignoreCount))
+            {
+                // 当前非起始段，更新标志位
+                beginFlag = false;
+            }
+
+            if (!beginFlag && actVel != 0.0)
+            {
+                perVel = actVel;
+            }
         }
 
 
         xdata << posX << negX << posX << negX;
         ydata << posJour << negJour << posV << negV;
-        m_pJour->SetData(xdata, ydata);
+        m_pJour->SetData(&xdata, &ydata);
+        ui->verticalLayout_3->removeWidget(m_pCurr);
         m_pCurr = m_pJour;
+        ui->verticalLayout_3->addWidget(m_pJour);
     }
 }
 
@@ -193,7 +246,8 @@ void WgComRpt::MouseMoveEventHandle(QMouseEvent *event)
     //判断有没有超出坐标轴范围
     if (x_val < x_begin || x_val > x_end)
     {
-        QToolTip::hideText();
+        m_pTracer->setVisible(false);
+        m_pQCPText->setVisible(false);
         return;
     }
 
@@ -228,14 +282,23 @@ void WgComRpt::MouseMoveEventHandle(QMouseEvent *event)
     {
         y_posval = ui->plot->graph(graphIndex)->data()->at(index)->value;
 
-        QString strToolTip = QString("Graph:%1 \nx=%2\ny=%3").arg(graphIndex + 1).arg(x_posval).arg(y_posval);
+        m_pTracer->setGraph(ui->plot->graph(0));
+        m_pTracer->setGraphKey(x_posval);
+        m_pTracer->setVisible(true);
+        m_pQCPText->position->setParentAnchor(m_pTracer->position);
+        m_pQCPText->setText(QString("x=%1\ny=%2").arg(x_posval).arg(y_posval));
+        m_pQCPText->setTextAlignment(Qt::AlignLeft);
+        m_pQCPText->setPositionAlignment(Qt::AlignBottom | Qt::AlignHCenter);  // 文本底部对齐到 tracer
+        m_pQCPText->position->setCoords(0, -10);
+        m_pQCPText->setVisible(true);
 
-        QToolTip::showText(cursor().pos(), strToolTip, ui->plot);
     }
     else
     {
-        QToolTip::hideText();
+        m_pTracer->setVisible(false);
+        m_pQCPText->setVisible(false);
     }
+    ui->plot->replot();
 }
 
 
@@ -315,21 +378,14 @@ void WgComRpt::on_drawBtn_clicked()
     ui->plot->graph(0)->setData(xVec, yVec);
     ui->plot->replot();
     connect(ui->plot, &QCustomPlot::mouseMove, this, &WgComRpt::MouseMoveEventHandle);
-    PromptOut(TR("绘制完成"), 3);
+    PromptOut(TR("绘制完成"), 3000);
 }
 
 void WgComRpt::DefaultRadioHandle(bool checked)
 {
     if (checked) // 使用预定组合图
     {
-        QString fileName = HmiComRpt::Instance().GetFileName();
-        QRegularExpression re("^(?<type>MC_\\d+)_.*$");
-        QRegularExpressionMatch match = re.match(fileName);
-        QString mask = "";
-        if (match.hasMatch())
-        {
-            mask = match.captured("type");
-        }
+        QString mask = HmiComRpt::Instance().GetMask();
         BuildUnioPlot(mask);
         UnionReplot();
         ui->stackedWidget->setCurrentIndex(1);

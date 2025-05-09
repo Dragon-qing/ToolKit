@@ -31,12 +31,14 @@ public:
     Bit32 GetTotalPosNum();
     QVariant GetValue(Bit32 type, QVariant key = QVariant(), QVariant subKey = QVariant());
     QString GetFileName();
+    QString GetMask(){ return m_sMask; }
 private:
     QString m_sPath; // 数据文件路径
     QMap<QString, QVariant> m_infoMap; // 文件头数据
     QMap<QString, QVariant> m_configMap; // 配置数据
     QList<QVector<Bit64>*> m_dataList; // 数据部分
     ReadFileThread *m_pThread;
+    QString m_sMask; // 当前数据文件的mask
 
     void Clear();
 };

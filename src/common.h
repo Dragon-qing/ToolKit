@@ -11,6 +11,7 @@
 #define UTF8 QTextCodec::codecForName("UTF-8")
 #define TR(str) tr((UTF8->fromUnicode(str).data()))
 #define UTF_8 "UTF-8"
+#define FONT_STYLE "Microsoft YaHei"
 
 #define TOOLS_PATH "./tools"
 

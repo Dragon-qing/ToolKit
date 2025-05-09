@@ -48,6 +48,14 @@ void HmiComRpt::SetPath(QString path)
 
     Clear();
     m_sPath = path;
+    QString fileName = HmiComRpt::Instance().GetFileName();
+    QRegularExpression re("^(?<type>MC_\\d+)_.*$");
+    QRegularExpressionMatch match = re.match(fileName);
+    m_sMask = "";
+    if (match.hasMatch())
+    {
+        m_sMask = match.captured("type");
+    }
     m_pThread = new ReadFileThread(this);
     m_pThread->SetConfig(path, &m_infoMap, &m_configMap, &m_dataList);
     // 运行完后自动销毁
