@@ -38,13 +38,25 @@ private:
     UnionPlot *m_pCurPlot; // 当前图像
     UnionPlot *m_pJourPlot; // 全程电流
     UnionPlot *m_pPosPlot; // 位置环
+    UnionPlot *m_pSpeedPlot; // 速度环
+    UnionPlot *m_pSpdlDirPlot; // 主轴定向
+    UnionPlot *m_pSpdlFluPlot; // 主轴波动
+    UnionPlot *m_pSpdlSpeedPlot; // 主轴升降速
+    UnionPlot *m_pToolChangePlot; // 换刀
+    UnionPlot *m_pTapPlot; // 刚性攻丝
 
     void InitDict();
     void UnionReplot();
     void BuildUnioPlot(QString mask);
     void BuildJourDefaultPlot();
     void BuildPosDefaultPlot();
-    
+    void BuildSpdlDirDefaultPlot();
+    void BuildSpdlFluDefaultPlot();
+    void BuildSpeedDefaultPlot();
+    void BuildSpdlSpeedDefultPlot();
+    void BuildToolChangeDefaultPlot();
+    void BuildTapDefault();
+
     void AddUnionPlot(UnionPlot *plot);
 
 private slots:

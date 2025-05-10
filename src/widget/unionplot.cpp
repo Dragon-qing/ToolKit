@@ -148,6 +148,14 @@ void UnionPlot::RePlot()
 
         fBit64 xOffset = (xRange.second - xRange.first) * 0.1;
         fBit64 yOffset = (yRange.second - yRange.first) * 0.1;
+        if (xOffset == 0)
+        {
+            xOffset += 5;
+        }
+        if (yOffset == 0)
+        {
+            yOffset += 5;
+        }
 
         plot->xAxis->setRange(xRange.first - xOffset, xRange.second + xOffset);
         plot->yAxis->setRange(yRange.first - yOffset, yRange.second + yOffset);
