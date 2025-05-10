@@ -451,12 +451,13 @@ void WgComRpt::BuildTapDefault()
     fBit64 samplePeriod = 1.0;
     QVector<fBit64> syncErr;
     fBit64 syncErrCoef = 1000;
-
+    fBit64 pitch = HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_PITCH").toDouble();
+    fBit64 syncErrVal = 0.0;
     for (Bit32 i = 0; i < totalCount; i++)
     {
         fBit64 axisVal = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * axisVelCoef;
         fBit64 syncAxisVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * syncAxisVelCoef;
-        fBit64 syncErrVal = (syncAxisVal - axisVal) / 60000.0 * samplePeriod * syncErrCoef;
+        syncErrVal += (syncAxisVal * pitch - axisVal) / 60000.0 * samplePeriod * syncErrCoef;
         axisVel << axisVal;
         syncAxisVel << syncAxisVal;
         time << i * samplePeriod;
