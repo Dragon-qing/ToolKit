@@ -21,9 +21,10 @@ public:
         RECTANGLE_LAYOUT        // 矩阵排列
 
     }Layout_Type;
+
     explicit UnionPlot(Layout_Type layout, Bit32 plotNum, QWidget *parent = nullptr);
     ~UnionPlot();
-    void SetData(QList<QVector<fBit64>> *xdata, QList<QVector<fBit64>> *ydata);
+    void SetData(QList<QVector<fBit64>> *xdata, QList<QVector<fBit64>> *ydata, QVector<Bit32> graphNum, QStringList lineName = QStringList());
     void SetAxisLabel(QStringList xlabelList, QStringList ylabelList);
     void RePlot();
     bool eventFilter(QObject *obj, QEvent *event) override;
@@ -46,6 +47,7 @@ private:
 
     void EnlargeGraph(Bit32 block, Bit16 axis); // 放大图像
     void ReduceGraph(Bit32 block, Bit16 axis); // 缩小图像
+    void FitRange(QPair<fBit64, fBit64> &first, QPair<fBit64, fBit64>second);
 };
 
 #endif // UNIONPLOT_H

@@ -159,3 +159,23 @@ QPair<fBit64, fBit64> GetRange(const QVector<fBit64> &in)
 
     return QPair<fBit64, fBit64>(min, max);
 }
+
+/**
+ * @brief LayoutContainsWidget 判断layout中是否存在指定widget
+ * @param layout
+ * @param widget
+ * @return
+ */
+bool LayoutContainsWidget(QLayout *layout, QWidget *widget)
+{
+    for (Bit32 i = 0; i < layout->count(); ++i)
+    {
+        QLayoutItem *item = layout->itemAt(i);
+        if (item && item->widget() == widget)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}

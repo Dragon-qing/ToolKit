@@ -4,6 +4,7 @@
 #include <QString>
 #include <QDomDocument>
 #include <QStatusBar>
+#include <QLayout>
 
 #include "datadef.h"
 #include "logdt.h"
@@ -33,4 +34,6 @@ void InitStatusBar(QStatusBar *statusBar);
 void PromptOut(const QString &content, Bit32 outtime = 0);
 // 获取数据的范围
 QPair<fBit64, fBit64> GetRange(const QVector<fBit64> &in);
+
+bool LayoutContainsWidget(QLayout *layout, QWidget* widget);
 #endif // COMMON_H

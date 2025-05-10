@@ -29,7 +29,8 @@ WgComRpt::WgComRpt(QWidget *parent)
     ui->label->setText("");
     connect(ui->defaultRaido, &QRadioButton::toggled, this, &WgComRpt::DefaultRadioHandle);
     connect(ui->progressBar, &QProgressBar::valueChanged, this, &WgComRpt::ProcessChangeHandle);
-    m_pJour = NULL;
+    m_pJourPlot = NULL;
+    m_pPosPlot = NULL;
     m_pTracer = new QCPItemTracer(ui->plot);
     m_pTracer->setStyle(QCPItemTracer::tsCircle);
     m_pTracer->setPen(QPen(Qt::red));
@@ -41,6 +42,7 @@ WgComRpt::WgComRpt(QWidget *parent)
     m_pQCPText->setFont(QFont(FONT_STYLE, 9));
     m_pQCPText->setLayer("overlay");
     m_pQCPText->setVisible(false);
+    m_pCurPlot = NULL;
 }
 
 WgComRpt::~WgComRpt()
@@ -83,84 +85,146 @@ void WgComRpt::InitDict()
 
 void WgComRpt::BuildUnioPlot(QString mask)
 {
+    if (mask == "MC_0") // 位置环
+    {
+        BuildPosDefaultPlot();
+    }
+    else if (mask == "MC_16") // 全程电流
+    {
+        BuildJourDefaultPlot();
+    }
+
+}
+
+void WgComRpt::BuildJourDefaultPlot()
+{
+    if (m_pJourPlot == NULL)
+    {
+        m_pJourPlot = new UnionPlot(UnionPlot::VERTICAL_LAYOUT, 4, this);
+        m_pJourPlot->SetAxisLabel(QStringList() << TR("位置(mm)") << TR("位置(mm)") << TR("位置(mm)") << TR("位置(mm)"),
+                              QStringList() << TR("正向负载电流(mm/min)") << TR("负向负载电流(mm/min)") << TR("正向进给速度(mm/min)") << TR("负向进给速度(mm/min)"));
+    }
     QList<QVector<fBit64>> xdata;
     QList<QVector<fBit64>> ydata;
-    if (mask == "MC_16") // 全程电流
+    QVector<fBit64> posX;
+    QVector<fBit64> negX;
+    QVector<fBit64> posJour;
+    QVector<fBit64> negJour;
+    QVector<fBit64> posV;
+    QVector<fBit64> negV;
+    Bit32 totalNum = HmiComRpt::Instance().GetTotalPosNum();
+    QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    fBit64 perVel = 1;
+    bool reverseFlag = false;   // 反向标志
+    bool beginFlag = true;  // 开始段标志
+    Bit32 ignoreCount = totalNum * 0.05; // 忽略前5%的数据开始寻找反向点。
+    for (Bit32 i = 0; i < totalNum; i++)
     {
-        if (m_pJour == NULL)
+        fBit64 positionCoef = coefList.at(0).toDouble();
+        fBit64 position = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * positionCoef;
+        fBit64 jourCoef = coefList.at(1).toDouble();
+        fBit64 jour = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * jourCoef;
+        fBit64 actVelCoef = coefList.at(2).toDouble();
+        fBit64 actVel = HmiComRpt::Instance().GetValue(DATA_PART, 2, i).toLongLong() * actVelCoef;
+        fBit64 cmdVelCoef = coefList.at(4).toDouble();
+        fBit64 cmdVel = HmiComRpt::Instance().GetValue(DATA_PART, 4, i).toLongLong() * cmdVelCoef;
+
+        if (!beginFlag && perVel * actVel < 0)
         {
-            m_pJour = new UnionPlot(UnionPlot::VERTICAL_LAYOUT, 4, this);
-            m_pJour->SetAxisLabel(QStringList() << TR("位置(mm)") << TR("位置(mm)") << TR("位置(mm)") << TR("位置(mm)"),
-                                  QStringList() << TR("正向负载电流(mm/min)") << TR("负向负载电流(mm/min)") << TR("正向进给速度(mm/min)") << TR("负向进给速度(mm/min)"));
+            // 当前开始反向运动
+            reverseFlag = true;
         }
-        QVector<fBit64> posX;
-        QVector<fBit64> negX;
-        QVector<fBit64> posJour;
-        QVector<fBit64> negJour;
-        QVector<fBit64> posV;
-        QVector<fBit64> negV;
-        Bit32 totalNum = HmiComRpt::Instance().GetTotalPosNum();
-        QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
-        fBit64 perVel = 1;
-        bool reverseFlag = false;   // 反向标志
-        bool beginFlag = true;  // 开始段标志
-        Bit32 ignoreCount = totalNum * 0.05; // 忽略前5%的数据开始寻找反向点。
-        for (Bit32 i = 0; i < totalNum; i++)
+        if (!reverseFlag)
         {
-            fBit64 positionCoef = coefList.at(0).toDouble();
-            fBit64 position = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * positionCoef;
-            fBit64 jourCoef = coefList.at(1).toDouble();
-            fBit64 jour = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * jourCoef;
-            fBit64 actVelCoef = coefList.at(2).toDouble();
-            fBit64 actVel = HmiComRpt::Instance().GetValue(DATA_PART, 2, i).toLongLong() * actVelCoef;
-            fBit64 cmdVelCoef = coefList.at(4).toDouble();
-            fBit64 cmdVel = HmiComRpt::Instance().GetValue(DATA_PART, 4, i).toLongLong() * cmdVelCoef;
-
-            if (!beginFlag && perVel * actVel < 0)
-            {
-                // 当前开始反向运动
-                reverseFlag = true;
-            }
-            if (!reverseFlag)
-            {
-                posX << position;
-                posJour << jour;
-                posV << actVel;
-            }
-            else
-            {
-                negX << position;
-                negJour << jour;
-                negV << actVel;
-            }
-
-            if (actVel != 0.0 && beginFlag && (i > ignoreCount))
-            {
-                // 当前非起始段，更新标志位
-                beginFlag = false;
-            }
-
-            if (!beginFlag && actVel != 0.0)
-            {
-                perVel = actVel;
-            }
+            posX << position;
+            posJour << jour;
+            posV << actVel;
+        }
+        else
+        {
+            negX << position;
+            negJour << jour;
+            negV << actVel;
         }
 
+        if (actVel != 0.0 && beginFlag && (i > ignoreCount))
+        {
+            // 当前非起始段，更新标志位
+            beginFlag = false;
+        }
 
-        xdata << posX << negX << posX << negX;
-        ydata << posJour << negJour << posV << negV;
-        m_pJour->SetData(&xdata, &ydata);
-        ui->verticalLayout_3->removeWidget(m_pCurr);
-        m_pCurr = m_pJour;
-        ui->verticalLayout_3->addWidget(m_pJour);
+        if (!beginFlag && actVel != 0.0)
+        {
+            perVel = actVel;
+        }
     }
+
+
+    xdata << posX << negX << posX << negX;
+    ydata << posJour << negJour << posV << negV;
+    m_pJourPlot->SetData(&xdata, &ydata, QVector<Bit32>() << 1 << 1 << 1 << 1);
+    AddUnionPlot(m_pJourPlot);
+}
+
+void WgComRpt::BuildPosDefaultPlot()
+{
+    if (m_pPosPlot == NULL)
+    {
+        m_pPosPlot = new UnionPlot(UnionPlot::VERTICAL_LAYOUT, 2, this);
+        m_pPosPlot->SetAxisLabel(QStringList() << TR("时间(ms)") << TR("时间(ms)"),
+                              QStringList() << TR("指令/实际位置(mm)") << TR("跟踪误差(um)"));
+    }
+    QList<QVector<fBit64>> xdata;
+    QList<QVector<fBit64>> ydata;
+    Bit32 totalCount = HmiComRpt::Instance().GetTotalPosNum();
+    QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    QVector<fBit64> followErr;
+    fBit64 followErrCoef = coefList.at(0).toDouble();
+    QVector<fBit64> actPos;
+    fBit64 actPosCoef = coefList.at(1).toDouble();
+    QVector<fBit64> cmdPos;
+    fBit64 cmdPosCoef = coefList.at(2).toDouble();
+    QVector<fBit64> time;
+    fBit64 samplePeriod = HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
+
+    for (Bit32 i = 0; i < totalCount; i++)
+    {
+        fBit64 followErrVal = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * followErrCoef;
+        fBit64 actPosVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * actPosCoef;
+        fBit64 cmdPosVal = HmiComRpt::Instance().GetValue(DATA_PART, 2, i).toLongLong() * cmdPosCoef;
+
+        followErr << followErrVal;
+        actPos << actPosVal;
+        cmdPos << cmdPosVal;
+        time << i * samplePeriod;
+    }
+
+    xdata << time << time;
+    ydata << actPos << cmdPos << followErr;
+    m_pPosPlot->SetData(&xdata, &ydata, QVector<Bit32>() << 2 << 1, QStringList() << TR("实际位置") << TR("指令位置") << TR("跟踪误差"));
+    // 添加至布局
+    AddUnionPlot(m_pPosPlot);
+}
+
+void WgComRpt::AddUnionPlot(UnionPlot *plot)
+{
+    if (m_pCurPlot != NULL)
+    {
+        m_pCurPlot->setVisible(false);
+    }
+    if (!LayoutContainsWidget(ui->verticalLayout_3, plot))
+    {
+        ui->verticalLayout_3->addWidget(plot);
+    }
+    m_pCurPlot = plot;
+    plot->setVisible(true);
 }
 
 void WgComRpt::UnionReplot()
 {
-    if (m_pCurr != NULL)
+    if (m_pCurPlot != NULL)
     {
-        m_pCurr->RePlot();
+        m_pCurPlot->RePlot();
     }
 }
 
@@ -170,6 +234,10 @@ void WgComRpt::on_OpenBtn_clicked()
     QString filePath = QFileDialog::getOpenFileName(this, QObject::TR("选择文件"), desktopPath);
     if (!QFileInfo(filePath).fileName().startsWith("MC_"))
     {
+        if (filePath.isEmpty())
+        {
+            return;
+        }
         m_pDlg->ExecAndRet("请选择采样文件！！！！");
         return;
     }
@@ -210,6 +278,8 @@ void WgComRpt::ProcessChangeHandle(int changeValue)
             QString labelText = match.captured("type");
             ui->label->setText(m_pDictMap->value(labelText, labelText));
         }
+		// 刷新预设图像
+        DefaultRadioHandle(ui->defaultRaido->isChecked());
     }
     else if (changeValue > 0 && ui->OpenBtn->isEnabled())
     {

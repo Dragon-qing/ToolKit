@@ -35,12 +35,18 @@ private:
     QCPItemText *m_pQCPText;
 
     // 组合图像
-    UnionPlot *m_pCurr; // 当前图像
-    UnionPlot *m_pJour; // 全程电流
+    UnionPlot *m_pCurPlot; // 当前图像
+    UnionPlot *m_pJourPlot; // 全程电流
+    UnionPlot *m_pPosPlot; // 位置环
 
     void InitDict();
-    void BuildUnioPlot(QString mask);
     void UnionReplot();
+    void BuildUnioPlot(QString mask);
+    void BuildJourDefaultPlot();
+    void BuildPosDefaultPlot();
+    
+    void AddUnionPlot(UnionPlot *plot);
+
 private slots:
     void on_OpenBtn_clicked();
     void ProcessChangeHandle(int changeValue);

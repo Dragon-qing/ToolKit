@@ -7,6 +7,8 @@
 #include "unionplot.h"
 #include "ui_unionplot.h"
 
+const QList<QColor> LINE_COLOR = {QColor(0, 120, 212), QColor(0, 178, 148), QColor(180, 0, 158), QColor(92, 45, 145)};
+
 /**
  * @brief UnionPlot::UnionPlot 构造函数
  * @param layout 布局种类
@@ -83,18 +85,32 @@ UnionPlot::~UnionPlot()
  * @param xdata
  * @param ydata
  */
-void UnionPlot::SetData(QList<QVector<fBit64> > *xdata, QList<QVector<fBit64> > *ydata)
+void UnionPlot::SetData(QList<QVector<fBit64> > *xdata, QList<QVector<fBit64> > *ydata, QVector<Bit32> graphNum, QStringList lineName)
 {
     m_xRangeList.clear();
     m_yRangeList.clear();
+    Bit32 totalGraph = 0;
     for (Bit32 i = 0; i < m_plotList.count(); i++)
     {
         QCustomPlot *plot = m_plotList.at(i);
+        Bit32 graphN = graphNum[i];
+        QPair<fBit64, fBit64> yrange(0, 0);
         plot->clearGraphs();
-        plot->addGraph();
-        plot->graph(0)->setData(xdata->at(i), ydata->at(i));
+        if (graphN > 1)
+        {
+            plot->legend->setVisible(true);
+        }
+        for (Bit32 j = 0 ; j < graphN; j++)
+        {
+            plot->addGraph();
+            plot->graph(j)->setPen(QPen(LINE_COLOR.at(j)));
+            plot->graph(j)->setName(lineName.value(totalGraph + j));
+            plot->graph(j)->setData(xdata->at(i), ydata->at(totalGraph + j));
+            FitRange(yrange, GetRange(ydata->at(totalGraph + j)));
+        }
+        totalGraph += graphN;
         m_xRangeList << GetRange(xdata->at(i));
-        m_yRangeList << GetRange(ydata->at(i));
+        m_yRangeList << yrange;
     }
 }
 
@@ -126,6 +142,7 @@ void UnionPlot::RePlot()
     for (Bit32 i = 0;i < m_plotList.count(); i++)
     {
         QCustomPlot *plot = m_plotList.at(i);
+        plot->setVisible(true);
         QPair<fBit64, fBit64> xRange = m_xRangeList.at(i);
         QPair<fBit64, fBit64> yRange = m_yRangeList.at(i);
 
@@ -242,7 +259,7 @@ void UnionPlot::MouseMoveHandleSlot(QMouseEvent *event, Bit32 block)
         y_posval = plot->graph(graphIndex)->data()->at(index)->value;
 
         QString strToolTip = QString("x=%1\ny=%2").arg(x_posval).arg(y_posval);
-        tracer->setGraph(plot->graph(0));
+        tracer->setGraph(plot->graph(graphIndex));
         tracer->setGraphKey(x_posval);
         tracer->setVisible(true);
         text->position->setParentAnchor(tracer->position);
@@ -263,21 +280,35 @@ void UnionPlot::MouseMoveHandleSlot(QMouseEvent *event, Bit32 block)
 
 void UnionPlot::keyPressEvent(QKeyEvent *event)
 {
-    if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_Z)
+    if (event->modifiers() & Qt::ControlModifier)
     {
-        RePlot();
-    }
-    else if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_Plus)
-    {
-        EnlargeGraph(m_nCurBlock, 0);
+        if (event->key() == Qt::Key_Z)
+        {
+            RePlot();
+        }
+        else if (event->key() == Qt::Key_Plus)
+        {
+            EnlargeGraph(m_nCurBlock, 0);
+        }
+        else if (event->key() == Qt::Key_Minus)
+        {
+            ReduceGraph(m_nCurBlock, 0);
+        }
+        else if (event->key() == Qt::Key_F)
+        {
+            for (Bit32 i = 0; i < m_plotList.count(); i++)
+            {
+                if (i != m_nCurBlock)
+                {
+                    m_plotList.at(i)->setVisible(false);
+
+                }
+            }
+        }
     }
     else if (event->key() == Qt::Key_Plus)
     {
         EnlargeGraph(m_nCurBlock, 1);
-    }
-    else if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_Minus)
-    {
-        ReduceGraph(m_nCurBlock, 0);
     }
     else if (event->key() == Qt::Key_Minus)
     {
@@ -341,5 +372,17 @@ void UnionPlot::ReduceGraph(Bit32 block, Bit16 axis)
         fBit64 newSize = range.size() * scaleFactor;
         yAxis->setRange(center - newSize / 2, center + newSize / 2);
         plot->replot();
+    }
+}
+
+void UnionPlot::FitRange(QPair<fBit64, fBit64> &first, QPair<fBit64, fBit64> second)
+{
+    if (first.first > second.first)
+    {
+        first.first = second.first;
+    }
+    if (first.second < second.second)
+    {
+        first.second = second.second;
     }
 }
