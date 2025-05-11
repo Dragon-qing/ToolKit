@@ -24,7 +24,7 @@ public:
 
     explicit UnionPlot(Layout_Type layout, Bit32 plotNum, QWidget *parent = nullptr);
     ~UnionPlot();
-    void SetData(QList<QVector<fBit64>> *xdata, QList<QVector<fBit64>> *ydata, QVector<Bit32> graphNum, QStringList lineName = QStringList());
+    void SetData(QList<QVector<fBit64>> *xdata, QList<QVector<fBit64>> *ydata, QVector<Bit32> graphNum, QStringList lineName = QStringList(), bool isCurve = false);
     void SetAxisLabel(QStringList xlabelList, QStringList ylabelList);
     void RePlot();
     bool eventFilter(QObject *obj, QEvent *event) override;

@@ -52,6 +52,7 @@ WgComRpt::WgComRpt(QWidget *parent)
     m_pSpdlSpeedPlot = NULL;
     m_pToolChangePlot = NULL;
     m_pTapPlot = NULL;
+    m_pCirclePlot = NULL;
 }
 
 WgComRpt::~WgComRpt()
@@ -103,6 +104,10 @@ void WgComRpt::BuildUnioPlot(QString mask)
     else if (mask == "MC_1") // 速度环
     {
         BuildSpeedDefaultPlot();
+    }
+    else if (mask == "MC_2") // 圆度测试
+    {
+        BuildCircleDefault();
     }
     else if (mask == "MC_3") // 刚性攻丝
     {
@@ -469,6 +474,41 @@ void WgComRpt::BuildTapDefault()
     m_pTapPlot->SetData(&xdata, &ydata, QVector<Bit32>() << 1 << 2, QStringList() << TR("同步误差") << TR("攻丝轴实际速度") << TR("同步轴实际速度"));
     // 添加至布局
     AddUnionPlot(m_pTapPlot);
+}
+
+void WgComRpt::BuildCircleDefault()
+{
+    if (m_pCirclePlot == NULL)
+    {
+        QMap<Bit32, QString> axisName({{0, TR("X轴")}, {1, TR("Y轴")}, {2, TR("Z轴")}, {3, TR("A轴")}, {4, TR("C轴")}});
+        m_pCirclePlot = new UnionPlot(UnionPlot::VERTICAL_LAYOUT, 1, this);
+        m_pCirclePlot->SetAxisLabel(QStringList() << TR("横轴"),
+                              QStringList() << TR("纵轴"));
+    }
+    QList<QVector<fBit64>> xdata;
+    QList<QVector<fBit64>> ydata;
+    Bit32 totalCount = HmiComRpt::Instance().GetTotalPosNum();
+    QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    QVector<fBit64> hAxis;
+    fBit64 hAxisCoef = coefList.at(0).toDouble();
+    QVector<fBit64> vAxis;
+    fBit64 vAxisCoef = coefList.at(1).toDouble();
+    QVector<fBit64> t;
+
+    for (Bit32 i = 0; i < totalCount; i++)
+    {
+        fBit64 hAxisVal = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * hAxisCoef;
+        fBit64 vAxisVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * vAxisCoef;
+
+        hAxis << hAxisVal;
+        vAxis << vAxisVal;
+        t << i;
+    }
+    xdata << hAxis;
+    ydata << vAxis;
+    m_pCirclePlot->SetData(&xdata, &ydata, QVector<Bit32>() << 1, QStringList(), true);
+    // 添加至布局
+    AddUnionPlot(m_pCirclePlot);
 }
 
 void WgComRpt::AddUnionPlot(UnionPlot *plot)

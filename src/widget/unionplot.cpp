@@ -85,7 +85,7 @@ UnionPlot::~UnionPlot()
  * @param xdata
  * @param ydata
  */
-void UnionPlot::SetData(QList<QVector<fBit64> > *xdata, QList<QVector<fBit64> > *ydata, QVector<Bit32> graphNum, QStringList lineName)
+void UnionPlot::SetData(QList<QVector<fBit64> > *xdata, QList<QVector<fBit64> > *ydata, QVector<Bit32> graphNum, QStringList lineName, bool isCurve)
 {
     m_xRangeList.clear();
     m_yRangeList.clear();
@@ -94,18 +94,33 @@ void UnionPlot::SetData(QList<QVector<fBit64> > *xdata, QList<QVector<fBit64> > 
     {
         QCustomPlot *plot = m_plotList.at(i);
         Bit32 graphN = graphNum[i];
-        QPair<fBit64, fBit64> yrange(0, 0);
+        QPair<fBit64, fBit64> yrange(ydata->at(i).first(), ydata->at(i).first());
         plot->clearGraphs();
+        plot->clearPlottables();
         if (graphN > 1)
         {
             plot->legend->setVisible(true);
         }
         for (Bit32 j = 0 ; j < graphN; j++)
         {
-            plot->addGraph();
-            plot->graph(j)->setPen(QPen(LINE_COLOR.at(j)));
-            plot->graph(j)->setName(lineName.value(totalGraph + j));
-            plot->graph(j)->setData(xdata->at(i), ydata->at(totalGraph + j));
+            if (isCurve)
+            {
+                QCPCurve *curve = new QCPCurve(plot->xAxis, plot->yAxis);
+                QVector<fBit64> t;
+                for (fBit64 tmp= 0; tmp < xdata->at(i).count(); tmp++)
+                {
+                    t << tmp;
+                }
+                curve->setPen(QPen(LINE_COLOR.at(j)));
+                curve->setData(t, xdata->at(i), ydata->at(i));
+            }
+            else
+            {
+                plot->addGraph();
+                plot->graph(j)->setPen(QPen(LINE_COLOR.at(j)));
+                plot->graph(j)->setName(lineName.value(totalGraph + j));
+                plot->graph(j)->setData(xdata->at(i), ydata->at(totalGraph + j));
+            }
             FitRange(yrange, GetRange(ydata->at(totalGraph + j)));
         }
         totalGraph += graphN;
@@ -206,8 +221,10 @@ void UnionPlot::MouseMoveHandleSlot(QMouseEvent *event, Bit32 block)
     QCustomPlot *plot = m_plotList.value(block);
     QCPItemTracer *tracer = m_pTracer.value(block);
     QCPItemText *text = m_pText.value(block);
+    QCPCurve* curve = NULL;
+    bool isCurve = false;
 
-    if (plot == NULL || plot->graphCount() == 0)
+    if (plot == NULL || (plot->graphCount() == 0 && plot->plottableCount() == 0))
     {
         return;
     }
@@ -237,40 +254,107 @@ void UnionPlot::MouseMoveHandleSlot(QMouseEvent *event, Bit32 block)
 
     //通过x值查找离曲线最近的一个key值索引
     Bit32 index = 0;
-    Bit32 index_left = plot->graph(0)->findBegin(x_val, true);//左边最近的一个key值索引
-    Bit32 index_right = plot->graph(0)->findEnd(x_val, true);//右边
-    fBit32 dif_left = fabs(plot->graph(0)->data()->at(index_left)->key - x_val);
-    fBit32 dif_right = fabs(plot->graph(0)->data()->at(index_right)->key - x_val);
+    Bit32 index_left = 0;//左边最近的一个key值索引
+    Bit32 index_right = 0;//右边
+    fBit32 dif_left = 0;
+    fBit32 dif_right = 0;
+    if (plot->graphCount() == 0 && plot->plottableCount() != 0)
+    {
+        curve = qobject_cast<QCPCurve*>(plot->plottable(0));
+        if (curve == NULL)
+        {
+            return;
+        }
+        isCurve = true;
+        index_left = curve->findBegin(x_val, true);//左边最近的一个key值索引
+        index_right = curve->findEnd(x_val, true);//右边
+        dif_left = fabs(curve->data()->at(index_left)->key - x_val);
+        dif_right = fabs(curve->data()->at(index_right)->key - x_val);
+
+    }
+    else
+    {
+        index_left = plot->graph(0)->findBegin(x_val, true);//左边最近的一个key值索引
+        index_right = plot->graph(0)->findEnd(x_val, true);//右边
+        dif_left = fabs(plot->graph(0)->data()->at(index_left)->key - x_val);
+        dif_right = fabs(plot->graph(0)->data()->at(index_right)->key - x_val);
+    }
     index = ((dif_left < dif_right) ? index_left : index_right);
 
-    double x_posval = plot->graph(0)->data()->at(index)->key;//通过得到的索引获取key值
-    double y_posval = plot->graph(0)->data()->at(index)->value;//通过得到的索引获取value值
+    double x_posval = 0;
+    double y_posval = 0;
+    if (isCurve)
+    {
+        x_posval = curve->data()->at(index)->key;//通过得到的索引获取key值
+        y_posval = curve->data()->at(index)->value;//通过得到的索引获取value值
+    }
+    else
+    {
+        x_posval = plot->graph(0)->data()->at(index)->key;//通过得到的索引获取key值
+        y_posval = plot->graph(0)->data()->at(index)->value;//通过得到的索引获取value值
+    }
 
     fBit32 dx = fabs(x_posval - x_val);
     fBit32 dy = fabs(y_posval - y_val);
 
     Bit32 graphIndex = 0;//curve index closest to the cursor
     //通过遍历每条曲线在index处的value值，得到离光标点最近的value及对应曲线索引
-    for (Bit32 i = 0, n = plot->xAxis->graphs().count(); i < n; i++)
+    if (isCurve)
     {
-        y_posval = fabs(plot->graph(i)->data()->at(index)->value - y_val);
-        if (y_posval < dy)
+        for (Bit32 i = 0, n = plot->plottableCount(); i < n; i++)
         {
-            dy = y_posval;
-            graphIndex = i;
+            QCPCurve *curveT = qobject_cast<QCPCurve*>(plot->plottable(0));
+            if (curveT == NULL)
+            {
+                continue;
+            }
+            y_posval = fabs(curveT->data()->at(index)->value - y_val);
+            if (y_posval < dy)
+            {
+                dy = y_posval;
+                graphIndex = i;
+            }
+        }
+    }
+    else
+    {
+        for (Bit32 i = 0, n = plot->xAxis->graphs().count(); i < n; i++)
+        {
+            y_posval = fabs(plot->graph(i)->data()->at(index)->value - y_val);
+            if (y_posval < dy)
+            {
+                dy = y_posval;
+                graphIndex = i;
+            }
         }
     }
 
+//    ComDebug(QString("dx=%1,x_tolerate=%2,dy=%3,y_tolerate=%4").arg(dx).arg(x_tolerate).arg(dy).arg(y_tolerate));
     //判断光标点与最近点的距离是否在设定范围内
     if (dx <= x_tolerate && dy <= y_tolerate)
     {
-        y_posval = plot->graph(graphIndex)->data()->at(index)->value;
 
-        QString strToolTip = QString("x=%1\ny=%2").arg(x_posval).arg(y_posval);
-        tracer->setGraph(plot->graph(graphIndex));
-        tracer->setGraphKey(x_posval);
+        if (isCurve)
+        {
+            QCPCurve *curveT = qobject_cast<QCPCurve*>(plot->plottable(graphIndex));
+            if (curveT == NULL)
+            {
+                return;
+            }
+            y_posval = curveT->data()->at(index)->value;
+            tracer->setGraph(nullptr);
+            tracer->position->setCoords(x_posval, y_posval);
+        }
+        else
+        {
+            y_posval = plot->graph(graphIndex)->data()->at(index)->value;
+            tracer->setGraph(plot->graph(graphIndex));
+            tracer->setGraphKey(x_posval);
+        }
         tracer->setVisible(true);
         text->position->setParentAnchor(tracer->position);
+
+        QString strToolTip = QString("x=%1\ny=%2").arg(x_posval).arg(y_posval);
         text->setText(strToolTip);
         text->setTextAlignment(Qt::AlignLeft);
         text->setPositionAlignment(Qt::AlignBottom | Qt::AlignHCenter);  // 文本底部对齐到 tracer

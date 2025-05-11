@@ -44,6 +44,7 @@ private:
     UnionPlot *m_pSpdlSpeedPlot; // 主轴升降速
     UnionPlot *m_pToolChangePlot; // 换刀
     UnionPlot *m_pTapPlot; // 刚性攻丝
+    UnionPlot *m_pCirclePlot; // 圆度测试
 
     void InitDict();
     void UnionReplot();
@@ -56,6 +57,7 @@ private:
     void BuildSpdlSpeedDefultPlot();
     void BuildToolChangeDefaultPlot();
     void BuildTapDefault();
+    void BuildCircleDefault();
 
     void AddUnionPlot(UnionPlot *plot);
 
