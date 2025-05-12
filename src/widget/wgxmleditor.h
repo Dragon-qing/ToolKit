@@ -6,6 +6,7 @@
 
 #include "basewidget.h"
 #include "hmixmleditor.h"
+#include "dlgprompt.h"
 
 namespace Ui {
 class WgXmlEditor;
@@ -24,6 +25,7 @@ private:
     QStandardItemModel *m_pTreeModel;
     QStringListModel *m_pListModel;
     QModelIndex m_currentIndex;
+    DlgPrompt *m_pDlg;
 
 
     void InitModel();

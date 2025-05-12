@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_nTimer1 = startTimer(200);
     m_nTimer2 = startTimer(20);
+    InitStatusBar(ui->statusbar);
 }
 
 MainWindow::~MainWindow()

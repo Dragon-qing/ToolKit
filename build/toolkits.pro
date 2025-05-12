@@ -1,7 +1,8 @@
 QT       += core gui
 QT       += xml
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++11
 
@@ -21,10 +22,14 @@ RC_ICONS = ../img/toolbox.ico
 INCLUDEPATH += \
     ../src ../src/widget\
     ../src/hmi ../src/service\
+    ../src/thirdparty\
 LIBS += -luser32
 SOURCES += \
     ../src/basewidget.cpp \
     ../src/common.cpp \
+    ../src/hmi/hmicomrpt.cpp \
+    ../src/hmi/hmilog.cpp \
+    ../src/hmi/syspathmanager.cpp \
     ../src/logdt.cpp \
     ../src/main.cpp \
     ../src/mainwindow.cpp \
@@ -34,16 +39,24 @@ SOURCES += \
     ../src/hmi/hmipainter.cpp \
     ../src/hmi/hmixmleditor.cpp \
     ../src/widget/dlgbtfmakeinfo.cpp \
+    ../src/widget/dlgprompt.cpp \
+    ../src/widget/unionplot.cpp \
     ../src/widget/wgbtfmake.cpp \
+    ../src/widget/wgcomrpt.cpp \
     ../src/widget/wggeneratebugfolder.cpp \
+    ../src/widget/wglog.cpp \
     ../src/widget/wgtyproaimgcleaner.cpp \
     ../src/widget/wgxmleditor.cpp \
-    ../src/widget/widgetmanger.cpp
+    ../src/widget/widgetmanger.cpp\
+    ../src/thirdparty/qcustomplot.cpp
 
 HEADERS += \
     ../src/basewidget.h \
     ../src/common.h \
     ../src/datadef.h \
+    ../src/hmi/hmicomrpt.h \
+    ../src/hmi/hmilog.h \
+    ../src/hmi/syspathmanager.h \
     ../src/logdt.h \
     ../src/mainwindow.h \
     ../src/msgdata.h \
@@ -52,19 +65,28 @@ HEADERS += \
     ../src/hmi/hmipainter.h \
     ../src/hmi/hmixmleditor.h \
     ../src/widget/dlgbtfmakeinfo.h \
+    ../src/widget/dlgprompt.h \
+    ../src/widget/unionplot.h \
     ../src/widget/wgbtfmake.h \
+    ../src/widget/wgcomrpt.h \
     ../src/widget/wggeneratebugfolder.h \
+    ../src/widget/wglog.h \
     ../src/widget/wgtyproaimgcleaner.h \
     ../src/widget/wgxmleditor.h \
-    ../src/widget/widgetmanger.h
+    ../src/widget/widgetmanger.h\
+    ../src/thirdparty/qcustomplot.h
 
 FORMS += \
     ../src/basewidget.ui \
     ../src/mainwindow.ui \
     ../src/hmi/hmipainter.ui \
     ../src/widget/dlgbtfmakeinfo.ui \
+    ../src/widget/dlgprompt.ui \
+    ../src/widget/unionplot.ui \
     ../src/widget/wgbtfmake.ui \
+    ../src/widget/wgcomrpt.ui \
     ../src/widget/wggeneratebugfolder.ui \
+    ../src/widget/wglog.ui \
     ../src/widget/wgtyproaimgcleaner.ui \
     ../src/widget/wgxmleditor.ui \
     ../src/widget/widgetmanger.ui

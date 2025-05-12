@@ -22,6 +22,7 @@ public:
     ~LogDt();
 
     Bit32 AddLog(LogDataType type, QString logStr);
+    QStringList GetLogFiles();
 private:
     explicit LogDt();
     void WriteLog(QString type, QString logStr);

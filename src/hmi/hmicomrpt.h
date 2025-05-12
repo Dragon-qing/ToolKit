@@ -1,0 +1,70 @@
+﻿#ifndef HMICOMRPT_H
+#define HMICOMRPT_H
+
+#include <QString>
+#include <QMap>
+#include <QVariant>
+#include <QThread>
+#include <QObject>
+
+#include "common.h"
+QT_BEGIN_NAMESPACE
+class ReadFileThread;
+QT_END_NAMESPACE
+
+enum _Context_Type{
+    INVALID = 0,    // 无效
+    INFO_PART = 1,  // 文件头部分
+    CONFIG_PART,    // 配置部分
+    DATA_PART       // 数据部分
+};
+
+class HmiComRpt : public QObject
+{
+    Q_OBJECT
+public:
+    HmiComRpt(QObject *parent = nullptr);
+    ~HmiComRpt();
+    static HmiComRpt &Instance();
+    void SetPath(QString path);
+    ReadFileThread *GetThreadClass();
+    Bit32 GetTotalPosNum();
+    QVariant GetValue(Bit32 type, QVariant key = QVariant(), QVariant subKey = QVariant());
+    QString GetFileName();
+    QString GetMask(){ return m_sMask; }
+private:
+    QString m_sPath; // 数据文件路径
+    QMap<QString, QVariant> m_infoMap; // 文件头数据
+    QMap<QString, QVariant> m_configMap; // 配置数据
+    QList<QVector<Bit64>*> m_dataList; // 数据部分
+    ReadFileThread *m_pThread;
+    QString m_sMask; // 当前数据文件的mask
+
+    void Clear();
+};
+
+class ReadFileThread : public QThread
+{
+    Q_OBJECT
+public:
+    ReadFileThread(QObject *parent = nullptr);
+    void SetConfig(QString path, QMap<QString, QVariant>* info, QMap<QString, QVariant>* config, QList<QVector<Bit64>*>* data);
+
+signals:
+    void ProcessSignal(int eta);
+
+protected:
+    void run() override;
+
+private:
+    QString m_sPath; // 数据文件路径
+    QMap<QString, QVariant>* m_pInfoMap; // 文件头数据
+    QMap<QString, QVariant>* m_pConfigMap; // 配置数据
+    QList<QVector<Bit64>*>* m_pDataList; // 数据部分
+
+    Bit32 ProcessFileBatch();// 处理解析数据文件(一次读取)
+    void ParseLine(Bit32 type, QString tmp);
+    void ParseLines(Bit32 type, QStringList list);
+};
+
+#endif // HMICOMRPT_H

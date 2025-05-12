@@ -1,4 +1,11 @@
-﻿#include <QDragEnterEvent>
+﻿/*!
+ * @brief BTF包制作页面
+ * @file wgbtfmake.cpp
+ * @author Dragon_qing
+ * @date 2024/10/20
+ */
+
+#include <QDragEnterEvent>
 #include <QMimeData>
 #include <QDebug>
 #include <QFileInfo>

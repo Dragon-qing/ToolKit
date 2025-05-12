@@ -16,13 +16,13 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="leftMargin">
-     <number>9</number>
+     <number>0</number>
     </property>
     <property name="topMargin">
      <number>0</number>
     </property>
     <property name="rightMargin">
-     <number>9</number>
+     <number>0</number>
     </property>
     <property name="bottomMargin">
      <number>0</number>
@@ -59,7 +59,7 @@
      <x>0</x>
      <y>0</y>
      <width>411</width>
-     <height>26</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>
