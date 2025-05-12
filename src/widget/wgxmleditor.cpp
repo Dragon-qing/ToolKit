@@ -47,9 +47,8 @@ void WgXmlEditor::InitModel()
 
 void WgXmlEditor::on_pushButton_clicked()
 {
-    m_pDlg->ExecAndRet("test");
-    // m_pTreeModel->removeRows(0, m_pTreeModel->rowCount());
-    // m_pListModel->removeRows(0, m_pListModel->rowCount());
+    m_pTreeModel->removeRows(0, m_pTreeModel->rowCount());
+    m_pListModel->removeRows(0, m_pListModel->rowCount());
 }
 
 void WgXmlEditor::on_selectBtn_clicked()
