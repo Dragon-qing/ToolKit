@@ -442,7 +442,7 @@ void WgComRpt::BuildTapDefault()
     {
         m_pTapPlot = new UnionPlot(UnionPlot::VERTICAL_LAYOUT, 2, this);
         m_pTapPlot->SetAxisLabel(QStringList() << TR("时间(ms)") << TR("时间(ms)"),
-                              QStringList() << TR("同步误差") << TR("攻丝轴/同步轴实际速度"));
+                              QStringList() << TR("同步误差(um)") << TR("攻丝轴/同步轴实际速度"));
     }
     QList<QVector<fBit64>> xdata;
     QList<QVector<fBit64>> ydata;
@@ -585,6 +585,7 @@ void WgComRpt::ProcessChangeHandle(int changeValue)
         }
 		// 刷新预设图像
         DefaultRadioHandle(ui->defaultRaido->isChecked());
+        PromptOut(TR("%1已加载").arg(fileName), 60000);
     }
     else if (changeValue > 0 && ui->OpenBtn->isEnabled())
     {
