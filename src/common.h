@@ -24,6 +24,7 @@ const Bit32 DLG_HEIGHT = 200;   // 对话框高度
 
 void ComDebug(const QString &content, const QString &title = "");
 void ComDebug(const QStringList content, const QString &title = "");
+void ErrOutput(const QString content); //记录错误日志
 
 Bit32 GetXmlDoc(QString path, QDomDocument &doc);
 Bit32 SaveXmlDoc(QString path, const QDomDocument &doc);

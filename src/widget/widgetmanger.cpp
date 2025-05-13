@@ -26,6 +26,8 @@ WidgetManger::WidgetManger(QWidget *parent) :
         QWidget *tmpWidget = m_widgetContainer.at(i);
         ui->tabWidget->addTab(tmpWidget, m_widgetNameList.at(i));
     }
+
+    connect(ui->tabWidget, &QTabWidget::currentChanged, this, &WidgetManger::WidgetChangeHandle);
 }
 
 WidgetManger::~WidgetManger()
@@ -64,4 +66,13 @@ void WidgetManger::AddWidget(QWidget *widget, const QString &name)
 
     m_widgetContainer.append(widget);
     m_widgetNameList.append(name);
+}
+
+void WidgetManger::WidgetChangeHandle(int index)
+{
+    BaseWidget *wg = dynamic_cast<BaseWidget *>(m_widgetContainer.at(index));
+    if (wg != NULL)
+    {
+        wg->MassageQueue(MsgData::REDRAW, "");
+    }
 }

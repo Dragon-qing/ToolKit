@@ -24,6 +24,8 @@ private:
 
     void InitWidgetContainer();
     void AddWidget(QWidget *widget, const QString &name);
+private slots:
+    void WidgetChangeHandle(int index);
 };
 
 #endif // WIDGETMANGER_H

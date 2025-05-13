@@ -13,7 +13,7 @@ public:
 
     void LoadLog(QStandardItemModel *model);
 private:
-    Bit32 ProcessRawLog(QString rawStr, QString &time, QString &type, QString &context);
+    QString TransLogType2Str(Bit32 type); // 转换日志类型
 
 };
 

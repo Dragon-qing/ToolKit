@@ -11,4 +11,5 @@ build/*
 bin/*
 !bin/tools
 !bin/style.qss
+!bin/sqldrivers
 log

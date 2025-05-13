@@ -1,12 +1,12 @@
 ﻿/*!
  * @brief 系统路径接口模块
- * @file syspathmanager.cpp
+ * @file sysapi.cpp
  * @author Dragon_qing
  * @date 2025/04/27
  */
 #include <QDir>
 
-#include "syspathmanager.h"
+#include "sysapi.h"
 
 
 QString GetSysPath(_Path_Type type)
@@ -28,6 +28,9 @@ QString GetSysPath(_Path_Type type)
         break;
     case SCRIPT_PATH:
         path = "../script";
+        break;
+    case PLUGINS_PATH:
+        path = "../plugins";
         break;
     default:
         break;

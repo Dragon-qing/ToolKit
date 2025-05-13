@@ -9,15 +9,18 @@
 #include <QDateTime>
 #include <QDir>
 #include <QTextStream>
+#include <QCoreApplication>
 
 #include "common.h"
-#include "syspathmanager.h"
+#include "sysapi.h"
 
 #include "logdt.h"
 
 #define LOG_FILE_BASE_NAME "syslog"
-#define FILE_BAK_MAX_NUM (10) // 日志文件最大备份个数
-#define FILE_MAX_SIZE (50 * 1024 * 1024) // 单个文件最大为50MB
+#define LOG_FILE_SUFFIX ".db3"
+#define LOG_MAX_NUM (3000) // 日志文件最大条数
+
+using namespace EasyQtSql;
 
 LogDt &LogDt::Instance()
 {
@@ -27,81 +30,39 @@ LogDt &LogDt::Instance()
 
 LogDt::~LogDt()
 {
-
+    m_sqlDB.close();
 }
 
 LogDt::LogDt()
 {
+    m_sqlDB = QSqlDatabase::addDatabase("QSQLITE");
+    m_sqlDB.setDatabaseName(GetLogPath());
+    try
+    {
+        Transaction t(m_sqlDB); // 自动回滚非显示提交
+        t.execNonQuery("CREATE TABLE IF NOT EXISTS logtb(time_stamp text, type int, content text);");
+        t.commit();
+    }
+    catch (const DBException &e)
+    {
+        ErrOutput(QString("%1,%2").arg(e.lastError.text()).arg(e.lastQuery));
+    }
 }
 
-void LogDt::WriteLog(QString type, QString logStr)
+void LogDt::WriteLog(Bit32 type, QString logStr)
 {
-    if (type.isEmpty() || logStr.isEmpty())
+    QString timeSt = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+    try
     {
-        return;
+        Transaction t(m_sqlDB);
+        t.insertInto("logtb (time_stamp, type, content)")
+            .values(timeSt, type, logStr).exec();
+        t.commit();
     }
-
-    QString filePath = GetAvailableFilePath();
-
-    QFile file(filePath);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+    catch (const DBException &e)
     {
-        return;
+        ErrOutput(QString("%1,%2").arg(e.lastError.text()).arg(e.lastQuery));
     }
-
-    QTextStream textStream(&file);
-    textStream.setCodec("UTF-8");
-    textStream.reset();
-    QString currentTime = QDateTime::currentDateTime().toString("[yyyy-MM-dd HH:mm:ss]");
-    textStream << QString("%1(%2):%3\n").arg(currentTime).arg(type).arg(logStr);
-    file.flush();
-    file.close();
-}
-
-QString LogDt::GetAvailableFilePath()
-{
-    QDir logDir(GetSysPath(LOG_PATH));
-    QString path = "";
-    QDateTime modifyTime = QDateTime::currentDateTime();
-    Bit32 oldestIdx = 0; // 最旧的log文件序号；
-    if (!logDir.exists())
-    {
-        logDir.mkpath(logDir.absolutePath());
-    }
-
-    for (Bit32 i = 0; i < FILE_BAK_MAX_NUM; i++)
-    {
-        QString filename = QString("%1_%2.txt").arg(LOG_FILE_BASE_NAME).arg(i, 2, 10, QChar('0'));
-        QString tmpPath = QDir::toNativeSeparators(logDir.filePath(filename));
-        QFileInfo info(tmpPath);
-        if (!info.exists()) // 不存在
-        {
-            path = tmpPath;
-            break;
-        }
-        else
-        {
-            if (info.size() < FILE_MAX_SIZE)
-            {
-                path = tmpPath;
-                break;
-            }
-            // 超过单文件最大大小
-            if(info.lastModified() < modifyTime)
-            {
-                modifyTime = info.lastModified();
-                oldestIdx = i;
-            }
-
-        }
-    }
-    if (path.isEmpty())
-    {
-        path = QString("%1_%2.txt").arg(LOG_FILE_BASE_NAME).arg(oldestIdx, 2, 10, QChar('0')); // 取最旧的文件名
-        ClearFile(path);
-    }
-
-    return path;
 }
 
 Bit32 LogDt::AddLog(LogDataType type, QString logStr)
@@ -110,54 +71,91 @@ Bit32 LogDt::AddLog(LogDataType type, QString logStr)
     {
         return -1;
     }
-    QString typeStr = "";
-    switch (type)
+    if (GetLogNum() >= LOG_MAX_NUM) // 检查log是否超限
     {
-    case DEBUG_LOG:
-        typeStr = "D";
-        break;
-    case INFO_LOG:
-        typeStr = "I";
-        break;
-    case WARNING_LOG:
-        typeStr = "W";
-        break;
-    case CRITICAL_LOG:
-        typeStr = "C";
-        break;
-    case FATAL_LOG:
-        typeStr = "F";
-        break;
-    default:
-        break;
+        DeleteLog(0, 1000);
     }
-    WriteLog(typeStr, logStr);
+    WriteLog(type, logStr);
     return 0;
 }
 
+QString LogDt::GetLogPath()
+{
+    QDir exeDir(QCoreApplication::applicationDirPath());
+    QDir logDir(exeDir.filePath(GetSysPath(LOG_PATH)));
+    QString path = QDir::cleanPath(logDir.filePath(QString("%1%2").arg(LOG_FILE_BASE_NAME).arg(LOG_FILE_SUFFIX)));
+
+    return path;
+}
+
+Bit32 LogDt::GetLogNum()
+{
+    Bit32 num = 0;
+    try
+    {
+        Transaction t(m_sqlDB);
+        QueryResult res = t.execQuery("SELECT COUNT(*) FROM logtb;");
+        res.first();
+        res.fetchVars(num);
+    }
+    catch (const DBException &e)
+    {
+        ErrOutput(e.lastError.text() + e.lastQuery);
+    }
+    return num;
+}
+
 /**
- * @brief LogDt::GetLogFiles 获取所有的log文件路径
+ * @brief LogDt::GetAllLog 获取所有日志
  * @return
  */
-QStringList LogDt::GetLogFiles()
+QList<LogData> LogDt::GetAllLog()
 {
-    QDir logDir(GetSysPath(LOG_PATH));
-    QStringList fileList;
-    if (!logDir.exists())   // log目录不存在
+    QList<LogData> logList;
+    logList.clear();
+    try
     {
-        return fileList;
-    }
-
-    QStringList files = logDir.entryList();
-    foreach(const QString &str, files)
-    {
-        if (str.startsWith(LOG_FILE_BASE_NAME))
+        Transaction t(m_sqlDB);
+        QueryResult res = t.execQuery("SELECT * FROM logtb;");
+        while(res.next())
         {
-            fileList.append(logDir.absoluteFilePath(str));
+            LogData data;
+            res.fetchVars(data.m_sDate, data.m_nType, data.m_sContent);
+            logList << data;
         }
     }
+    catch (const DBException &e)
+    {
+        ErrOutput(e.lastError.text() + e.lastQuery);
+    }
+    return logList;
+}
 
-    return fileList;
+/**
+ * @brief LogDt::DeleteLog 删除日志
+ * @param from 起始位置
+ * @param count 数量
+ */
+void LogDt::DeleteLog(Bit32 from, Bit32 count)
+{
+    if (from > GetLogNum() || from < 0)
+    {
+        return;
+    }
+
+    QString sql = QString("delete FROM logtb "\
+                          "WHERE time_stamp IN (SELECT time_stamp FROM logtb ORDER BY time_stamp ASC LIMIT %1 OFFSET %2);")
+                        .arg(count).arg(from);
+    try
+    {
+        Transaction t(m_sqlDB);
+        t.execNonQuery(sql);
+        t.commit();
+    }
+    catch (const DBException &e)
+    {
+        ErrOutput(e.lastError.text() + e.lastQuery);
+    }
 }
 
 /**

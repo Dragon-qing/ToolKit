@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 QT       += xml
 
 
@@ -14,6 +14,9 @@ MOC_DIR = ../moc
 UI_DIR = ../ui
 DESTDIR = ../bin
 
+# 引入EasyQtSql第三方sql库
+include(../src/thirdparty/easyqtsql/EasyQtSql.pri)
+
 msvc {
     QMAKE_CFLAGS += /utf-8
     QMAKE_CXXFLAGS += /utf-8
@@ -22,14 +25,14 @@ RC_ICONS = ../img/toolbox.ico
 INCLUDEPATH += \
     ../src ../src/widget\
     ../src/hmi ../src/service\
-    ../src/thirdparty\
+    ../src/thirdparty ../src/thirdparty/easyqtsql\
 LIBS += -luser32
 SOURCES += \
     ../src/basewidget.cpp \
     ../src/common.cpp \
     ../src/hmi/hmicomrpt.cpp \
     ../src/hmi/hmilog.cpp \
-    ../src/hmi/syspathmanager.cpp \
+    ../src/hmi/sysapi.cpp \
     ../src/logdt.cpp \
     ../src/main.cpp \
     ../src/mainwindow.cpp \
@@ -56,7 +59,7 @@ HEADERS += \
     ../src/datadef.h \
     ../src/hmi/hmicomrpt.h \
     ../src/hmi/hmilog.h \
-    ../src/hmi/syspathmanager.h \
+    ../src/hmi/sysapi.h \
     ../src/logdt.h \
     ../src/mainwindow.h \
     ../src/msgdata.h \
@@ -74,6 +77,7 @@ HEADERS += \
     ../src/widget/wgtyproaimgcleaner.h \
     ../src/widget/wgxmleditor.h \
     ../src/widget/widgetmanger.h\
+    # QCP第三方绘图模块引入
     ../src/thirdparty/qcustomplot.h
 
 FORMS += \

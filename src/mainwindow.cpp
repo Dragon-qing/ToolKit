@@ -2,6 +2,7 @@
 
 #include "basewidget.h"
 #include "hmipainter.h"
+#include "sysapi.h"
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"

@@ -9,6 +9,7 @@
 #include <QRegularExpression>
 
 #include "logdt.h"
+#include "EasyQtSql.h"
 
 #include "hmilog.h"
 
@@ -18,7 +19,9 @@ HmiLog &HmiLog::GetInstance()
     return sdata;
 }
 
-HmiLog::HmiLog() {}
+HmiLog::HmiLog()
+{
+}
 
 void HmiLog::LoadLog(QStandardItemModel *model)
 {
@@ -26,58 +29,47 @@ void HmiLog::LoadLog(QStandardItemModel *model)
     {
         return;
     }
-    QStringList logFiles = LogDt::Instance().GetLogFiles();
-    Bit32 row = 0;
-    foreach (const QString &filePath, logFiles)
+    QList<LogData> logList = LogDt::Instance().GetAllLog();
+    for (Bit32 i = logList.count() - 1, row = 0; i >= 0; i--, row++)
     {
-        QFile file(filePath);
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            return;
-        }
-        QTextStream in(&file);
-        in.setCodec(UTF_8);
-        while (!in.atEnd())
-        {
-            QString rawStr = in.readLine();
-            QString time = "";
-            QString type = "";
-            QString context = "";
-            ProcessRawLog(rawStr, time, type, context);
-            QStandardItem *timeItem = new QStandardItem(time);
-            QStandardItem *typeItem = new QStandardItem(type);
-            typeItem->setTextAlignment(Qt::AlignCenter);
-            QStandardItem *contextItem = new QStandardItem(context);
-            model->setItem(row, 0, timeItem);
-            model->setItem(row, 1, typeItem);
-            model->setItem(row, 2, contextItem);
-            row++;
-        }
-        file.close();
+        const LogData &data = logList.at(i);
+        QString time = data.m_sDate;
+        QString type = TransLogType2Str(data.m_nType);
+        QString context = data.m_sContent;
+
+        QStandardItem *timeItem = new QStandardItem(time);
+        QStandardItem *typeItem = new QStandardItem(type);
+        typeItem->setTextAlignment(Qt::AlignCenter);
+        QStandardItem *contextItem = new QStandardItem(context);
+        model->setItem(row, 0, timeItem);
+        model->setItem(row, 1, typeItem);
+        model->setItem(row, 2, contextItem);
     }
 }
 
-/**
- * @brief HmiLog::ProcessRawLog 处理原始数据
- * @param[in] rawStr
- * @param[out] time 时间
- * @param[out] type 日志类型
- * @param[out] context  日志内容
- * @return
- */
-Bit32 HmiLog::ProcessRawLog(QString rawStr, QString &time, QString &type, QString &context)
+QString HmiLog::TransLogType2Str(Bit32 type)
 {
-    if (rawStr.isEmpty())
+    QString typeStr = "";
+    switch (type)
     {
-        return -1;
+    case DEBUG_LOG:
+        typeStr = "D";
+        break;
+    case INFO_LOG:
+        typeStr = "I";
+        break;
+    case WARNING_LOG:
+        typeStr = "W";
+        break;
+    case CRITICAL_LOG:
+        typeStr = "C";
+        break;
+    case FATAL_LOG:
+        typeStr = "F";
+        break;
+    default:
+        break;
     }
-    QRegularExpression re ("^\\[(?<time>.*)\\]\\((?<type>\\w)\\):(?<context>.*)$");
-    QRegularExpressionMatch match = re.match(rawStr);
-    if (match.hasMatch())
-    {
-        time = match.captured("time");
-        type = match.captured("type");
-        context = match.captured("context");
-    }
-    return 0;
+
+    return typeStr;
 }

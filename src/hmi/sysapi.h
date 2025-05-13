@@ -1,5 +1,5 @@
-﻿#ifndef SYSPATHMANAGER_H
-#define SYSPATHMANAGER_H
+﻿#ifndef SYSAPI_H
+#define SYSAPI_H
 #include <QString>
 
 #include "datadef.h"
@@ -10,10 +10,11 @@ typedef enum _Path_Type{
     DATA_PATH,      // data目录
     LOG_PATH,       // log目录
     SCRIPT_PATH,    // script目录
+    PLUGINS_PATH,   // plugins目录
 
     PATH_NUM
 }PATH_TYPE;
 
 QString GetSysPath(PATH_TYPE type);
 
-#endif // SYSPATHMANAGER_H
+#endif // SYSAPI_H

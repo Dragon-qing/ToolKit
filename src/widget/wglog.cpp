@@ -4,6 +4,8 @@
  * @author Dragon_qing
  * @date 2025/04/27
  */
+#include <random>
+
 #include "hmilog.h"
 
 #include "wglog.h"
@@ -29,9 +31,12 @@ WgLog::~WgLog()
 
 void WgLog::MassageQueue(QVariant messageid, QVariant messageValue)
 {
-    if (messageid == MsgData::REFRESH)
+    Q_UNUSED(messageValue);
+    if (messageid == MsgData::REDRAW)
     {
-
+        // 清空内容，重新获取log内容
+        m_pModel->removeRows(0, m_pModel->rowCount());
+        HmiLog::GetInstance().LoadLog(m_pModel);
     }
 }
 
