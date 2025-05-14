@@ -5,6 +5,7 @@
 
 #include "basewidget.h"
 #include "qcustomplot.h"
+#include "dlgunionplotsubline.h"
 
 namespace Ui {
 class UnionPlot;
@@ -44,10 +45,13 @@ private:
     Bit32 m_nCurBlock;
     QList<QCPItemTracer*> m_pTracer;
     QList<QCPItemText*> m_pText;
+    DlgUnionPlotSubline *m_pDlg;
+    QList<QCPItemStraightLine*> m_vlineList;
 
     void EnlargeGraph(Bit32 block, Bit16 axis); // 放大图像
     void ReduceGraph(Bit32 block, Bit16 axis); // 缩小图像
     void FitRange(QPair<fBit64, fBit64> &first, QPair<fBit64, fBit64>second);
+    void RedrawVline(QList<QPair<fBit64, fBit64>> rangeList);
 };
 
 #endif // UNIONPLOT_H

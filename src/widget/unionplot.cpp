@@ -64,6 +64,8 @@ UnionPlot::UnionPlot(Layout_Type layout, Bit32 plotNum, QWidget *parent)
     m_yRangeList.clear();
     m_nCurBlock = 0;
     m_nPreBlock = 0;
+    m_pDlg = new DlgUnionPlotSubline(this);
+    m_vlineList.clear();
     this->setMouseTracking(true);
     installEventFilter(this);
 }
@@ -78,6 +80,7 @@ UnionPlot::~UnionPlot()
     m_plotList.clear();
     m_xRangeList.clear();
     m_yRangeList.clear();
+    m_vlineList.clear();
 }
 
 /**
@@ -397,6 +400,11 @@ void UnionPlot::keyPressEvent(QKeyEvent *event)
                 }
             }
         }
+        else if (event->key() == Qt::Key_I)
+        {
+            QList<QPair<fBit64, fBit64>> rangeList = m_pDlg->ExecAndRet();
+            RedrawVline(rangeList);
+        }
     }
     else if (event->key() == Qt::Key_Plus)
     {
@@ -476,5 +484,34 @@ void UnionPlot::FitRange(QPair<fBit64, fBit64> &first, QPair<fBit64, fBit64> sec
     if (first.second < second.second)
     {
         first.second = second.second;
+    }
+}
+
+void UnionPlot::RedrawVline(QList<QPair<fBit64, fBit64> > rangeList)
+{
+    foreach(QCPItemStraightLine *line, m_vlineList)
+    {
+        line->setParent(NULL);
+        delete line;
+    }
+    m_vlineList.clear();
+    for (Bit32 i = 0; i < m_plotList.count(); i++)
+    {
+        QCustomPlot *plot = m_plotList.at(i);
+        for (Bit32 j = 0; j < rangeList.count(); j++)
+        {
+            QCPItemStraightLine *vline1 = new QCPItemStraightLine(plot);
+            m_vlineList << vline1;
+            vline1->point1->setCoords(rangeList.at(j).first, 0);
+            vline1->point2->setCoords(rangeList.at(j).first, 1);
+            vline1->setPen(QColor(Qt::magenta));
+
+            QCPItemStraightLine *vline2 = new QCPItemStraightLine(plot);
+            m_vlineList << vline2;
+            vline2->point1->setCoords(rangeList.at(j).second, 0);
+            vline2->point2->setCoords(rangeList.at(j).second, 1);
+            vline2->setPen(QColor(Qt::darkMagenta));
+        }
+        plot->replot();
     }
 }

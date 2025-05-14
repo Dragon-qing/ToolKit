@@ -43,6 +43,7 @@ SOURCES += \
     ../src/hmi/hmixmleditor.cpp \
     ../src/widget/dlgbtfmakeinfo.cpp \
     ../src/widget/dlgprompt.cpp \
+    ../src/widget/dlgunionplotsubline.cpp \
     ../src/widget/unionplot.cpp \
     ../src/widget/wgbtfmake.cpp \
     ../src/widget/wgcomrpt.cpp \
@@ -69,6 +70,7 @@ HEADERS += \
     ../src/hmi/hmixmleditor.h \
     ../src/widget/dlgbtfmakeinfo.h \
     ../src/widget/dlgprompt.h \
+    ../src/widget/dlgunionplotsubline.h \
     ../src/widget/unionplot.h \
     ../src/widget/wgbtfmake.h \
     ../src/widget/wgcomrpt.h \
@@ -86,6 +88,7 @@ FORMS += \
     ../src/hmi/hmipainter.ui \
     ../src/widget/dlgbtfmakeinfo.ui \
     ../src/widget/dlgprompt.ui \
+    ../src/widget/dlgunionplotsubline.ui \
     ../src/widget/unionplot.ui \
     ../src/widget/wgbtfmake.ui \
     ../src/widget/wgcomrpt.ui \

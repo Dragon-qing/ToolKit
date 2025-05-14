@@ -6,6 +6,7 @@
 
 #include "basewidget.h"
 #include "common.h"
+#include "dlgprompt.h"
 
 namespace Ui {
 class WgLog;
@@ -20,10 +21,13 @@ public:
     ~WgLog();
     void MassageQueue(QVariant messageid, QVariant messageValue);
 
+
 private:
     Ui::WgLog *ui;
-
     QStandardItemModel *m_pModel;
+    DlgPrompt *m_pDlg;
+private slots:
+    void on_clearBtn_clicked();
 
 };
 

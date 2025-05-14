@@ -20,6 +20,7 @@ WgLog::WgLog(QWidget *parent)
     m_pModel = new QStandardItemModel(this);
     m_pModel->setHorizontalHeaderLabels(QStringList() << "时间" << "类型" << "内容"); // 设置表头
     ui->tableView->setModel(m_pModel);
+    m_pDlg = new DlgPrompt(DlgPrompt::OK_BUTTON | DlgPrompt::CANCEL_BUTTON, this);
 
     HmiLog::GetInstance().LoadLog(m_pModel);
 }
@@ -66,3 +67,13 @@ void LogTab::resizeEvent(QResizeEvent *event)
     setColumnWidth(1, col2Width);
     setColumnWidth(2, col3Width);
 }
+
+void WgLog::on_clearBtn_clicked()
+{
+    Bit32 ret = m_pDlg->ExecAndRet(TR("是否清空日志?"));
+    if (ret == DlgPrompt::OK_CODE)
+    {
+
+    }
+}
+
