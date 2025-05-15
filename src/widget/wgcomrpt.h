@@ -46,6 +46,8 @@ private:
     UnionPlot *m_pTapPlot; // 刚性攻丝
     UnionPlot *m_pCirclePlot; // 圆度测试
 
+    QString m_sOpenFolder; // 文件打开路径
+
     void InitDict();
     void UnionReplot();
     void BuildUnioPlot(QString mask);

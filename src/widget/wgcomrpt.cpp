@@ -53,6 +53,7 @@ WgComRpt::WgComRpt(QWidget *parent)
     m_pToolChangePlot = NULL;
     m_pTapPlot = NULL;
     m_pCirclePlot = NULL;
+    m_sOpenFolder = "";
 }
 
 WgComRpt::~WgComRpt()
@@ -536,7 +537,13 @@ void WgComRpt::UnionReplot()
 void WgComRpt::on_OpenBtn_clicked()
 {
     QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
-    QString filePath = QFileDialog::getOpenFileName(this, QObject::TR("选择文件"), desktopPath);
+    QString openPath = "";
+    if (m_sOpenFolder.isEmpty())
+    {
+        openPath = desktopPath;
+    }
+    QString filePath = QFileDialog::getOpenFileName(this, QObject::TR("选择文件"), openPath);
+    m_sOpenFolder = QFileInfo(filePath).absoluteFilePath();
     if (!QFileInfo(filePath).fileName().startsWith("MC_"))
     {
         if (filePath.isEmpty())

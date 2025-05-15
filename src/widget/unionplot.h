@@ -48,8 +48,8 @@ private:
     DlgUnionPlotSubline *m_pDlg;
     QList<QCPItemStraightLine*> m_vlineList;
 
-    void EnlargeGraph(Bit32 block, Bit16 axis); // 放大图像
-    void ReduceGraph(Bit32 block, Bit16 axis); // 缩小图像
+    void EnlargeGraph(Bit32 block, Bit16 axis, fBit64 scaleFactor = 0.9); // 放大图像
+    void ReduceGraph(Bit32 block, Bit16 axis, fBit64 scaleFactor = 1.1); // 缩小图像
     void FitRange(QPair<fBit64, fBit64> &first, QPair<fBit64, fBit64>second);
     void RedrawVline(QList<QPair<fBit64, fBit64>> rangeList);
 };

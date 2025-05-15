@@ -26,7 +26,7 @@ UnionPlot::UnionPlot(Layout_Type layout, Bit32 plotNum, QWidget *parent)
     {
         QCustomPlot *plotp = new QCustomPlot(this);
         plotp->setInteraction(QCP::iRangeDrag, true);
-        plotp->setInteraction(QCP::iRangeZoom, true);
+        // plotp->setInteraction(QCP::iRangeZoom, true);
         if (layout == HORIZON_LAYOUT)   // 水平布局
         {
             ui->gridLayout->addWidget(plotp, 0, i);
@@ -214,6 +214,46 @@ bool UnionPlot::eventFilter(QObject *obj, QEvent *event)
                 }
             }
         }
+    }
+    else if (event->type() == QEvent::Wheel)
+    {
+        QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
+        if (wheelEvent->modifiers() & Qt::ControlModifier)
+        {
+            if (wheelEvent->angleDelta().y() > 0)
+            {
+                EnlargeGraph(m_nCurBlock, 1);
+            }
+            else
+            {
+                ReduceGraph(m_nCurBlock, 1);
+            }
+        }
+        else if (wheelEvent->modifiers() & Qt::ShiftModifier)
+        {
+            if (wheelEvent->angleDelta().y() > 0)
+            {
+                EnlargeGraph(m_nCurBlock, 0);
+            }
+            else
+            {
+                ReduceGraph(m_nCurBlock, 0);
+            }
+        }
+        else
+        {
+            if (wheelEvent->angleDelta().y() > 0)
+            {
+                EnlargeGraph(m_nCurBlock, 0, 0.8);
+                EnlargeGraph(m_nCurBlock, 1, 0.8);
+            }
+            else
+            {
+                ReduceGraph(m_nCurBlock, 0, 1.2);
+                ReduceGraph(m_nCurBlock, 1, 1.2);
+            }
+        }
+        wheelEvent->accept();
     }
 
     return BaseWidget::eventFilter(obj, event);
@@ -417,7 +457,7 @@ void UnionPlot::keyPressEvent(QKeyEvent *event)
 
 }
 
-void UnionPlot::EnlargeGraph(Bit32 block, Bit16 axis)
+void UnionPlot::EnlargeGraph(Bit32 block, Bit16 axis, fBit64 scaleFactor)
 {
     if (block < 0 || block >= m_plotList.count())
     {
@@ -429,7 +469,6 @@ void UnionPlot::EnlargeGraph(Bit32 block, Bit16 axis)
         QCPAxis *xAxis = plot->xAxis;
         QCPRange range = xAxis->range();
         fBit64 center = range.center();
-        fBit64 scaleFactor = 0.9;  // 缩小范围即为放大
         fBit64 newSize = range.size() * scaleFactor;
         xAxis->setRange(center - newSize / 2, center + newSize / 2);
         plot->replot();
@@ -439,14 +478,13 @@ void UnionPlot::EnlargeGraph(Bit32 block, Bit16 axis)
         QCPAxis *yAxis = plot->yAxis;
         QCPRange range = yAxis->range();
         fBit64 center = range.center();
-        fBit64 scaleFactor = 0.9;  // 缩小范围即为放大
         fBit64 newSize = range.size() * scaleFactor;
         yAxis->setRange(center - newSize / 2, center + newSize / 2);
         plot->replot();
     }
 }
 
-void UnionPlot::ReduceGraph(Bit32 block, Bit16 axis)
+void UnionPlot::ReduceGraph(Bit32 block, Bit16 axis, fBit64 scaleFactor)
 {
     if (block < 0 || block >= m_plotList.count())
     {
@@ -458,7 +496,6 @@ void UnionPlot::ReduceGraph(Bit32 block, Bit16 axis)
         QCPAxis *xAxis = plot->xAxis;
         QCPRange range = xAxis->range();
         fBit64 center = range.center();
-        fBit64 scaleFactor = 1.1;  // 放大范围即为缩小
         fBit64 newSize = range.size() * scaleFactor;
         xAxis->setRange(center - newSize / 2, center + newSize / 2);
         plot->replot();
@@ -468,7 +505,6 @@ void UnionPlot::ReduceGraph(Bit32 block, Bit16 axis)
         QCPAxis *yAxis = plot->yAxis;
         QCPRange range = yAxis->range();
         fBit64 center = range.center();
-        fBit64 scaleFactor = 1.1;  // 放大范围即为缩小
         fBit64 newSize = range.size() * scaleFactor;
         yAxis->setRange(center - newSize / 2, center + newSize / 2);
         plot->replot();
