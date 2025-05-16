@@ -18,6 +18,7 @@ public:
     explicit BaseWidget(QWidget *parent = nullptr);
     ~BaseWidget();
     virtual void MassageQueue(QVariant messageid, QVariant messageValue);
+    virtual QStringList GetHelpText();
 
 private:
     Ui::BaseWidget *ui;

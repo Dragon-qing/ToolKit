@@ -19,6 +19,7 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     enum _AXIS_TYPE{
@@ -62,6 +63,9 @@ private:
     void BuildCircleDefault();
 
     void AddUnionPlot(UnionPlot *plot);
+    QStringList GetHelpText() override;
+    void EnlargeGraph(Bit16 axis, fBit64 scaleFactor = 0.9);
+    void ReduceGraph(Bit16 axis, fBit64 scaleFactor = 1.1);
 
 private slots:
     void on_OpenBtn_clicked();

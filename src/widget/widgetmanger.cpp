@@ -18,6 +18,7 @@ WidgetManger::WidgetManger(QWidget *parent) :
     ui->setupUi(this);
     m_widgetContainer.clear();
     m_widgetNameList.clear();
+    m_pDlgHelp = new DlgHelp(this);
 
     InitWidgetContainer();
 
@@ -28,6 +29,7 @@ WidgetManger::WidgetManger(QWidget *parent) :
     }
 
     connect(ui->tabWidget, &QTabWidget::currentChanged, this, &WidgetManger::WidgetChangeHandle);
+    installEventFilter(this);
 }
 
 WidgetManger::~WidgetManger()
@@ -45,6 +47,26 @@ QWidget *WidgetManger::GetCurrentWidget()
     }
 
     return m_widgetContainer.at(idx);
+}
+
+bool WidgetManger::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if (keyEvent->modifiers() & Qt::ControlModifier)
+        {
+            if (keyEvent->key() == Qt::Key_H)
+            {
+                BaseWidget *wg = static_cast<BaseWidget*>(GetCurrentWidget());
+                QStringList contentList = wg->GetHelpText();
+                m_pDlgHelp->SetContent(contentList);
+                m_pDlgHelp->show();
+            }
+        }
+    }
+
+    return QWidget::eventFilter(watched, event);
 }
 
 void WidgetManger::InitWidgetContainer()
@@ -65,6 +87,7 @@ void WidgetManger::AddWidget(QWidget *widget, const QString &name)
     }
 
     m_widgetContainer.append(widget);
+    widget->installEventFilter(this);
     m_widgetNameList.append(name);
 }
 

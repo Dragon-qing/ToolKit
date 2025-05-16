@@ -11,21 +11,31 @@ QStatusBar *GLOBAL_STATUSBAR = NULL;
 
 void ComDebug(const QString &content, const QString &title)
 {
-    qDebug() << QString("------------%1------------").arg(title);
-    qDebug() << content;
+    qDebug() << QString("<------------%1------------>").arg(title);
     qDebug() << QDateTime::currentDateTime().toString("[yy-MM-dd hh:mm:ss]");
-    qDebug() << QString("------------------------");
+    qDebug() << content;
+    qDebug() << QString(">------------------------<");
 }
+
+void ComDebug(const Bit16 &content, const QString &title) { ComDebug(QString::number(content), title); }
+
+void ComDebug(const Bit32 &content, const QString &title) { ComDebug(QString::number(content), title); }
+
+void ComDebug(const Bit64 &content, const QString &title) { ComDebug(QString::number(content), title); }
+
+void ComDebug(const fBit32 &content, const QString &title) { ComDebug(QString::number(content), title); }
+
+void ComDebug(const fBit64 &content, const QString &title) { ComDebug(QString::number(content), title); }
 
 void ComDebug(const QStringList content, const QString &title)
 {
-    qDebug() << QString("------------%1------------").arg(title);
+    qDebug() << QString("<------------%1------------>").arg(title);
+    qDebug() << QDateTime::currentDateTime().toString("[yy-MM-dd hh:mm:ss]");
     foreach (QString str, content)
     {
         qDebug() << str;
     }
-    qDebug() << QDateTime::currentDateTime().toString("[yy-MM-dd hh:mm:ss]");
-    qDebug() << QString("------------------------");
+    qDebug() << QString(">------------------------<");
 }
 
 /**

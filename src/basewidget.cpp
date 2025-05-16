@@ -20,3 +20,8 @@ void BaseWidget::MassageQueue(QVariant messageid, QVariant messageValue)
 
     return;
 }
+
+QStringList BaseWidget::GetHelpText()
+{
+    return QStringList();
+}

@@ -22,7 +22,7 @@ WgComRpt::WgComRpt(QWidget *parent)
     ui->setupUi(this);
     m_pDlg = new DlgPrompt(DlgPrompt::OK_BUTTON, this);
     ui->plot->setInteraction(QCP::iRangeDrag, true);
-    ui->plot->setInteraction(QCP::iRangeZoom, true);
+    // ui->plot->setInteraction(QCP::iRangeZoom, true);
     m_xAxisRange = QPair<fBit64, fBit64>(0, 10);
     m_yAxisRange = QPair<fBit64, fBit64>(0, 10);
     InitDict();
@@ -69,6 +69,52 @@ void WgComRpt::keyPressEvent(QKeyEvent *event)
         ui->plot->yAxis->setRange(m_yAxisRange.first, m_yAxisRange.second);
         ui->plot->replot();
     }
+}
+
+bool WgComRpt::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::Wheel)
+    {
+        QWheelEvent *wheelEvent = static_cast<QWheelEvent*>(event);
+        if (wheelEvent->modifiers() & Qt::ControlModifier)
+        {
+            if (wheelEvent->angleDelta().y() > 0)
+            {
+                EnlargeGraph(1);
+            }
+            else
+            {
+                ReduceGraph(1);
+            }
+        }
+        else if (wheelEvent->modifiers() & Qt::ShiftModifier)
+        {
+            if (wheelEvent->angleDelta().y() > 0)
+            {
+                EnlargeGraph(0);
+            }
+            else
+            {
+                ReduceGraph(0);
+            }
+        }
+        else
+        {
+            if (wheelEvent->angleDelta().y() > 0)
+            {
+                EnlargeGraph(0, 0.8);
+                EnlargeGraph(1, 0.8);
+            }
+            else
+            {
+                ReduceGraph(0, 1.2);
+                ReduceGraph(1, 1.2);
+            }
+        }
+        wheelEvent->accept();
+    }
+
+    return BaseWidget::eventFilter(watched, event);
 }
 
 void WgComRpt::InitDict()
@@ -380,18 +426,18 @@ void WgComRpt::BuildSpdlSpeedDefultPlot()
     Bit32 totalCount = HmiComRpt::Instance().GetTotalPosNum();
     QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
     QVector<fBit64> actVel;
-    fBit64 actCoef = coefList.at(1).toDouble();
+    fBit64 actCoef = coefList.at(0).toDouble();
     QVector<fBit64> cmdVel;
     fBit64 cmdCoef = coefList.at(3).toDouble();
     QVector<fBit64> current;
-    fBit64 currCoef = coefList.at(2).toDouble();
+    fBit64 currCoef = coefList.at(1).toDouble();
     QVector<fBit64> time;
     fBit64 samplePeriod = HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
 
     for (Bit32 i = 0; i < totalCount; i++)
     {
-        fBit64 actVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * actCoef;
-        fBit64 currVal = HmiComRpt::Instance().GetValue(DATA_PART, 2, i).toLongLong() * currCoef;
+        fBit64 actVal = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * actCoef;
+        fBit64 currVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * currCoef;
         fBit64 cmdVal = HmiComRpt::Instance().GetValue(DATA_PART, 3, i).toLongLong() * cmdCoef;
         actVel << actVal;
         current << currVal;
@@ -524,6 +570,65 @@ void WgComRpt::AddUnionPlot(UnionPlot *plot)
     }
     m_pCurPlot = plot;
     plot->setVisible(true);
+}
+
+QStringList WgComRpt::GetHelpText()
+{
+    QStringList list;
+    list << QObject::TR("<b>快捷键</b>");
+    list << QObject::TR("Ctrl+滚轮：图像放大/缩小");
+    list << QObject::TR("Ctrl+Z：复位");
+    list << QObject::TR("Ctrl+ +/-：放大缩小");
+    list << QObject::TR("<b>预设图</b>");
+    list << QObject::TR("Ctrl+i：增加辅助线");
+    list << QObject::TR("Ctrl+f：放大鼠标位置的图像");
+    return list;
+}
+
+void WgComRpt::EnlargeGraph(Bit16 axis, fBit64 scaleFactor)
+{
+    QCustomPlot * plot = ui->plot;
+    if (axis == 0)
+    {
+        QCPAxis *xAxis = plot->xAxis;
+        QCPRange range = xAxis->range();
+        fBit64 center = range.center();
+        fBit64 newSize = range.size() * scaleFactor;
+        xAxis->setRange(center - newSize / 2, center + newSize / 2);
+        plot->replot();
+    }
+    else if (axis == 1)
+    {
+        QCPAxis *yAxis = plot->yAxis;
+        QCPRange range = yAxis->range();
+        fBit64 center = range.center();
+        fBit64 newSize = range.size() * scaleFactor;
+        yAxis->setRange(center - newSize / 2, center + newSize / 2);
+        plot->replot();
+    }
+}
+
+void WgComRpt::ReduceGraph(Bit16 axis, fBit64 scaleFactor)
+{
+    QCustomPlot * plot = ui->plot;
+    if (axis == 0)
+    {
+        QCPAxis *xAxis = plot->xAxis;
+        QCPRange range = xAxis->range();
+        fBit64 center = range.center();
+        fBit64 newSize = range.size() * scaleFactor;
+        xAxis->setRange(center - newSize / 2, center + newSize / 2);
+        plot->replot();
+    }
+    else if (axis == 1)
+    {
+        QCPAxis *yAxis = plot->yAxis;
+        QCPRange range = yAxis->range();
+        fBit64 center = range.center();
+        fBit64 newSize = range.size() * scaleFactor;
+        yAxis->setRange(center - newSize / 2, center + newSize / 2);
+        plot->replot();
+    }
 }
 
 void WgComRpt::UnionReplot()

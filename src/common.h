@@ -22,8 +22,15 @@ const Bit32 WINDOW_HEIGHT = 768;
 const Bit32 DLG_WIDTH =  400;   // 对话框宽度
 const Bit32 DLG_HEIGHT = 200;   // 对话框高度
 
+// 输出到控制台
 void ComDebug(const QString &content, const QString &title = "");
+void ComDebug(const Bit16 &content, const QString &title = "");
+void ComDebug(const Bit32 &content, const QString &title = "");
+void ComDebug(const Bit64 &content, const QString &title = "");
+void ComDebug(const fBit32 &content, const QString &title = "");
+void ComDebug(const fBit64 &content, const QString &title = "");
 void ComDebug(const QStringList content, const QString &title = "");
+
 void ErrOutput(const QString content); //记录错误日志
 
 Bit32 GetXmlDoc(QString path, QDomDocument &doc);
