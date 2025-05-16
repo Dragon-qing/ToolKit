@@ -39,6 +39,7 @@ public:
     Bit32 GetLogNum(); // 获取日志数量
     QList<LogData> GetAllLog();
     void DeleteLog(Bit32 from, Bit32 count);
+    void DeleteAllLog();
 private:
     QSqlDatabase m_sqlDB;
 

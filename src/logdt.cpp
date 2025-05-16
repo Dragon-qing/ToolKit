@@ -158,6 +158,21 @@ void LogDt::DeleteLog(Bit32 from, Bit32 count)
     }
 }
 
+void LogDt::DeleteAllLog()
+{
+    QString sql = QString("delete FROM logtb;");
+    try
+    {
+        Transaction t(m_sqlDB);
+        t.execNonQuery(sql);
+        t.commit();
+    }
+    catch (const DBException &e)
+    {
+        ErrOutput(e.lastError.text() + e.lastQuery);
+    }
+}
+
 /**
  * @brief LogDt::ClearFile 清空文件内容
  * @param filePath 文件路径

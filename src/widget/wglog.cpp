@@ -73,7 +73,8 @@ void WgLog::on_clearBtn_clicked()
     Bit32 ret = m_pDlg->ExecAndRet(TR("是否清空日志?"));
     if (ret == DlgPrompt::OK_CODE)
     {
-
+        LogDt::Instance().DeleteAllLog();
+        MassageQueue(MsgData::REDRAW, "");
     }
 }
 

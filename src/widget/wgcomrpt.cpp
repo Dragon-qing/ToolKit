@@ -660,6 +660,7 @@ void WgComRpt::on_OpenBtn_clicked()
     }
 
     HmiComRpt::Instance().SetPath(filePath);
+    LogDt::Instance().AddLog(INFO_LOG, TR("打开%1采样文件").arg(filePath));
     ReadFileThread *threadp = HmiComRpt::Instance().GetThreadClass();
     connect(threadp, &ReadFileThread::ProcessSignal, ui->progressBar, &QProgressBar::setValue);
 }
