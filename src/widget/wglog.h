@@ -30,6 +30,8 @@ private:
     DlgPrompt *m_pDlg;
 
     QStringList GetHelpText() override;
+private slots:
+    void DoubleClickHandle(const QModelIndex &index);
 };
 
 class LogTab : public QTableView

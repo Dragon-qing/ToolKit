@@ -30,6 +30,9 @@ public:
     explicit DlgPrompt(Bit32 buttons = (OK_BUTTON | CANCEL_BUTTON), QWidget *parent = nullptr);
     ~DlgPrompt();
     Bit32 ExecAndRet(const QString &context);
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
 private:
     Ui::DlgPrompt *ui;
     QButtonGroup *m_pButtonGroup;

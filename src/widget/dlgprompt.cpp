@@ -4,6 +4,7 @@
  * @author Dragon_qing
  * @date 2025/04/25
  */
+#include <QPainter>
 
 #include "dlgprompt.h"
 #include "ui_dlgprompt.h"
@@ -12,7 +13,8 @@ void DlgPrompt::InitUi()
 {
     resize(DLG_WIDTH, DLG_HEIGHT);
     this->setWindowTitle(TR("提示"));
-    this->setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground); // 允许透明背景
 
     m_pButtonGroup = new QButtonGroup(this);
     m_pButtonGroup->addButton(ui->ok_Btn, OK_BUTTON);
@@ -20,6 +22,7 @@ void DlgPrompt::InitUi()
     connect(m_pButtonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &DlgPrompt::HandleClicked);
     ui->ok_Btn->setVisible(false);
     ui->cancel_Btn->setVisible(false);
+    ui->label->setTextInteractionFlags(Qt::TextSelectableByMouse);
 }
 
 void DlgPrompt::HandleClicked(int id)
@@ -64,4 +67,21 @@ Bit32 DlgPrompt::ExecAndRet(const QString &context)
     ui->label->setText(context);
     this->exec();
     return m_nCurrentCode;
+}
+
+void DlgPrompt::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing); // 开启抗锯齿
+    QPainterPath path;
+    path.addRoundedRect(rect(), 35, 35); // 设置圆角半径
+
+    painter.setClipPath(path);
+    painter.fillPath(path, Qt::white);
+
+    QStyleOption opt;
+    opt.init(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &painter, this);
+
+    QDialog::paintEvent(event);
 }

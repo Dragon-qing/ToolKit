@@ -23,6 +23,7 @@ WgLog::WgLog(QWidget *parent)
     m_pDlg = new DlgPrompt(DlgPrompt::OK_BUTTON | DlgPrompt::CANCEL_BUTTON, this);
 
     HmiLog::GetInstance().LoadLog(m_pModel);
+    connect(ui->tableView, &LogTab::doubleClicked, this, &WgLog::DoubleClickHandle);
 }
 
 WgLog::~WgLog()
@@ -61,6 +62,12 @@ QStringList WgLog::GetHelpText()
     list << TR("Ctrl+D 清空日志");
 
     return list;
+}
+
+void WgLog::DoubleClickHandle(const QModelIndex &index)
+{
+    QString content = m_pModel->data(index, Qt::DisplayRole).toString();
+    m_pDlg->ExecAndRet(content);
 }
 
 LogTab::LogTab(QWidget *parent)
