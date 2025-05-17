@@ -26,6 +26,7 @@ INCLUDEPATH += \
     ../src ../src/widget\
     ../src/hmi ../src/service\
     ../src/thirdparty ../src/thirdparty/easyqtsql\
+    ../src/widget/control\
 INCLUDEPATH += ../include
 LIBS += -luser32
 LIBS += -L$$PWD/../lib
@@ -44,6 +45,7 @@ SOURCES += \
     ../src/hmi/hmiconfig.cpp \
     ../src/hmi/hmipainter.cpp \
     ../src/hmi/hmixmleditor.cpp \
+    ../src/widget/control/basetable.cpp \
     ../src/widget/dlgbtfmakeinfo.cpp \
     ../src/widget/dlghelp.cpp \
     ../src/widget/dlgprompt.cpp \
@@ -73,6 +75,7 @@ HEADERS += \
     ../src/hmi/hmiconfig.h \
     ../src/hmi/hmipainter.h \
     ../src/hmi/hmixmleditor.h \
+    ../src/widget/control/basetable.h \
     ../src/widget/dlgbtfmakeinfo.h \
     ../src/widget/dlghelp.h \
     ../src/widget/dlgprompt.h \
@@ -92,6 +95,7 @@ FORMS += \
     ../src/basewidget.ui \
     ../src/mainwindow.ui \
     ../src/hmi/hmipainter.ui \
+    ../src/widget/control/basetable.ui \
     ../src/widget/dlgbtfmakeinfo.ui \
     ../src/widget/dlghelp.ui \
     ../src/widget/dlgprompt.ui \
@@ -112,12 +116,3 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     ../res.qrc
-
-# python environment config
-
-# win32: LIBS += -L$$PWD/'../../../Program Files/python312/libs/' -lpython312
-
-# INCLUDEPATH += $$PWD/'../../../Program Files/python312/include'
-# DEPENDPATH += $$PWD/'../../../Program Files/python312/include'
-
-# win32:!win32-g++: PRE_TARGETDEPS += $$PWD/'../../../Program Files/python312/libs/python312.lib'
