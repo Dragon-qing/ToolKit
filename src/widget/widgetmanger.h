@@ -20,8 +20,6 @@ public:
     ~WidgetManger();
     QWidget *GetCurrentWidget();
 
-    bool eventFilter(QObject *watched, QEvent *event) override;
-
 private:
     Ui::WidgetManger *ui;
 
@@ -33,6 +31,7 @@ private:
     void AddWidget(QWidget *widget, const QString &name);
 private slots:
     void WidgetChangeHandle(int index);
+    void CallHelpDlg();
 
 };
 

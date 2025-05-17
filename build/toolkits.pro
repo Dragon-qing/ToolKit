@@ -26,7 +26,10 @@ INCLUDEPATH += \
     ../src ../src/widget\
     ../src/hmi ../src/service\
     ../src/thirdparty ../src/thirdparty/easyqtsql\
+INCLUDEPATH += ../include
 LIBS += -luser32
+LIBS += -L$$PWD/../lib
+LIBS += -lqhotkey
 SOURCES += \
     ../src/basewidget.cpp \
     ../src/common.cpp \
@@ -53,6 +56,7 @@ SOURCES += \
     ../src/widget/wgtyproaimgcleaner.cpp \
     ../src/widget/wgxmleditor.cpp \
     ../src/widget/widgetmanger.cpp\
+    # QCP第三方绘图模块引入
     ../src/thirdparty/qcustomplot.cpp
 
 HEADERS += \

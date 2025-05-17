@@ -44,4 +44,3 @@ void MainWindow::timerEvent(QTimerEvent *event)
 
     }
 }
-

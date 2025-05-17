@@ -1,4 +1,12 @@
-﻿#include "common.h"
+﻿/*!
+ * @brief 界面管理类
+ * @file widgetmanger.cpp
+ * @date 2024/08/11
+ * @author Dragonqing
+ */
+#include "qhotkey.h"
+
+#include "common.h"
 #include "wggeneratebugfolder.h"
 #include "wgtyproaimgcleaner.h"
 #include "wgbtfmake.h"
@@ -29,7 +37,9 @@ WidgetManger::WidgetManger(QWidget *parent) :
     }
 
     connect(ui->tabWidget, &QTabWidget::currentChanged, this, &WidgetManger::WidgetChangeHandle);
-    installEventFilter(this);
+    // 注册帮助页面全局快捷键
+    QHotkey *helpHotKey = new QHotkey(QKeySequence("Ctrl+H"), true, qApp);
+    connect(helpHotKey, &QHotkey::activated, this, &WidgetManger::CallHelpDlg);
 }
 
 WidgetManger::~WidgetManger()
@@ -47,26 +57,6 @@ QWidget *WidgetManger::GetCurrentWidget()
     }
 
     return m_widgetContainer.at(idx);
-}
-
-bool WidgetManger::eventFilter(QObject *watched, QEvent *event)
-{
-    if (event->type() == QEvent::KeyPress)
-    {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-        if (keyEvent->modifiers() & Qt::ControlModifier)
-        {
-            if (keyEvent->key() == Qt::Key_H)
-            {
-                BaseWidget *wg = static_cast<BaseWidget*>(GetCurrentWidget());
-                QStringList contentList = wg->GetHelpText();
-                m_pDlgHelp->SetContent(contentList);
-                m_pDlgHelp->show();
-            }
-        }
-    }
-
-    return QWidget::eventFilter(watched, event);
 }
 
 void WidgetManger::InitWidgetContainer()
@@ -87,7 +77,6 @@ void WidgetManger::AddWidget(QWidget *widget, const QString &name)
     }
 
     m_widgetContainer.append(widget);
-    widget->installEventFilter(this);
     m_widgetNameList.append(name);
 }
 
@@ -98,4 +87,15 @@ void WidgetManger::WidgetChangeHandle(int index)
     {
         wg->MassageQueue(MsgData::REDRAW, "");
     }
+}
+
+void WidgetManger::CallHelpDlg()
+{
+    BaseWidget *wg = dynamic_cast<BaseWidget *>(GetCurrentWidget());
+    if (wg != NULL)
+    {
+        QStringList contentList = wg->GetHelpText();
+        m_pDlgHelp->SetContent(contentList);
+    }
+    m_pDlgHelp->show();
 }
