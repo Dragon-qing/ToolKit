@@ -1,4 +1,5 @@
 ﻿#include "common.h"
+#include "sysapi.h"
 
 #include "dlghelp.h"
 #include "ui_dlghelp.h"
@@ -30,5 +31,6 @@ void DlgHelp::SetContent(QStringList content)
     {
         display = QObject::TR("帮助文档暂时为空，等待补充。");
     }
+    display.insert(0, QString("<p><b>Version:</b>%1</p><hr>").arg(SYS_VERSION));
     ui->textBrowser->setHtml(display);
 }

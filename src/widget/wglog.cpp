@@ -4,7 +4,7 @@
  * @author Dragon_qing
  * @date 2025/04/27
  */
-#include <random>
+#include <QKeyEvent>
 
 #include "hmilog.h"
 
@@ -41,6 +41,28 @@ void WgLog::MassageQueue(QVariant messageid, QVariant messageValue)
     }
 }
 
+void WgLog::keyPressEvent(QKeyEvent *event)
+{
+    if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_D)
+    {
+        Bit32 ret = m_pDlg->ExecAndRet(TR("是否清空日志?"));
+        if (ret == DlgPrompt::OK_CODE)
+        {
+            LogDt::Instance().DeleteAllLog();
+            MassageQueue(MsgData::REDRAW, "");
+        }
+    }
+}
+
+QStringList WgLog::GetHelpText()
+{
+    QStringList list;
+    list << TR("<h3>快捷键<h3>");
+    list << TR("Ctrl+D 清空日志");
+
+    return list;
+}
+
 LogTab::LogTab(QWidget *parent)
     : QTableView(parent)
 {
@@ -67,14 +89,3 @@ void LogTab::resizeEvent(QResizeEvent *event)
     setColumnWidth(1, col2Width);
     setColumnWidth(2, col3Width);
 }
-
-void WgLog::on_clearBtn_clicked()
-{
-    Bit32 ret = m_pDlg->ExecAndRet(TR("是否清空日志?"));
-    if (ret == DlgPrompt::OK_CODE)
-    {
-        LogDt::Instance().DeleteAllLog();
-        MassageQueue(MsgData::REDRAW, "");
-    }
-}
-

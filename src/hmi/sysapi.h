@@ -4,6 +4,8 @@
 
 #include "datadef.h"
 
+#define SYS_VERSION "0.3.2"
+
 typedef enum _Path_Type{
     BIN_PATH = 0,   // bin目录
     TMP_PATH,       // tmp目录

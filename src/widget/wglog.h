@@ -21,14 +21,15 @@ public:
     ~WgLog();
     void MassageQueue(QVariant messageid, QVariant messageValue);
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 
 private:
     Ui::WgLog *ui;
     QStandardItemModel *m_pModel;
     DlgPrompt *m_pDlg;
-private slots:
-    void on_clearBtn_clicked();
 
+    QStringList GetHelpText() override;
 };
 
 class LogTab : public QTableView
