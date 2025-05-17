@@ -4,8 +4,8 @@ QFrame#backgrd, #func_frame
 }
 QPushButton
 {
-    color:#d35400;
-    background-color:qlineargradient(x1:1, y1:0, x2:0, y2:0, stop:0 #fce38a, stop:1 #ffbc7a);
+    color:#f38181;
+    background-color:#fce38a;
     border-style:outset;
     border-width:2px;
     border-color:#feeba5; 
