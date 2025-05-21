@@ -18,6 +18,8 @@ public:
     explicit WgComRpt(QWidget *parent = nullptr);
     ~WgComRpt();
 
+    void MessageQueue(QVariant messageid, QVariant messageValue) override;
+
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
@@ -76,10 +78,6 @@ private slots:
     void MouseMoveEventHandle(QMouseEvent *event);
     void on_drawBtn_clicked();
     void DefaultRadioHandle(bool checked);
-
-    // BaseWidget interface
-public:
-    void MessageQueue(QVariant messageid, QVariant messageValue) override;
 };
 
 #endif // WGCOMRPT_H

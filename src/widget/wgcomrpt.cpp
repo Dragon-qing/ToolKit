@@ -56,6 +56,7 @@ WgComRpt::WgComRpt(QWidget *parent)
     m_sOpenFolder = "";
 
     m_pDlgComRes = new DlgComRes(this);
+    ui->plot->installEventFilter(this);
 }
 
 WgComRpt::~WgComRpt()
@@ -589,6 +590,7 @@ QStringList WgComRpt::GetHelpText()
     list << QObject::TR("Ctrl+滚轮：图像放大/缩小");
     list << QObject::TR("Ctrl+Z：复位");
     list << QObject::TR("Ctrl+ +/-：放大缩小");
+    list << QObject::TR("Ctrl+ R：显示加载的数据计算结果");
     list << QObject::TR("<b>预设图</b>");
     list << QObject::TR("Ctrl+i：增加辅助线");
     list << QObject::TR("Ctrl+f：放大鼠标位置的图像");
