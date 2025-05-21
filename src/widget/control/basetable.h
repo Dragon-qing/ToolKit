@@ -10,7 +10,7 @@ namespace Ui {
 class BaseTable;
 }
 
-class TableModel;
+class TKTableModel;
 class BaseTable : public QTableView
 {
     Q_OBJECT
@@ -28,27 +28,41 @@ public:
     ~BaseTable();
 
     virtual QVariant ContentGet(Bit32 row, Bit32 col) = 0;
-    virtual QVariant RoleStyle(Bit32 row, Bit32 col, RoleType role) = 0;
+    virtual Bit32 TotalRow() = 0;
+    // virtual QVariant RoleStyle(Bit32 row, Bit32 col, RoleType role) = 0;
 
+    void Refresh(); // 仅更新已有数据
+    void ReDraw(); // 重新构建数据
+protected:
+    Bit32 InitTable(QStringList headList, QVector<Bit32> scale);
+
+    void resizeEvent(QResizeEvent *event) override;
 private:
     Ui::BaseTable *ui;
-    TableModel *m_pModel;
+    TKTableModel *m_pModel;
+    QVector<Bit32> m_scaleVec;
 };
 
-class TableModel : public QAbstractTableModel
+class TKTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit TableModel(QWidget *parent = nullptr);
-    ~TableModel();
+    explicit TKTableModel(QWidget *parent = nullptr);
+    ~TKTableModel();
 
-
-
-    // QAbstractItemModel interface
-public:
-    int rowCount(const QModelIndex &parent) const override;
-    int columnCount(const QModelIndex &parent) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
-}
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+
+    void InsertData(QStringList list); // 尾插数据
+    void InsertHead(QString head); // 尾插标题头
+    void ClearData(); // 清空数据
+
+private:
+    QVector<QStringList> m_dataVec; // 数据
+    QStringList m_headList; // 标题头
+};
 
 #endif // BASETABLE_H
