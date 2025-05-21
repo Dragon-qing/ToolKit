@@ -28,5 +28,7 @@ private:
     WidgetManger *m_pWidgetManger;
     Bit32 m_nTimer1;    // 200ms定时器
     Bit32 m_nTimer2;    // 20ms定时器
+
+    void RegistStruct(); // 注册自定义结构体
 };
 #endif // MAINWINDOW_H

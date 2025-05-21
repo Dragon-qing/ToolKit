@@ -3,6 +3,7 @@
 #include "basewidget.h"
 #include "hmipainter.h"
 #include "sysapi.h"
+#include "hmicomrpt.h"
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -22,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_nTimer1 = startTimer(200);
     m_nTimer2 = startTimer(20);
     InitStatusBar(ui->statusbar);
+    RegistStruct();
 }
 
 MainWindow::~MainWindow()
@@ -36,11 +38,16 @@ void MainWindow::timerEvent(QTimerEvent *event)
         BaseWidget *baseWidget = dynamic_cast<BaseWidget *>(m_pWidgetManger->GetCurrentWidget());
         if (baseWidget != NULL)
         {
-            baseWidget->MassageQueue(MsgData::REFRESH, "");
+            baseWidget->MessageQueue(MsgData::REFRESH, "");
         }
     }
     else if (event->timerId() == m_nTimer2)
     {
 
     }
+}
+
+void MainWindow::RegistStruct()
+{
+    qRegisterMetaType<ComResult>("ComResult");
 }

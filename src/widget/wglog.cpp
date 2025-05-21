@@ -31,7 +31,7 @@ WgLog::~WgLog()
     delete ui;
 }
 
-void WgLog::MassageQueue(QVariant messageid, QVariant messageValue)
+void WgLog::MessageQueue(QVariant messageid, QVariant messageValue)
 {
     Q_UNUSED(messageValue);
     if (messageid == MsgData::REDRAW)
@@ -50,7 +50,7 @@ void WgLog::keyPressEvent(QKeyEvent *event)
         if (ret == DlgPrompt::OK_CODE)
         {
             LogDt::Instance().DeleteAllLog();
-            MassageQueue(MsgData::REDRAW, "");
+            MessageQueue(MsgData::REDRAW, "");
         }
     }
 }

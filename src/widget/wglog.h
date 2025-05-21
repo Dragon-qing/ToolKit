@@ -19,7 +19,7 @@ class WgLog : public BaseWidget
 public:
     explicit WgLog(QWidget *parent = nullptr);
     ~WgLog();
-    void MassageQueue(QVariant messageid, QVariant messageValue);
+    void MessageQueue(QVariant messageid, QVariant messageValue);
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

@@ -13,7 +13,7 @@ BaseWidget::~BaseWidget()
     delete ui;
 }
 
-void BaseWidget::MassageQueue(QVariant messageid, QVariant messageValue)
+void BaseWidget::MessageQueue(QVariant messageid, QVariant messageValue)
 {
     Q_UNUSED(messageid);
     Q_UNUSED(messageValue);

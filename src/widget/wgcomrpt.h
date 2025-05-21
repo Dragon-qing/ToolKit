@@ -4,6 +4,7 @@
 #include "basewidget.h"
 #include "dlgprompt.h"
 #include "unionplot.h"
+#include "dlgcomres.h"
 
 namespace Ui {
 class WgComRpt;
@@ -49,6 +50,8 @@ private:
 
     QString m_sOpenFolder; // 文件打开路径
 
+    DlgComRes *m_pDlgComRes;
+
     void InitDict();
     void UnionReplot();
     void BuildUnioPlot(QString mask);
@@ -73,6 +76,10 @@ private slots:
     void MouseMoveEventHandle(QMouseEvent *event);
     void on_drawBtn_clicked();
     void DefaultRadioHandle(bool checked);
+
+    // BaseWidget interface
+public:
+    void MessageQueue(QVariant messageid, QVariant messageValue) override;
 };
 
 #endif // WGCOMRPT_H

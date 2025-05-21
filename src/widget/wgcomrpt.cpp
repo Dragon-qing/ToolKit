@@ -54,6 +54,8 @@ WgComRpt::WgComRpt(QWidget *parent)
     m_pTapPlot = NULL;
     m_pCirclePlot = NULL;
     m_sOpenFolder = "";
+
+    m_pDlgComRes = new DlgComRes(this);
 }
 
 WgComRpt::~WgComRpt()
@@ -63,11 +65,18 @@ WgComRpt::~WgComRpt()
 
 void WgComRpt::keyPressEvent(QKeyEvent *event)
 {
-    if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_Z)
+    if (event->modifiers() & Qt::ControlModifier)
     {
-        ui->plot->xAxis->setRange(m_xAxisRange.first, m_xAxisRange.second);
-        ui->plot->yAxis->setRange(m_yAxisRange.first, m_yAxisRange.second);
-        ui->plot->replot();
+        if (event->key() == Qt::Key_Z)
+        {
+            ui->plot->xAxis->setRange(m_xAxisRange.first, m_xAxisRange.second);
+            ui->plot->yAxis->setRange(m_yAxisRange.first, m_yAxisRange.second);
+            ui->plot->replot();
+        }
+        else if (event->key() == Qt::Key_R)
+        {
+            m_pDlgComRes->Exec();
+        }
     }
 }
 
@@ -219,6 +228,7 @@ void WgComRpt::BuildJourDefaultPlot()
         fBit64 jour = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * jourCoef;
         fBit64 actVel = HmiComRpt::Instance().GetValue(DATA_PART, 2, i).toLongLong() * actVelCoef;
         fBit64 cmdVel = HmiComRpt::Instance().GetValue(DATA_PART, 4, i).toLongLong() * cmdVelCoef;
+        Q_UNUSED(cmdVel);
 
         if (!beginFlag && perVel * actVel < 0)
         {
@@ -882,6 +892,14 @@ void WgComRpt::DefaultRadioHandle(bool checked)
     else // 使用自定义图像
     {
         ui->stackedWidget->setCurrentIndex(0);
+    }
+}
+
+void WgComRpt::MessageQueue(QVariant messageid, QVariant messageValue)
+{
+    if (messageid == MsgData::SETFOCUS)
+    {
+        ui->plot->setFocus();
     }
 }
 

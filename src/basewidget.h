@@ -17,7 +17,7 @@ class BaseWidget : public QWidget
 public:
     explicit BaseWidget(QWidget *parent = nullptr);
     ~BaseWidget();
-    virtual void MassageQueue(QVariant messageid, QVariant messageValue);
+    virtual void MessageQueue(QVariant messageid, QVariant messageValue);
     virtual QStringList GetHelpText();
 
 private:

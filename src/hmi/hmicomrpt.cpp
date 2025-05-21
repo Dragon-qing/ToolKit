@@ -21,6 +21,7 @@ HmiComRpt::HmiComRpt(QObject *parent)
     m_infoMap.clear();
     m_configMap.clear();
     m_dataList.clear();
+    m_resList.clear();
 }
 
 HmiComRpt::~HmiComRpt()
@@ -57,7 +58,7 @@ void HmiComRpt::SetPath(QString path)
         m_sMask = match.captured("type");
     }
     m_pThread = new ReadFileThread(this);
-    m_pThread->SetConfig(path, &m_infoMap, &m_configMap, &m_dataList);
+    m_pThread->SetConfig(path, &m_infoMap, &m_configMap, &m_dataList, &m_resList);
     // 运行完后自动销毁
     connect(m_pThread, &ReadFileThread::finished, m_pThread, &ReadFileThread::deleteLater);
     m_pThread->start();
@@ -115,6 +116,16 @@ QVariant HmiComRpt::GetValue(Bit32 type, QVariant key, QVariant subKey)
         Bit64 rawValue = vecp->value(index);
         return QVariant(rawValue);
     }
+    else if (type == RESULT_PART)
+    {
+        Bit32 idx = key.toInt();
+        if (idx < 0 || idx >= m_resList.count())
+        {
+            return QVariant();
+        }
+        QVariant var = QVariant::fromValue(m_resList.at(idx));
+        return var;
+    }
 
     return QVariant();
 }
@@ -122,6 +133,11 @@ QVariant HmiComRpt::GetValue(Bit32 type, QVariant key, QVariant subKey)
 QString HmiComRpt::GetFileName()
 {
     return QFileInfo(m_sPath).fileName();
+}
+
+Bit32 HmiComRpt::GetResultCount()
+{
+    return m_resList.count();
 }
 
 void HmiComRpt::Clear()
@@ -135,6 +151,7 @@ void HmiComRpt::Clear()
         delete m_dataList.at(i);
     }
     m_dataList.clear();
+    m_resList.clear();
 }
 
 /**
@@ -184,6 +201,46 @@ void ReadFileThread::ParseLine(Bit32 type, QString tmp)
         }
         break;
     }
+    case RESULT_PART:
+    {
+        QString rightValues = tmp.split("=").at(1);
+        rightValues.chop(1);
+        QStringList list = rightValues.split(";");
+        for (Bit32 i = 0; i < list.count(); i++)
+        {
+            ComResult res = m_pResList->value(i);
+            if (tmp.startsWith("RESID="))
+            {
+                res.resid = list.at(i);
+            }
+            else if (tmp.startsWith("RESNAME="))
+            {
+                res.name = list.at(i);
+            }
+            else if (tmp.startsWith("RESVALUE="))
+            {
+                res.value = list.at(i);
+            }
+            else if (tmp.startsWith("RESRANGE="))
+            {
+                res.range = Str2Range(list.at(i));
+            }
+            else if (tmp.startsWith("RESUNIT="))
+            {
+                res.unit = list.at(i);
+            }
+
+            if (m_pResList->count() < i + 1)
+            {
+                m_pResList->append(res);
+            }
+            else
+            {
+                m_pResList->replace(i, res);
+            }
+        }
+        break;
+    }
     case DATA_PART:
     {
         QStringList dataList = tmp.split(";");
@@ -227,6 +284,21 @@ void ReadFileThread::ParseLines(Bit32 type, QStringList list)
     }
 }
 
+QPair<fBit64, fBit64> ReadFileThread::Str2Range(QString str)
+{
+    QPair<fBit64, fBit64> range;
+    if (str.isEmpty())
+    {
+        return range;
+    }
+
+    QStringList list = str.split("~");
+    range.first = list.value(0).toDouble();
+    range.second = list.value(1).toDouble();
+
+    return range;
+}
+
 void ReadFileThread::run()
 {
     emit ProcessSignal(0);
@@ -266,6 +338,10 @@ Bit32 ReadFileThread::ProcessFileBatch()
         {
             type = INFO_PART;
         }
+        else if (tmp.contains("[RESULT-DATA]"))
+        {
+            type = RESULT_PART;
+        }
         else if (tmp.contains("[CONFIG]"))
         {
             type = CONFIG_PART;
@@ -290,10 +366,12 @@ ReadFileThread::ReadFileThread(QObject *parent)
 
 }
 
-void ReadFileThread::SetConfig(QString path, QMap<QString, QVariant> *info, QMap<QString, QVariant> *config, QList<QVector<Bit64>*> *data)
+void ReadFileThread::SetConfig(QString path, QMap<QString, QVariant> *info, QMap<QString, QVariant> *config,
+                               QList<QVector<Bit64>*> *data, QList<ComResult>* res)
 {
     m_sPath = path;
     m_pInfoMap = info;
     m_pConfigMap = config;
     m_pDataList = data;
+    m_pResList = res;
 }
