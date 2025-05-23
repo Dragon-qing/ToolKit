@@ -34,12 +34,12 @@ public:
     void Refresh(); // 仅更新已有数据
     void ReDraw(); // 重新构建数据
 protected:
+    TKTableModel *m_pModel;
     Bit32 InitTable(QStringList headList, QVector<Bit32> scale);
 
     void resizeEvent(QResizeEvent *event) override;
 private:
     Ui::BaseTable *ui;
-    TKTableModel *m_pModel;
     QVector<Bit32> m_scaleVec;
 };
 
@@ -59,10 +59,12 @@ public:
     void InsertData(QStringList list); // 尾插数据
     void InsertHead(QString head); // 尾插标题头
     void ClearData(); // 清空数据
+    bool removeRows(int row, int count, const QModelIndex &parent) override;
 
 private:
     QVector<QStringList> m_dataVec; // 数据
     QStringList m_headList; // 标题头
+
 };
 
 #endif // BASETABLE_H

@@ -21,6 +21,7 @@ BaseTable::BaseTable(QWidget *parent)
     m_pModel = new TKTableModel(this);
     this->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed); // 设置表头不可拖动
     this->verticalHeader()->setVisible(false); // 隐藏行号列
+    setAlternatingRowColors(true);
 }
 
 BaseTable::~BaseTable()
@@ -170,7 +171,9 @@ bool TKTableModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 void TKTableModel::InsertData(QStringList list)
 {
+    beginInsertRows(QModelIndex(), m_dataVec.count(), m_dataVec.count());
     m_dataVec.append(list);
+    endInsertRows();
 }
 
 void TKTableModel::InsertHead(QString head)
@@ -180,5 +183,24 @@ void TKTableModel::InsertHead(QString head)
 
 void TKTableModel::ClearData()
 {
+    beginResetModel();
     m_dataVec.clear();
+    endResetModel();
+}
+
+bool TKTableModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    if (row < 0 || row + count > rowCount())
+    {
+        return false;
+    }
+    beginRemoveRows(parent, row, row + count - 1);
+
+    // 删除数据
+    for (Bit32 i = 0; i < count; ++i) {
+        m_dataVec.removeAt(row);
+    }
+
+    endRemoveRows();
+    return true;
 }

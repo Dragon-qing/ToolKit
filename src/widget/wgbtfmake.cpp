@@ -78,7 +78,8 @@ bool WgBTFMake::eventFilter(QObject *obj, QEvent *event)
             {
                 if (label->property("isMore").toBool())
                 {
-                    m_pDlgInfo->exec();
+                    m_pDlgInfo->SetFiles(m_pathList);
+                    m_pDlgInfo->Exec();
                 }
                 return true;
             }
