@@ -20,10 +20,9 @@ QPushButton
 QPushButton:hover
 {
     color:#ffffff; 
-    background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop:0 #ff55ff, stop: 1 #1296db);
+    background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop:0 #f54ea2, stop: 1 #ff7676);
     border-style:outset; 
     border-width:2px;
-    border-color:#0055ff; 
     border-radius:10px; 
     font:bold 20px; 
     font-family: Segoe UI;
@@ -105,10 +104,10 @@ QTableWidget,QTableView{
 
 DlgMsgBox{
 	font:bold 16px;
-	background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop:0 #14cfd0, stop: 1 #ffffff);
+	background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop:0 #95e1d3, stop: 1 #ffffff);
 }
 QDialog{
-    background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop:0 #14cfd0, stop: 1 #ffffff);
+    background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop:0 #95e1d3, stop: 1 #ffffff);
 }
 
 QCheckBox {
