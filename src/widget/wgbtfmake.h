@@ -8,9 +8,12 @@
 #include "datadef.h"
 
 #include "dlgbtfmakeinfo.h"
+#include "dlgbtfprocess.h"
 
 #define BTF_INFO_CLR_MAX_TIME (3000)
 #define MAX_DISITEM_NUM (6)
+
+class BTFProcessThread;
 
 namespace Ui {
 class WgBTFMake;
@@ -33,7 +36,7 @@ public slots:
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
-
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     Ui::WgBTFMake *ui;
@@ -44,6 +47,8 @@ private:
     DlgBTFMakeInfo *m_pDlgInfo;
     QLabel *m_pMoreLabel;
     bool m_bHasMoreLabel;
+    DlgBtfProcess *m_pDlgProcess;
+    BTFProcessThread *m_pThread;
 
     QLabel *CreateImgLabel(const QString &path);
     void ClearList();
@@ -54,7 +59,26 @@ private:
 
 private slots:
     void TimeoutHandler();
+};
 
+class BTFProcessThread : public QThread
+{
+    Q_OBJECT
+public:
+    explicit BTFProcessThread(QWidget *parent = nullptr);
+    ~BTFProcessThread();
+    void SetConfig(const QStringList &fileList, const QString &saveName);
+
+signals:
+    void MakeDone();
+    void MakeFaild();
+
+protected:
+    void run() override;
+
+private:
+    QStringList m_fileList; // 文件列表
+    QString m_sSaveName;    // 保存名字
 };
 
 #endif // WGBTFMAKE_H

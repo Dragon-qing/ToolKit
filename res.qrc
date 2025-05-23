@@ -4,5 +4,7 @@
         <file>img/folder.png</file>
         <file>img/toolbox.ico</file>
         <file>img/more.png</file>
+        <file>img/close.png</file>
+        <file>img/minimize.png</file>
     </qresource>
 </RCC>

@@ -47,6 +47,7 @@ SOURCES += \
     ../src/hmi/hmixmleditor.cpp \
     ../src/widget/control/basetable.cpp \
     ../src/widget/dlgbtfmakeinfo.cpp \
+    ../src/widget/dlgbtfprocess.cpp \
     ../src/widget/dlgcomres.cpp \
     ../src/widget/dlghelp.cpp \
     ../src/widget/dlgprompt.cpp \
@@ -78,6 +79,7 @@ HEADERS += \
     ../src/hmi/hmixmleditor.h \
     ../src/widget/control/basetable.h \
     ../src/widget/dlgbtfmakeinfo.h \
+    ../src/widget/dlgbtfprocess.h \
     ../src/widget/dlgcomres.h \
     ../src/widget/dlghelp.h \
     ../src/widget/dlgprompt.h \
@@ -99,6 +101,7 @@ FORMS += \
     ../src/hmi/hmipainter.ui \
     ../src/widget/control/basetable.ui \
     ../src/widget/dlgbtfmakeinfo.ui \
+    ../src/widget/dlgbtfprocess.ui \
     ../src/widget/dlgcomres.ui \
     ../src/widget/dlghelp.ui \
     ../src/widget/dlgprompt.ui \
