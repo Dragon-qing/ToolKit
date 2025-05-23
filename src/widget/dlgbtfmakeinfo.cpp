@@ -81,32 +81,29 @@ void InfoTable::SetFilePath(QStringList list)
 
 void InfoTable::keyPressEvent(QKeyEvent *event)
 {
-    if (event->modifiers() & Qt::ControlModifier)
+    if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_D || event->key() == Qt::Key_Delete)
     {
-        if (event->key() == Qt::Key_D)
+        QModelIndexList indexList = selectedIndexes();
+        // 排序
+        std::sort(indexList.begin(), indexList.end(), [](const QModelIndex &a, const QModelIndex &b) {
+            return a.row() > b.row(); // 从大到小排序
+        });
+        QSet<Bit32> rowSet;
+        for (Bit32 i = 0; i < indexList.count(); i++)
         {
-            QModelIndexList indexList = selectedIndexes();
-            // 排序
-            std::sort(indexList.begin(), indexList.end(), [](const QModelIndex &a, const QModelIndex &b) {
-                return a.row() > b.row(); // 从大到小排序
-            });
-            QSet<Bit32> rowSet;
-            for (Bit32 i = 0; i < indexList.count(); i++)
+            if (rowSet.contains(indexList.at(i).row()))
             {
-                if (rowSet.contains(indexList.at(i).row()))
-                {
-                    continue;
-                }
-                else
-                {
-                    rowSet.insert(indexList.at(i).row());
-                    m_pModel->removeRow(indexList.at(i).row());
-                    m_filePathList.removeAt(indexList.at(i).row());
-                }
-
+                continue;
             }
-            ReDraw();
+            else
+            {
+                rowSet.insert(indexList.at(i).row());
+                m_pModel->removeRow(indexList.at(i).row());
+                m_filePathList.removeAt(indexList.at(i).row());
+            }
+
         }
+        ReDraw();
     }
     BaseTable::keyPressEvent(event);
 }
