@@ -8,6 +8,7 @@ ui/*
 ui
 build/*
 !build/*.pro
+!build/vscode_make.bat
 bin/*
 !bin/tools
 !bin/style.qss

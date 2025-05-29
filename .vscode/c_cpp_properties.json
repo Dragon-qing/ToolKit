@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "qt",
+            "includePath": [
+                "d:/Qt/5.14.2/5.14.2/msvc2017_64/include/**",
+                "${workspaceRoot}/**",
+                "${workspaceFolder}/include"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "compilerPath": "C:/Program Files/Microsoft Visual Studio/2022/Professional/VC/Tools/MSVC/14.16.27023/bin/HostX64/x64/cl.exe",
+            "intelliSenseMode": "windows-msvc-x64"
+        }
+    ],
+    "version": 4
+}

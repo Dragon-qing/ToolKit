@@ -31,6 +31,7 @@ INCLUDEPATH += ../include
 LIBS += -luser32
 LIBS += -L$$PWD/../lib
 LIBS += -lqhotkey
+
 SOURCES += \
     ../src/basewidget.cpp \
     ../src/common.cpp \
