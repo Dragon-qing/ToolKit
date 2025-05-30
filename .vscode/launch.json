@@ -11,7 +11,8 @@
             "cwd": "${workspaceRoot}/bin",
             "environment": [],
             "console": "integratedTerminal",
-            "preLaunchTask": "make-debug"
+            "preLaunchTask": "make-debug",
+            "visualizerFile": "${workspaceFolder}/.vscode/qt5.natvis"
         }
     ]
 }
