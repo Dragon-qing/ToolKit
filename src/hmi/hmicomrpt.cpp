@@ -278,7 +278,7 @@ void ReadFileThread::ParseLine(Bit32 type, QString tmp)
 
 void ReadFileThread::ParseLines(Bit32 type, QStringList list)
 {
-    foreach(QString str, list)
+    foreach (QString str, list)
     {
         ParseLine(type, str);
     }
@@ -363,11 +363,10 @@ Bit32 ReadFileThread::ProcessFileBatch()
 ReadFileThread::ReadFileThread(QObject *parent)
     : QThread(parent)
 {
-
 }
 
 void ReadFileThread::SetConfig(QString path, QMap<QString, QVariant> *info, QMap<QString, QVariant> *config,
-                               QList<QVector<Bit64>*> *data, QList<ComResult>* res)
+                               QList<QVector<Bit64> *> *data, QList<ComResult> *res)
 {
     m_sPath = path;
     m_pInfoMap = info;

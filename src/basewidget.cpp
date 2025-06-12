@@ -1,4 +1,12 @@
-﻿#include "basewidget.h"
+﻿/*
+ * @Author: dragon-qing
+ * @Date: 2025-04-25 10:28:24
+ * @LastEditors: dragon-qing
+ * @LastEditTime: 2025-05-30 08:43:54
+ * @FilePath: \ToolKit\src\basewidget.cpp
+ * @Description: 
+ */
+#include "basewidget.h"
 #include "ui_basewidget.h"
 
 BaseWidget::BaseWidget(QWidget *parent)
@@ -13,6 +21,12 @@ BaseWidget::~BaseWidget()
     delete ui;
 }
 
+/**
+ * @description: 消息处理接口
+ * @param {QVariant} messageid
+ * @param {QVariant} messageValue
+ * @return
+ */
 void BaseWidget::MessageQueue(QVariant messageid, QVariant messageValue)
 {
     Q_UNUSED(messageid);
@@ -21,6 +35,10 @@ void BaseWidget::MessageQueue(QVariant messageid, QVariant messageValue)
     return;
 }
 
+/**
+ * @description: 帮助文档信息
+ * @return {*}
+ */
 QStringList BaseWidget::GetHelpText()
 {
     return QStringList();

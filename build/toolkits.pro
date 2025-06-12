@@ -1,4 +1,4 @@
-QT       += core gui sql
+QT       += core gui sql webenginewidgets
 QT       += xml
 
 
@@ -47,6 +47,8 @@ SOURCES += \
     ../src/hmi/hmipainter.cpp \
     ../src/hmi/hmixmleditor.cpp \
     ../src/widget/control/basetable.cpp \
+    ../src/widget/control/tkwebview.cpp \
+    ../src/widget/dlgabout.cpp \
     ../src/widget/dlgbtfmakeinfo.cpp \
     ../src/widget/dlgbtfprocess.cpp \
     ../src/widget/dlgcomres.cpp \
@@ -59,6 +61,7 @@ SOURCES += \
     ../src/widget/wggeneratebugfolder.cpp \
     ../src/widget/wglog.cpp \
     ../src/widget/wgtyproaimgcleaner.cpp \
+    ../src/widget/wgwebbowser.cpp \
     ../src/widget/wgxmleditor.cpp \
     ../src/widget/widgetmanger.cpp\
     # QCP第三方绘图模块引入
@@ -79,6 +82,8 @@ HEADERS += \
     ../src/hmi/hmipainter.h \
     ../src/hmi/hmixmleditor.h \
     ../src/widget/control/basetable.h \
+    ../src/widget/control/tkwebview.h \
+    ../src/widget/dlgabout.h \
     ../src/widget/dlgbtfmakeinfo.h \
     ../src/widget/dlgbtfprocess.h \
     ../src/widget/dlgcomres.h \
@@ -91,6 +96,7 @@ HEADERS += \
     ../src/widget/wggeneratebugfolder.h \
     ../src/widget/wglog.h \
     ../src/widget/wgtyproaimgcleaner.h \
+    ../src/widget/wgwebbowser.h \
     ../src/widget/wgxmleditor.h \
     ../src/widget/widgetmanger.h\
     # QCP第三方绘图模块引入
@@ -101,6 +107,8 @@ FORMS += \
     ../src/mainwindow.ui \
     ../src/hmi/hmipainter.ui \
     ../src/widget/control/basetable.ui \
+    ../src/widget/control/tkwebview.ui \
+    ../src/widget/dlgabout.ui \
     ../src/widget/dlgbtfmakeinfo.ui \
     ../src/widget/dlgbtfprocess.ui \
     ../src/widget/dlgcomres.ui \
@@ -113,6 +121,7 @@ FORMS += \
     ../src/widget/wggeneratebugfolder.ui \
     ../src/widget/wglog.ui \
     ../src/widget/wgtyproaimgcleaner.ui \
+    ../src/widget/wgwebbowser.ui \
     ../src/widget/wgxmleditor.ui \
     ../src/widget/widgetmanger.ui
 

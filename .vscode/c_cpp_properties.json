@@ -5,7 +5,10 @@
             "includePath": [
                 "d:/Qt/5.14.2/5.14.2/msvc2017_64/include/**",
                 "${workspaceRoot}/**",
-                "${workspaceFolder}/include"
+                "${workspaceFolder}/include",
+                "D:/Qt/5.14.2/5.14.2/msvc2017_64/include/QtCore",
+                "D:/Qt/5.14.2/5.14.2/msvc2017_64/include/QtGui",
+                "D:/Qt/5.14.2/5.14.2/msvc2017_64/include/QtWidgets"
             ],
             "cStandard": "c17",
             "cppStandard": "c++17",
