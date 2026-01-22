@@ -60,6 +60,7 @@ SOURCES += \
     ../src/widget/wgcomrpt.cpp \
     ../src/widget/wggeneratebugfolder.cpp \
     ../src/widget/wglog.cpp \
+    ../src/widget/wgrenametool.cpp \
     ../src/widget/wgtyproaimgcleaner.cpp \
     ../src/widget/wgwebbowser.cpp \
     ../src/widget/wgxmleditor.cpp \
@@ -95,6 +96,7 @@ HEADERS += \
     ../src/widget/wgcomrpt.h \
     ../src/widget/wggeneratebugfolder.h \
     ../src/widget/wglog.h \
+    ../src/widget/wgrenametool.h \
     ../src/widget/wgtyproaimgcleaner.h \
     ../src/widget/wgwebbowser.h \
     ../src/widget/wgxmleditor.h \
@@ -120,6 +122,7 @@ FORMS += \
     ../src/widget/wgcomrpt.ui \
     ../src/widget/wggeneratebugfolder.ui \
     ../src/widget/wglog.ui \
+    ../src/widget/wgrenametool.ui \
     ../src/widget/wgtyproaimgcleaner.ui \
     ../src/widget/wgwebbowser.ui \
     ../src/widget/wgxmleditor.ui \

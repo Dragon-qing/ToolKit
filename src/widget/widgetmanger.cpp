@@ -14,6 +14,8 @@
 #include "wglog.h"
 #include "wgcomrpt.h"
 #include "wgwebbowser.h"
+#include "wgrenametool.h"
+
 #include "dlgabout.h"
 
 #include "widgetmanger.h"
@@ -67,14 +69,15 @@ QWidget *WidgetManger::GetCurrentWidget()
 
 void WidgetManger::InitWidgetContainer()
 {
-    Menu_Type type = WORK_TYPE;
-    // 工作菜单组
+    Menu_Type type = TOOLS_TYPE;
+    // 工具菜单组
     AddWidget(GENERATE_ITEM(WgBTFMake, this), type, TR("BTF包制作"));
     AddWidget(GENERATE_ITEM(WgXmlEditor, this), type, TR("XML编辑器"));
     // AddWidget(new WgGenerateBugFolder(this), TR("代码文件查找"));
     // AddWidget(new WgTyproaImgCleaner(this), TR("Typroa图片清理"));
     AddWidget(GENERATE_ITEM(WgComRpt, this), type, TR("调机数据分析"));
     // AddWidget(GENERATE_WIDGET(WgWebBowser, this), TR("浏览器"));
+    AddWidget(GENERATE_ITEM(WgRenameTool, this), type, TR("文件重命名"));
     type = HELP_TYPE;
     // 帮助菜单组
     AddWidget(GENERATE_ITEM(WgLog, this), type, TR("日志"));
@@ -127,8 +130,8 @@ QMenu *WidgetManger::CreateMenuItem(Menu_Type type)
 
     switch (type)
     {
-    case WORK_TYPE:
-        str = TR("工作");
+    case TOOLS_TYPE:
+        str = TR("工具");
         break;
     case OTHER_TYPE:
         str = TR("其他");

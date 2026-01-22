@@ -22,9 +22,10 @@ public:
 
 private:
     enum Menu_Type{
-        WORK_TYPE = 0,      // 工作
+        TOOLS_TYPE = 0,     // 工具
         OTHER_TYPE,         // 其他
         HELP_TYPE,          // 帮助
+
 
         TEST_TYPE,          // 测试
         TOTAL_NUM
