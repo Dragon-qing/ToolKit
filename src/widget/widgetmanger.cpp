@@ -7,13 +7,11 @@
 #include "qhotkey.h"
 
 #include "common.h"
-#include "wggeneratebugfolder.h"
 #include "wgtyproaimgcleaner.h"
 #include "wgbtfmake.h"
 #include "wgxmleditor.h"
 #include "wglog.h"
 #include "wgcomrpt.h"
-#include "wgwebbowser.h"
 #include "wgrenametool.h"
 
 #include "dlgabout.h"
@@ -73,10 +71,8 @@ void WidgetManger::InitWidgetContainer()
     // 工具菜单组
     AddWidget(GENERATE_ITEM(WgBTFMake, this), type, TR("BTF包制作"));
     AddWidget(GENERATE_ITEM(WgXmlEditor, this), type, TR("XML编辑器"));
-    // AddWidget(new WgGenerateBugFolder(this), TR("代码文件查找"));
     // AddWidget(new WgTyproaImgCleaner(this), TR("Typroa图片清理"));
     AddWidget(GENERATE_ITEM(WgComRpt, this), type, TR("调机数据分析"));
-    // AddWidget(GENERATE_WIDGET(WgWebBowser, this), TR("浏览器"));
     AddWidget(GENERATE_ITEM(WgRenameTool, this), type, TR("文件重命名"));
     type = HELP_TYPE;
     // 帮助菜单组

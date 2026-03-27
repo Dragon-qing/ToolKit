@@ -1,10 +1,10 @@
-QT       += core gui sql webenginewidgets
+QT       += core gui sql
 QT       += xml
 
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
-CONFIG += c++11
+CONFIG += c++20
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -29,7 +29,7 @@ INCLUDEPATH += \
     ../src/widget/control\
 INCLUDEPATH += ../include
 LIBS += -luser32
-LIBS += -L$$PWD/../lib
+LIBS += -L$$PWD/../libs
 LIBS += -lqhotkey
 
 SOURCES += \
@@ -47,7 +47,6 @@ SOURCES += \
     ../src/hmi/hmipainter.cpp \
     ../src/hmi/hmixmleditor.cpp \
     ../src/widget/control/basetable.cpp \
-    ../src/widget/control/tkwebview.cpp \
     ../src/widget/dlgabout.cpp \
     ../src/widget/dlgbtfmakeinfo.cpp \
     ../src/widget/dlgbtfprocess.cpp \
@@ -58,11 +57,9 @@ SOURCES += \
     ../src/widget/unionplot.cpp \
     ../src/widget/wgbtfmake.cpp \
     ../src/widget/wgcomrpt.cpp \
-    ../src/widget/wggeneratebugfolder.cpp \
     ../src/widget/wglog.cpp \
     ../src/widget/wgrenametool.cpp \
     ../src/widget/wgtyproaimgcleaner.cpp \
-    ../src/widget/wgwebbowser.cpp \
     ../src/widget/wgxmleditor.cpp \
     ../src/widget/widgetmanger.cpp\
     # QCP第三方绘图模块引入
@@ -83,7 +80,6 @@ HEADERS += \
     ../src/hmi/hmipainter.h \
     ../src/hmi/hmixmleditor.h \
     ../src/widget/control/basetable.h \
-    ../src/widget/control/tkwebview.h \
     ../src/widget/dlgabout.h \
     ../src/widget/dlgbtfmakeinfo.h \
     ../src/widget/dlgbtfprocess.h \
@@ -94,11 +90,9 @@ HEADERS += \
     ../src/widget/unionplot.h \
     ../src/widget/wgbtfmake.h \
     ../src/widget/wgcomrpt.h \
-    ../src/widget/wggeneratebugfolder.h \
     ../src/widget/wglog.h \
     ../src/widget/wgrenametool.h \
     ../src/widget/wgtyproaimgcleaner.h \
-    ../src/widget/wgwebbowser.h \
     ../src/widget/wgxmleditor.h \
     ../src/widget/widgetmanger.h\
     # QCP第三方绘图模块引入
@@ -109,7 +103,6 @@ FORMS += \
     ../src/mainwindow.ui \
     ../src/hmi/hmipainter.ui \
     ../src/widget/control/basetable.ui \
-    ../src/widget/control/tkwebview.ui \
     ../src/widget/dlgabout.ui \
     ../src/widget/dlgbtfmakeinfo.ui \
     ../src/widget/dlgbtfprocess.ui \
@@ -120,11 +113,9 @@ FORMS += \
     ../src/widget/unionplot.ui \
     ../src/widget/wgbtfmake.ui \
     ../src/widget/wgcomrpt.ui \
-    ../src/widget/wggeneratebugfolder.ui \
     ../src/widget/wglog.ui \
     ../src/widget/wgrenametool.ui \
     ../src/widget/wgtyproaimgcleaner.ui \
-    ../src/widget/wgwebbowser.ui \
     ../src/widget/wgxmleditor.ui \
     ../src/widget/widgetmanger.ui
 
