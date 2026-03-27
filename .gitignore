@@ -1,4 +1,4 @@
-.vscode
+.vscode/
 .qtc_clangd
 moc
 obj
