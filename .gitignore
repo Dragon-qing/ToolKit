@@ -1,10 +1,7 @@
-.git
+.vscode
 .qtc_clangd
-moc/*
 moc
-obj/*
 obj
-ui/*
 ui
 build/*
 !build/*.pro
