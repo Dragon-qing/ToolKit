@@ -31,6 +31,18 @@ if ! echo "$commit_msg" | grep -qE "$pattern"; then
     echo "提交信息格式错误！请使用 Conventional Commits 格式:"
     echo "类型(scope): 简短描述（50字以内）"
     echo "例: feat(login): 添加用户登录功能"
+    echo "-------------支持以下类型-------------"
+    echo -e "\t|类型       |用途\n
+    | ---------| --------------------------\n
+    | feat     | 新功能（feature），通常是用户可感知的新功能\n
+    | func     | 小功能,比feature颗粒度更小\n
+    | fix      | 修复 bug\n
+    | docs     | 文档变更，例如 README、说明文件\n
+    | style    | 代码风格、格式化、缩进、空格修改，不影响逻辑、去除编译警告\n
+    | refactor | 重构代码，逻辑不变，但结构优化，修改函数名\n
+    | test     | 添加或修改测试\n
+    | chore    | 其他不影响产品功能的工作，例如构建、脚本、依赖、配置\n
+    | perf     | 性能优化\n"
     exit 1
 fi
 
