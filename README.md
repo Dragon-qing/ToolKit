@@ -17,8 +17,9 @@
 ```mermaid
 graph TD
   WidgetManger--界面管理--> Mainwindow
-  service--后台服务-->Mainwindow
+  Service--服务-->Mainwindow
   logdt--日志服务-->Mainwindow
-  HMI--提供数据-->WidgetManger
+  Data--提供数据-->WidgetManger
+  Data--提供数据-->Service
 ```
 
