@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @brief 界面管理类
  * @file widgetmanger.cpp
  * @date 2024/08/11

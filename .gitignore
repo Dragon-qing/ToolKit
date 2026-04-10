@@ -5,7 +5,7 @@ obj
 ui
 build/*
 !build/*.pro
-!build/vscode_make.bat
+!build/CMakeLists.txt
 bin/*
 !bin/tools
 !bin/style.qss
