@@ -15,7 +15,7 @@
 #include <QPainter>
 
 #include "common.h"
-#include "hmiconfig.h"
+#include "dataconfig.h"
 #include "logdt.h"
 
 #include "wgbtfmake.h"
@@ -33,8 +33,8 @@ WgBTFMake::WgBTFMake(QWidget *parent) :
     m_nameList.clear();
     m_pathList.clear();
     m_pTimer = new QTimer(this);
-    ui->lineEdit->setText(HMIConfig::Instance().GetConfig("btf_cfg", "btf_savepath"));
-    ui->lineEdit_2->setText(HMIConfig::Instance().GetConfig("btf_cfg", "btf_savefilename"));
+    ui->lineEdit->setText(DataConfig::Instance().GetConfig("btf_cfg", "btf_savepath"));
+    ui->lineEdit_2->setText(DataConfig::Instance().GetConfig("btf_cfg", "btf_savefilename"));
     m_pDlgInfo = new DlgBTFMakeInfo(this);
     m_bHasMoreLabel = false;
     m_pMoreLabel = NULL;
@@ -216,7 +216,7 @@ void WgBTFMake::on_selectDirBtn_clicked()
 {
     QString path = QFileDialog::getExistingDirectory(this, "Select Folder", QCoreApplication::applicationDirPath());
     ui->lineEdit->setText(path);
-    HMIConfig::Instance().SetConfig("btf_cfg", "btf_savepath", path);
+    DataConfig::Instance().SetConfig("btf_cfg", "btf_savepath", path);
 }
 
 void WgBTFMake::on_clsBtn_clicked()
@@ -240,7 +240,7 @@ void WgBTFMake::on_startBtn_clicked()
         return;
     }
     QString dirPath = ui->lineEdit->text();
-    HMIConfig::Instance().SetConfig("btf_cfg", "btf_savefilename", nameStr);
+    DataConfig::Instance().SetConfig("btf_cfg", "btf_savefilename", nameStr);
     if (dirPath.trimmed() != "")
     {
         nameStr = QString("%1/%2.BTF").arg(dirPath, nameStr);

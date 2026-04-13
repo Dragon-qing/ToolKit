@@ -1,6 +1,6 @@
 ﻿/*!
  * @brief 调机数据层
- * @file hmicomrpt.cpp
+ * @file datacomrpt.cpp
  * @author Dragon_qing
  * @date 2025/05/06
  */
@@ -11,10 +11,10 @@
 #include <QRegularExpression>
 #include <QElapsedTimer>
 
-#include "hmicomrpt.h"
+#include "datacomrpt.h"
 #include "logdt.h"
 
-HmiComRpt::HmiComRpt(QObject *parent)
+DataComRpt::DataComRpt(QObject *parent)
     : QObject(parent)
 {
     m_sPath = "";
@@ -24,17 +24,17 @@ HmiComRpt::HmiComRpt(QObject *parent)
     m_resList.clear();
 }
 
-HmiComRpt::~HmiComRpt()
+DataComRpt::~DataComRpt()
 {
 }
 
-HmiComRpt &HmiComRpt::Instance()
+DataComRpt &DataComRpt::Instance()
 {
-    static HmiComRpt s_data;
+    static DataComRpt s_data;
     return s_data;
 }
 
-void HmiComRpt::SetPath(QString path)
+void DataComRpt::SetPath(QString path)
 {
     if (path.isEmpty())
     {
@@ -49,7 +49,7 @@ void HmiComRpt::SetPath(QString path)
 
     Clear();
     m_sPath = path;
-    QString fileName = HmiComRpt::Instance().GetFileName();
+    QString fileName = DataComRpt::Instance().GetFileName();
     QRegularExpression re("^(?<type>MC_\\d+)_.*$");
     QRegularExpressionMatch match = re.match(fileName);
     m_sMask = "";
@@ -64,16 +64,16 @@ void HmiComRpt::SetPath(QString path)
     m_pThread->start();
 }
 
-ReadFileThread *HmiComRpt::GetThreadClass()
+ReadFileThread *DataComRpt::GetThreadClass()
 {
     return m_pThread;
 }
 
 /**
- * @brief HmiComRpt::GetTotalPosNum 获取数据点总数(单种采样)
+ * @brief DataComRpt::GetTotalPosNum 获取数据点总数(单种采样)
  * @return 数据点总数
  */
-Bit32 HmiComRpt::GetTotalPosNum()
+Bit32 DataComRpt::GetTotalPosNum()
 {
     if (m_dataList.isEmpty() || m_dataList.first() == NULL)
     {
@@ -84,13 +84,13 @@ Bit32 HmiComRpt::GetTotalPosNum()
 }
 
 /**
- * @brief HmiComRpt::GetValue 获取数据接口
+ * @brief DataComRpt::GetValue 获取数据接口
  * @param type 数据种类
  * @param key 键值索引
  * @param subKey 子键值索引
  * @return 返回数据值
  */
-QVariant HmiComRpt::GetValue(Bit32 type, QVariant key, QVariant subKey)
+QVariant DataComRpt::GetValue(Bit32 type, QVariant key, QVariant subKey)
 {
     if (type == INFO_PART)
     {
@@ -130,17 +130,17 @@ QVariant HmiComRpt::GetValue(Bit32 type, QVariant key, QVariant subKey)
     return QVariant();
 }
 
-QString HmiComRpt::GetFileName()
+QString DataComRpt::GetFileName()
 {
     return QFileInfo(m_sPath).fileName();
 }
 
-Bit32 HmiComRpt::GetResultCount()
+Bit32 DataComRpt::GetResultCount()
 {
     return m_resList.count();
 }
 
-void HmiComRpt::Clear()
+void DataComRpt::Clear()
 {
     m_sPath = "";
     m_infoMap.clear();

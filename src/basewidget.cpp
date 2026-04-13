@@ -3,7 +3,7 @@
  * @Date: 2025-04-25 10:28:24
  * @LastEditors: dragon-qing
  * @LastEditTime: 2025-05-30 08:43:54
- * @FilePath: \ToolKit\src\basewidget.cpp
+ * @FilePath: src\basewidget.cpp
  * @Description: 
  */
 #include "basewidget.h"

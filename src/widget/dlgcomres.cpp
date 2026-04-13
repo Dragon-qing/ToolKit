@@ -1,7 +1,7 @@
 ﻿#include <QMouseEvent>
 
 #include "common.h"
-#include "hmicomrpt.h"
+#include "datacomrpt.h"
 
 #include "dlgcomres.h"
 #include "ui_dlgcomres.h"
@@ -49,7 +49,7 @@ ResTable::~ResTable()
 
 QVariant ResTable::ContentGet(Bit32 row, Bit32 col)
 {
-    QVariant var = HmiComRpt::Instance().GetValue(RESULT_PART, row);
+    QVariant var = DataComRpt::Instance().GetValue(RESULT_PART, row);
     ComResult result = var.value<ComResult>();
     if (col == ID_COL)
     {
@@ -77,7 +77,7 @@ QVariant ResTable::ContentGet(Bit32 row, Bit32 col)
 
 Bit32 ResTable::TotalRow()
 {
-    return HmiComRpt::Instance().GetResultCount();
+    return DataComRpt::Instance().GetResultCount();
 }
 
 bool DlgComRes::eventFilter(QObject *obj, QEvent *event)

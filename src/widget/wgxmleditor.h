@@ -5,7 +5,7 @@
 #include <QStringListModel>
 
 #include "basewidget.h"
-#include "hmixmleditor.h"
+#include "dataxmleditor.h"
 #include "dlgprompt.h"
 
 namespace Ui {

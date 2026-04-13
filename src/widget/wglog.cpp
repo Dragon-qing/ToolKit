@@ -6,7 +6,7 @@
  */
 #include <QKeyEvent>
 
-#include "hmilog.h"
+#include "datalog.h"
 
 #include "wglog.h"
 #include "ui_wglog.h"
@@ -22,7 +22,7 @@ WgLog::WgLog(QWidget *parent)
     ui->tableView->setModel(m_pModel);
     m_pDlg = new DlgPrompt(DlgPrompt::OK_BUTTON | DlgPrompt::CANCEL_BUTTON, this);
 
-    HmiLog::GetInstance().LoadLog(m_pModel);
+    DataLog::GetInstance().LoadLog(m_pModel);
     connect(ui->tableView, &LogTab::doubleClicked, this, &WgLog::DoubleClickHandle);
 }
 
@@ -38,7 +38,7 @@ void WgLog::MessageQueue(QVariant messageid, QVariant messageValue)
     {
         // 清空内容，重新获取log内容
         m_pModel->removeRows(0, m_pModel->rowCount());
-        HmiLog::GetInstance().LoadLog(m_pModel);
+        DataLog::GetInstance().LoadLog(m_pModel);
     }
 }
 

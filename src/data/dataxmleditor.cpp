@@ -4,26 +4,26 @@
 
 #include "common.h"
 
-#include "hmixmleditor.h"
+#include "dataxmleditor.h"
 
-HmiXmlEditor &HmiXmlEditor::Instance()
+DataXmlEditor &DataXmlEditor::Instance()
 {
-    static HmiXmlEditor s_data;
+    static DataXmlEditor s_data;
     return s_data;
 }
 
-HmiXmlEditor::HmiXmlEditor()
+DataXmlEditor::DataXmlEditor()
 {
     m_docXml.clear();
     m_mapChange.clear();
 }
 
-HmiXmlEditor::~HmiXmlEditor()
+DataXmlEditor::~DataXmlEditor()
 {
 
 }
 
-void HmiXmlEditor::SetXmlFile(QString path, QStandardItemModel *model)
+void DataXmlEditor::SetXmlFile(QString path, QStandardItemModel *model)
 {
     if (model == NULL)
     {
@@ -44,19 +44,19 @@ void HmiXmlEditor::SetXmlFile(QString path, QStandardItemModel *model)
     TraverseElements(rootEle, model->invisibleRootItem(), 0, 0, LOAD_TYEP);
 }
 
-QStringList HmiXmlEditor::GetAttrList(QStandardItemModel *model, const QModelIndex &index)
+QStringList DataXmlEditor::GetAttrList(QStandardItemModel *model, const QModelIndex &index)
 {
     QString context = model->data(index, ATTR_ROLE).toString();
     return context.split(" ");
 }
 
 /**
- * @brief HmiXmlEditor::SyncAttrList 同步model中的数据
+ * @brief DataXmlEditor::SyncAttrList 同步model中的数据
  * @param treeModel
  * @param index
  * @param list
  */
-void HmiXmlEditor::SyncAttrList(QStandardItemModel *treeModel, const QModelIndex &index, QStringList list)
+void DataXmlEditor::SyncAttrList(QStandardItemModel *treeModel, const QModelIndex &index, QStringList list)
 {
     treeModel->setData(index, list.join(" "), ATTR_ROLE);
     QString displayText = treeModel->data(index).toString();
@@ -67,7 +67,7 @@ void HmiXmlEditor::SyncAttrList(QStandardItemModel *treeModel, const QModelIndex
     m_mapChange.insert(key, list.join(" "));
 }
 
-void HmiXmlEditor::Save()
+void DataXmlEditor::Save()
 {
     if (m_sPath.isEmpty())
     {
@@ -79,7 +79,7 @@ void HmiXmlEditor::Save()
     m_mapChange.clear();
 }
 
-QStandardItem * HmiXmlEditor::ParseXML(Bit32 idx, const QDomElement &element, Bit32 deepth, QStandardItem *modelItem)
+QStandardItem * DataXmlEditor::ParseXML(Bit32 idx, const QDomElement &element, Bit32 deepth, QStandardItem *modelItem)
 {
     QString content = QString("<%1").arg(element.tagName());
     QStringList attrList;
@@ -99,11 +99,11 @@ QStandardItem * HmiXmlEditor::ParseXML(Bit32 idx, const QDomElement &element, Bi
 }
 
 /**
- * @brief HmiXmlEditor::SaveChange 保存修改的属性值到doc节点
+ * @brief DataXmlEditor::SaveChange 保存修改的属性值到doc节点
  * @param key 位置
  * @param element 待修改的doc节点
  */
-void HmiXmlEditor::SaveChange(QString key, QDomElement &element)
+void DataXmlEditor::SaveChange(QString key, QDomElement &element)
 {
     if (!m_mapChange.contains(key) || element.isComment())
     {
@@ -124,14 +124,14 @@ void HmiXmlEditor::SaveChange(QString key, QDomElement &element)
 }
 
 /**
- * @brief HmiXmlEditor::TraverseElements 递归遍历解析xml文件
+ * @brief DataXmlEditor::TraverseElements 递归遍历解析xml文件
  * @param element
  * @param modelItem
  * @param deepth 递归深度
  * @param width 递归广度
  * @param opt 操作类型
  */
-void HmiXmlEditor::TraverseElements(QDomElement &element, QStandardItem *modelItem, Bit32 deepth, Bit32 width, _OPERATOR_TYPE opt)
+void DataXmlEditor::TraverseElements(QDomElement &element, QStandardItem *modelItem, Bit32 deepth, Bit32 width, _OPERATOR_TYPE opt)
 {
     if ((modelItem == NULL && opt != SAVE_TYPE) || element.isComment())
     {
@@ -163,13 +163,13 @@ void HmiXmlEditor::TraverseElements(QDomElement &element, QStandardItem *modelIt
 }
 
 /**
- * @brief HmiXmlEditor::AddChildItemToModel 想model中添加子项
+ * @brief DataXmlEditor::AddChildItemToModel 想model中添加子项
  * @param name 子项名字
  * @param parent 父指针
  * @param pos 位置
  * @return 子指针
  */
-QStandardItem* HmiXmlEditor::AddChildItemToModel(QString name, QStandardItem *parent, QStringList &attrList, QPair<Bit32, Bit32> pos)
+QStandardItem* DataXmlEditor::AddChildItemToModel(QString name, QStandardItem *parent, QStringList &attrList, QPair<Bit32, Bit32> pos)
 {
     if (parent == NULL)
     {

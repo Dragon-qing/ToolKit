@@ -59,14 +59,14 @@ void WgXmlEditor::on_selectBtn_clicked()
     {
         m_pTreeModel->removeRows(0, m_pTreeModel->rowCount());
     }
-    HmiXmlEditor::Instance().SetXmlFile(filePath, m_pTreeModel);
+    DataXmlEditor::Instance().SetXmlFile(filePath, m_pTreeModel);
     LogDt::Instance().AddLog(INFO_LOG, TR("xml编辑器-打开%1文件").arg(filePath));
     ui->treeView->expand(m_pTreeModel->index(0, 0));
 }
 
 void WgXmlEditor::HandleTreeViewClicked(const QModelIndex &index)
 {
-    QStringList attr = HmiXmlEditor::Instance().GetAttrList(m_pTreeModel, index);
+    QStringList attr = DataXmlEditor::Instance().GetAttrList(m_pTreeModel, index);
     m_pListModel->setStringList(attr);
     m_currentIndex = index;
 }
@@ -76,13 +76,13 @@ void WgXmlEditor::HandleListDataChange(const QModelIndex &topLeft, const QModelI
     Q_UNUSED(topLeft);
     Q_UNUSED(bottomRight);
 
-    HmiXmlEditor::Instance().SyncAttrList(m_pTreeModel, m_currentIndex, m_pListModel->stringList());
+    DataXmlEditor::Instance().SyncAttrList(m_pTreeModel, m_currentIndex, m_pListModel->stringList());
 }
 
 
 void WgXmlEditor::on_saveBtn_clicked()
 {
-    HmiXmlEditor::Instance().Save();
+    DataXmlEditor::Instance().Save();
     m_pDlg->ExecAndRet(TR("保存完成"));
 }
 

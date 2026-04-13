@@ -1,6 +1,6 @@
 ﻿/*!
  * @brief 日志数据层
- * @file hmilog.cpp
+ * @file datalog.cpp
  * @author Dragon_qing
  * @date 2025/04/27
  */
@@ -11,19 +11,19 @@
 #include "logdt.h"
 #include "EasyQtSql.h"
 
-#include "hmilog.h"
+#include "datalog.h"
 
-HmiLog &HmiLog::GetInstance()
+DataLog &DataLog::GetInstance()
 {
-    static HmiLog sdata;
+    static DataLog sdata;
     return sdata;
 }
 
-HmiLog::HmiLog()
+DataLog::DataLog()
 {
 }
 
-void HmiLog::LoadLog(QStandardItemModel *model)
+void DataLog::LoadLog(QStandardItemModel *model)
 {
     if (model == NULL)
     {
@@ -47,7 +47,7 @@ void HmiLog::LoadLog(QStandardItemModel *model)
     }
 }
 
-QString HmiLog::TransLogType2Str(Bit32 type)
+QString DataLog::TransLogType2Str(Bit32 type)
 {
     QString typeStr = "";
     switch (type)

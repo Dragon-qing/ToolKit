@@ -1,44 +1,44 @@
 ﻿/*!
  * @brief 样式管理接口
  * @note 用于获取各类样式颜色等。
- * @file hmipainter.cpp
+ * @file datapainter.cpp
  * @author Dragon_qing
  * @date 2025/04/15
  */
 
 #include <QFileInfo>
 
-#include "hmipainter.h"
-#include "ui_hmipainter.h"
+#include "datapainter.h"
+#include "ui_datapainter.h"
 
 #define STYLESHEET_FILE "style.qss"
 
-HmiPainter::HmiPainter(QWidget *parent)
+DataPainter::DataPainter(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::HmiPainter)
+    , ui(new Ui::DataPainter)
 {
     ui->setupUi(this);
 
     Init();
 }
 
-HmiPainter &HmiPainter::GetInstance()
+DataPainter &DataPainter::GetInstance()
 {
-    static HmiPainter *s_data = NULL;
+    static DataPainter *s_data = NULL;
     if (s_data == NULL)
     {
-        s_data = new HmiPainter();
+        s_data = new DataPainter();
     }
 
     return *s_data;
 }
 
-HmiPainter::~HmiPainter()
+DataPainter::~DataPainter()
 {
     delete ui;
 }
 
-void HmiPainter::Init()
+void DataPainter::Init()
 {
     // 获取qss文件样式
     QFile qssFile(STYLESHEET_FILE);
