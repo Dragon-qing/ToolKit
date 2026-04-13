@@ -5,7 +5,7 @@ build
 bin/*
 !bin/sqldrivers
 !bin/tools
-log
+logs
 
 # files
 msvc_make.bat

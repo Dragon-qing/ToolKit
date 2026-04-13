@@ -34,8 +34,10 @@ INCLUDEPATH += $$PWD/include
 LIBS += -luser32
 CONFIG(debug, debug|release) {
     LIBS += -L$$PWD/lib/debug -lqhotkey
+    LIBS += -L$$PWD/lib/debug -lspdlogd
 } else {
     LIBS += -L$$PWD/lib -lqhotkey
+    LIBS += -L$$PWD/lib -lspdlog
 }
 
 SOURCES += \
@@ -71,7 +73,7 @@ SOURCES += \
     src/widget/wgxmleditor.cpp \
     src/widget/widgetmanger.cpp\
     # 工具类
-    src/utils/logger.cpp \
+    src/utils/tklogger.cpp \
     # QCP第三方绘图模块引入
     src/thirdparty/qcustomplot.cpp
 
@@ -108,7 +110,7 @@ HEADERS += \
     src/widget/wgxmleditor.h \
     src/widget/widgetmanger.h\
     # 工具类
-    src/utils/logger.h \
+    src/utils/tklogger.h \
     # QCP第三方绘图模块引入
     src/thirdparty/qcustomplot.h
 

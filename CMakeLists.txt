@@ -59,7 +59,7 @@ set(PROJECT_SOURCES
     ./src/widget/wgxmleditor.cpp
     ./src/widget/widgetmanger.cpp
     # 工具类
-    ./src/utils/logger.cpp
+    ./src/utils/tklogger.cpp
     # 第三方
     ./src/thirdparty/qcustomplot.cpp
 )
@@ -97,7 +97,7 @@ set(PROJECT_HEADERS
     ./src/widget/wgxmleditor.h
     ./src/widget/widgetmanger.h
     # 工具类
-    ./src/utils/logger.h
+    ./src/utils/tklogger.h
     # 第三方
     ./src/thirdparty/qcustomplot.h
     )
@@ -157,6 +157,12 @@ set_target_properties(qhotkey PROPERTIES
     IMPORTED_LOCATION_DEBUG   "${LIBS_DIR}/debug/qhotkey.lib"
 )
 
+add_library(spdlog STATIC IMPORTED)
+set_target_properties(spdlog PROPERTIES
+    IMPORTED_LOCATION_RELEASE "${LIBS_DIR}/spdlog.lib"
+    IMPORTED_LOCATION_DEBUG   "${LIBS_DIR}/debug/spdlogd.lib"
+)
+
 target_link_libraries(DQToolKits PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
@@ -167,6 +173,7 @@ target_link_libraries(DQToolKits PRIVATE
     user32
     qhotkey
     EasyQtSql
+    spdlog
 )
 
 if (MSVC)

@@ -7,7 +7,7 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 
-#include "logger.h"
+#include "tklogger.h"
 
 #include "wgxmleditor.h"
 #include "ui_wgxmleditor.h"
@@ -60,7 +60,7 @@ void WgXmlEditor::on_selectBtn_clicked()
         m_pTreeModel->removeRows(0, m_pTreeModel->rowCount());
     }
     DataXmlEditor::Instance().SetXmlFile(filePath, m_pTreeModel);
-    Logger::Instance().AddLog(INFO_LOG, TR("xml编辑器-打开%1文件").arg(filePath));
+    TKLogger::Instance().AddLog(INFO_LOG, TR("xml编辑器-打开%1文件").arg(filePath));
     ui->treeView->expand(m_pTreeModel->index(0, 0));
 }
 

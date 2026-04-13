@@ -49,7 +49,7 @@ void WgLog::keyPressEvent(QKeyEvent *event)
         Bit32 ret = m_pDlg->ExecAndRet(TR("是否清空日志?"));
         if (ret == DlgPrompt::OK_CODE)
         {
-            Logger::Instance().DeleteAllLog();
+            TKLogger::Instance().DeleteAllLog();
             MessageQueue(MsgData::REDRAW, "");
         }
     }

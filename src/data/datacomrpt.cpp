@@ -12,7 +12,7 @@
 #include <QElapsedTimer>
 
 #include "datacomrpt.h"
-#include "logger.h"
+#include "tklogger.h"
 
 DataComRpt::DataComRpt(QObject *parent)
     : QObject(parent)
@@ -38,13 +38,13 @@ void DataComRpt::SetPath(QString path)
 {
     if (path.isEmpty())
     {
-        Logger::Instance().AddLog(WARNING_LOG, QObject::TR("%1路径错误").arg(path));
+        TKLogger::Instance().AddLog(WARNING_LOG, QObject::TR("%1路径错误").arg(path));
     }
 
     QFileInfo info(path);
     if (!info.exists())
     {
-        Logger::Instance().AddLog(WARNING_LOG, QObject::TR("%1文件不存在").arg(info.fileName()));
+        TKLogger::Instance().AddLog(WARNING_LOG, QObject::TR("%1文件不存在").arg(info.fileName()));
     }
 
     Clear();
@@ -310,12 +310,12 @@ Bit32 ReadFileThread::ProcessFileBatch()
     QFile file(m_sPath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        Logger::Instance().AddLog(WARNING_LOG, QObject::TR("%1文件打开失败").arg(m_sPath));
+        TKLogger::Instance().AddLog(WARNING_LOG, QObject::TR("%1文件打开失败").arg(m_sPath));
         return -1;
     }
     if (QFileInfo(m_sPath).size() == 0)
     {
-        Logger::Instance().AddLog(WARNING_LOG, QObject::TR("%1文件为空").arg(m_sPath));
+        TKLogger::Instance().AddLog(WARNING_LOG, QObject::TR("%1文件为空").arg(m_sPath));
         return -1;
     }
     QTextStream in(&file);

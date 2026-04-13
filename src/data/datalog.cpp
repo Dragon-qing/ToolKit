@@ -8,7 +8,7 @@
 #include <QTextStream>
 #include <QRegularExpression>
 
-#include "logger.h"
+#include "tklogger.h"
 #include "EasyQtSql.h"
 
 #include "datalog.h"
@@ -29,7 +29,7 @@ void DataLog::LoadLog(QStandardItemModel *model)
     {
         return;
     }
-    QList<LogData> logList = Logger::Instance().GetAllLog();
+    QList<LogData> logList = TKLogger::Instance().GetAllLog();
     for (Bit32 i = logList.count() - 1, row = 0; i >= 0; i--, row++)
     {
         const LogData &data = logList.at(i);
@@ -53,19 +53,19 @@ QString DataLog::TransLogType2Str(Bit32 type)
     switch (type)
     {
     case DEBUG_LOG:
-        typeStr = "D";
+        typeStr = "Debug";
         break;
     case INFO_LOG:
-        typeStr = "I";
+        typeStr = "Info";
         break;
     case WARNING_LOG:
-        typeStr = "W";
+        typeStr = "Warn";
         break;
     case CRITICAL_LOG:
-        typeStr = "C";
+        typeStr = "Crit";
         break;
-    case FATAL_LOG:
-        typeStr = "F";
+    case ERROR_LOG:
+        typeStr = "Error";
         break;
     default:
         break;
