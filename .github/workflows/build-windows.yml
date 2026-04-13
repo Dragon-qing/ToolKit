@@ -6,6 +6,7 @@ on:
   pull_request:
     branches: [ main ]
     types: [ opened ]
+  workflow_dispatch:
 
 
 jobs:
@@ -39,11 +40,9 @@ jobs:
         # CMake 配置
       - name: Configure CMake
         shell: cmd
-        run: >
-          cmake -S . -B build -G Ninja
-          -DCMAKE_BUILD_TYPE=Release
-          -DCMAKE_PREFIX_PATH=%Qt5_DIR%
-          -DCMAKE_GENERATOR_TOOLSET=v142
+        run: |
+          call "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.29
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%Qt5_DIR%
 
       - name: Check MSVC version
         shell: cmd
