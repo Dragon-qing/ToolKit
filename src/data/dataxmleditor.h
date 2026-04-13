@@ -1,5 +1,5 @@
-﻿#ifndef HMIXMLEDITOR_H
-#define HMIXMLEDITOR_H
+#ifndef DATAXMLEDITOR_H
+#define DATAXMLEDITOR_H
 
 #include <QObject>
 #include <QStandardItemModel>
@@ -9,12 +9,12 @@
 
 #include "datadef.h"
 
-class HmiXmlEditor
+class DataXmlEditor
 {
 public:
-    static HmiXmlEditor& Instance();
-    HmiXmlEditor();
-    ~HmiXmlEditor();
+    static DataXmlEditor& Instance();
+    DataXmlEditor();
+    ~DataXmlEditor();
 
     // 设置xml文件
     void SetXmlFile(QString path, QStandardItemModel *model);
@@ -45,4 +45,4 @@ private:
     void SaveChange(QString key, QDomElement &element);
 };
 
-#endif // HMIXMLEDITOR_H
+#endif // DATAXMLEDITOR_H

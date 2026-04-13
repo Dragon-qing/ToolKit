@@ -1,19 +1,19 @@
-﻿#ifndef HMICONFIG_H
-#define HMICONFIG_H
+#ifndef DATACONFIG_H
+#define DATACONFIG_H
 #include <QSettings>
 
-class HMIConfig
+class DataConfig
 {
 public:
-    static HMIConfig &Instance();
-    ~HMIConfig();
+    static DataConfig &Instance();
+    ~DataConfig();
 
     void SetConfig(QString title, QString key, QString value);
     QString GetConfig(QString title, QString key);
     void RemoveConfig(QString title, QString key);
 private:
     QSettings *m_pSetting;
-    HMIConfig();
+    DataConfig();
 };
 
-#endif // HMICONFIG_H
+#endif // DATACONFIG_H

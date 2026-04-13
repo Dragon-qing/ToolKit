@@ -1,19 +1,19 @@
 ﻿#include <QCoreApplication>
 
-#include "hmiconfig.h"
+#include "dataconfig.h"
 
-HMIConfig &HMIConfig::Instance()
+DataConfig &DataConfig::Instance()
 {
-    static HMIConfig s_data;
+    static DataConfig s_data;
     return s_data;
 }
 
-HMIConfig::~HMIConfig()
+DataConfig::~DataConfig()
 {
 
 }
 
-void HMIConfig::SetConfig(QString title, QString key, QString value)
+void DataConfig::SetConfig(QString title, QString key, QString value)
 {
     if (m_pSetting == NULL)
     {
@@ -23,7 +23,7 @@ void HMIConfig::SetConfig(QString title, QString key, QString value)
     m_pSetting->setValue(QString("%1/%2").arg(title, key), value);
 }
 
-QString HMIConfig::GetConfig(QString title, QString key)
+QString DataConfig::GetConfig(QString title, QString key)
 {
     if (m_pSetting == NULL)
     {
@@ -33,7 +33,7 @@ QString HMIConfig::GetConfig(QString title, QString key)
     return m_pSetting->value(QString("%1/%2").arg(title, key)).toString();
 }
 
-void HMIConfig::RemoveConfig(QString title, QString key)
+void DataConfig::RemoveConfig(QString title, QString key)
 {
     if (m_pSetting == NULL)
     {
@@ -43,7 +43,7 @@ void HMIConfig::RemoveConfig(QString title, QString key)
     m_pSetting->remove(QString("%1/%2").arg(title, key));
 }
 
-HMIConfig::HMIConfig()
+DataConfig::DataConfig()
 {
     m_pSetting = new QSettings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat);
 }

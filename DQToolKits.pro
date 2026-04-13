@@ -26,7 +26,7 @@ msvc {
 RC_ICONS = img/toolbox.ico
 INCLUDEPATH += \
     src src/widget\
-    src/hmi src/service\
+    src/data src/service\
     src/thirdparty src/thirdparty/easyqtsql\
     src/widget/control\
 INCLUDEPATH += $$PWD/include
@@ -37,17 +37,17 @@ LIBS += -lqhotkey
 SOURCES += \
     src/basewidget.cpp \
     src/common.cpp \
-    src/hmi/hmicomrpt.cpp \
-    src/hmi/hmilog.cpp \
-    src/hmi/sysapi.cpp \
+    src/data/datacomrpt.cpp \
+    src/data/dataconfig.cpp \
+    src/data/datalog.cpp \
+    src/data/datapainter.cpp \
+    src/data/dataxmleditor.cpp \
+    src/data/sysapi.cpp \
     src/logdt.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/msgdata.cpp \
     src/service/dataservice.cpp \
-    src/hmi/hmiconfig.cpp \
-    src/hmi/hmipainter.cpp \
-    src/hmi/hmixmleditor.cpp \
     src/widget/control/basetable.cpp \
     src/widget/dlgabout.cpp \
     src/widget/dlgbtfmakeinfo.cpp \
@@ -70,17 +70,17 @@ SOURCES += \
 HEADERS += \
     src/basewidget.h \
     src/common.h \
+    src/data/datacomrpt.h \
+    src/data/dataconfig.h \
+    src/data/datalog.h \
+    src/data/datapainter.h \
+    src/data/dataxmleditor.h \
     src/datadef.h \
-    src/hmi/hmicomrpt.h \
-    src/hmi/hmilog.h \
-    src/hmi/sysapi.h \
+    src/data/sysapi.h \
     src/logdt.h \
     src/mainwindow.h \
     src/msgdata.h \
     src/service/dataservice.h \
-    src/hmi/hmiconfig.h \
-    src/hmi/hmipainter.h \
-    src/hmi/hmixmleditor.h \
     src/widget/control/basetable.h \
     src/widget/dlgabout.h \
     src/widget/dlgbtfmakeinfo.h \
@@ -102,8 +102,8 @@ HEADERS += \
 
 FORMS += \
     src/basewidget.ui \
+    src/data/datapainter.ui \
     src/mainwindow.ui \
-    src/hmi/hmipainter.ui \
     src/widget/control/basetable.ui \
     src/widget/dlgabout.ui \
     src/widget/dlgbtfmakeinfo.ui \

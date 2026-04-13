@@ -1,15 +1,15 @@
-﻿#ifndef HMILOG_H
-#define HMILOG_H
+#ifndef DATALOG_H
+#define DATALOG_H
 
 #include <QStandardItemModel>
 
 #include "common.h"
 
-class HmiLog
+class DataLog
 {
 public:
-    static HmiLog &GetInstance();
-    HmiLog();
+    static DataLog &GetInstance();
+    DataLog();
 
     void LoadLog(QStandardItemModel *model);
 private:
@@ -17,4 +17,4 @@ private:
 
 };
 
-#endif // HMILOG_H
+#endif // DATALOG_H

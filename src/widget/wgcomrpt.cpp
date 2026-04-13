@@ -4,13 +4,14 @@
  * @author Dragon_qing
  * @date 2025/05/06
  */
+#include <math.h>
+
 #include <QFileDialog>
 #include <QStringList>
-#include <math.h>
 #include <QKeyEvent>
 #include <QRegularExpression>
 
-#include "hmicomrpt.h"
+#include "datacomrpt.h"
 
 #include "wgcomrpt.h"
 #include "ui_wgcomrpt.h"
@@ -213,8 +214,8 @@ void WgComRpt::BuildJourDefaultPlot()
     QVector<fBit64> negJour;
     QVector<fBit64> posV;
     QVector<fBit64> negV;
-    Bit32 totalNum = HmiComRpt::Instance().GetTotalPosNum();
-    QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    Bit32 totalNum = DataComRpt::Instance().GetTotalPosNum();
+    QStringList coefList = DataComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
     fBit64 positionCoef = coefList.at(0).toDouble();
     fBit64 jourCoef = coefList.at(1).toDouble();
     fBit64 actVelCoef = coefList.at(2).toDouble();
@@ -225,10 +226,10 @@ void WgComRpt::BuildJourDefaultPlot()
     Bit32 ignoreCount = totalNum * 0.05; // 忽略前5%的数据开始寻找反向点。
     for (Bit32 i = 0; i < totalNum; i++)
     {
-        fBit64 position = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * positionCoef;
-        fBit64 jour = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * jourCoef;
-        fBit64 actVel = HmiComRpt::Instance().GetValue(DATA_PART, 2, i).toLongLong() * actVelCoef;
-        fBit64 cmdVel = HmiComRpt::Instance().GetValue(DATA_PART, 4, i).toLongLong() * cmdVelCoef;
+        fBit64 position = DataComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * positionCoef;
+        fBit64 jour = DataComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * jourCoef;
+        fBit64 actVel = DataComRpt::Instance().GetValue(DATA_PART, 2, i).toLongLong() * actVelCoef;
+        fBit64 cmdVel = DataComRpt::Instance().GetValue(DATA_PART, 4, i).toLongLong() * cmdVelCoef;
         Q_UNUSED(cmdVel);
 
         if (!beginFlag && perVel * actVel < 0)
@@ -278,8 +279,8 @@ void WgComRpt::BuildPosDefaultPlot()
     }
     QList<QVector<fBit64>> xdata;
     QList<QVector<fBit64>> ydata;
-    Bit32 totalCount = HmiComRpt::Instance().GetTotalPosNum();
-    QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    Bit32 totalCount = DataComRpt::Instance().GetTotalPosNum();
+    QStringList coefList = DataComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
     QVector<fBit64> followErr;
     fBit64 followErrCoef = coefList.at(0).toDouble();
     QVector<fBit64> actPos;
@@ -287,13 +288,13 @@ void WgComRpt::BuildPosDefaultPlot()
     QVector<fBit64> cmdPos;
     fBit64 cmdPosCoef = coefList.at(2).toDouble();
     QVector<fBit64> time;
-    fBit64 samplePeriod = HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
+    fBit64 samplePeriod = DataComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
 
     for (Bit32 i = 0; i < totalCount; i++)
     {
-        fBit64 followErrVal = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * followErrCoef;
-        fBit64 actPosVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * actPosCoef;
-        fBit64 cmdPosVal = HmiComRpt::Instance().GetValue(DATA_PART, 2, i).toLongLong() * cmdPosCoef;
+        fBit64 followErrVal = DataComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * followErrCoef;
+        fBit64 actPosVal = DataComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * actPosCoef;
+        fBit64 cmdPosVal = DataComRpt::Instance().GetValue(DATA_PART, 2, i).toLongLong() * cmdPosCoef;
 
         followErr << followErrVal;
         actPos << actPosVal;
@@ -318,19 +319,19 @@ void WgComRpt::BuildSpdlDirDefaultPlot()
     }
     QList<QVector<fBit64>> xdata;
     QList<QVector<fBit64>> ydata;
-    Bit32 totalCount = HmiComRpt::Instance().GetTotalPosNum();
-    QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    Bit32 totalCount = DataComRpt::Instance().GetTotalPosNum();
+    QStringList coefList = DataComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
     QVector<fBit64> reg;
     fBit64 regCoef = coefList.at(0).toDouble();
     QVector<fBit64> current;
     fBit64 currentCoef = coefList.at(1).toDouble();
     QVector<fBit64> time;
-    fBit64 samplePeriod = HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
+    fBit64 samplePeriod = DataComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
 
     for (Bit32 i = 0; i < totalCount; i++)
     {
-        fBit64 regVal = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * regCoef;
-        fBit64 currentVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * currentCoef;
+        fBit64 regVal = DataComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * regCoef;
+        fBit64 currentVal = DataComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * currentCoef;
 
         reg << regVal;
         current << currentVal;
@@ -354,19 +355,19 @@ void WgComRpt::BuildSpdlFluDefaultPlot()
     }
     QList<QVector<fBit64>> xdata;
     QList<QVector<fBit64>> ydata;
-    Bit32 totalCount = HmiComRpt::Instance().GetTotalPosNum();
-    QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    Bit32 totalCount = DataComRpt::Instance().GetTotalPosNum();
+    QStringList coefList = DataComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
     QVector<fBit64> vel;
     fBit64 velCoef = coefList.at(1).toDouble();
     QVector<fBit64> current;
     fBit64 currentCoef = coefList.at(2).toDouble();
     QVector<fBit64> time;
-    fBit64 samplePeriod = HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
+    fBit64 samplePeriod = DataComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
 
     for (Bit32 i = 0; i < totalCount; i++)
     {
-        fBit64 velVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * velCoef;
-        fBit64 currentVal = HmiComRpt::Instance().GetValue(DATA_PART, 2, i).toLongLong() * currentCoef;
+        fBit64 velVal = DataComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * velCoef;
+        fBit64 currentVal = DataComRpt::Instance().GetValue(DATA_PART, 2, i).toLongLong() * currentCoef;
 
         vel << velVal;
         current << currentVal;
@@ -390,8 +391,8 @@ void WgComRpt::BuildSpeedDefaultPlot()
     }
     QList<QVector<fBit64>> xdata;
     QList<QVector<fBit64>> ydata;
-    Bit32 totalCount = HmiComRpt::Instance().GetTotalPosNum();
-    QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    Bit32 totalCount = DataComRpt::Instance().GetTotalPosNum();
+    QStringList coefList = DataComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
     QVector<fBit64> cmdVel;
     fBit64 cmdCoef = coefList.at(0).toDouble();
     QVector<fBit64> actVel;
@@ -399,16 +400,16 @@ void WgComRpt::BuildSpeedDefaultPlot()
     QVector<fBit64> acc;
     fBit64 accCoef = 1.0 / 3600000 * 60000; // mm/min^2 -> m/s^2 60000为ms->min
     QVector<fBit64> time;
-    fBit64 samplePeriod = HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
+    fBit64 samplePeriod = DataComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
 
     for (Bit32 i = 0; i < totalCount; i++)
     {
-        fBit64 cmdVal = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * cmdCoef;
-        fBit64 actVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * actCoef;
+        fBit64 cmdVal = DataComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * cmdCoef;
+        fBit64 actVal = DataComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * actCoef;
         fBit64 nextActVal = 0;
         if (i < totalCount - 1)
         {
-            nextActVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i + 1).toLongLong() * actCoef;
+            nextActVal = DataComRpt::Instance().GetValue(DATA_PART, 1, i + 1).toLongLong() * actCoef;
         }
         fBit64 accVal = (nextActVal - actVal) / samplePeriod * accCoef;
         cmdVel << cmdVal;
@@ -434,8 +435,8 @@ void WgComRpt::BuildSpdlSpeedDefultPlot()
     }
     QList<QVector<fBit64>> xdata;
     QList<QVector<fBit64>> ydata;
-    Bit32 totalCount = HmiComRpt::Instance().GetTotalPosNum();
-    QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    Bit32 totalCount = DataComRpt::Instance().GetTotalPosNum();
+    QStringList coefList = DataComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
     QVector<fBit64> actVel;
     fBit64 actCoef = coefList.at(0).toDouble();
     QVector<fBit64> cmdVel;
@@ -443,13 +444,13 @@ void WgComRpt::BuildSpdlSpeedDefultPlot()
     QVector<fBit64> current;
     fBit64 currCoef = coefList.at(1).toDouble();
     QVector<fBit64> time;
-    fBit64 samplePeriod = HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
+    fBit64 samplePeriod = DataComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
 
     for (Bit32 i = 0; i < totalCount; i++)
     {
-        fBit64 actVal = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * actCoef;
-        fBit64 currVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * currCoef;
-        fBit64 cmdVal = HmiComRpt::Instance().GetValue(DATA_PART, 3, i).toLongLong() * cmdCoef;
+        fBit64 actVal = DataComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * actCoef;
+        fBit64 currVal = DataComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * currCoef;
+        fBit64 cmdVal = DataComRpt::Instance().GetValue(DATA_PART, 3, i).toLongLong() * cmdCoef;
         actVel << actVal;
         current << currVal;
         cmdVel << cmdVal;
@@ -469,20 +470,20 @@ void WgComRpt::BuildToolChangeDefaultPlot()
     {
         m_pToolChangePlot = new UnionPlot(UnionPlot::VERTICAL_LAYOUT, 1, this);
         m_pToolChangePlot->SetAxisLabel(QStringList() << TR("时间(ms)"),
-                              QStringList() << TR("R%1寄存器").arg(HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_R_REG").toString()));
+                              QStringList() << TR("R%1寄存器").arg(DataComRpt::Instance().GetValue(CONFIG_PART, "CONF_R_REG").toString()));
     }
     QList<QVector<fBit64>> xdata;
     QList<QVector<fBit64>> ydata;
-    Bit32 totalCount = HmiComRpt::Instance().GetTotalPosNum();
-    QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    Bit32 totalCount = DataComRpt::Instance().GetTotalPosNum();
+    QStringList coefList = DataComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
     QVector<fBit64> Rreg;
     fBit64 RregCoef = 1;
     QVector<fBit64> time;
-    fBit64 samplePeriod = HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
+    fBit64 samplePeriod = DataComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toDouble();
 
     for (Bit32 i = 0; i < totalCount; i++)
     {
-        fBit64 reg = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * RregCoef;
+        fBit64 reg = DataComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * RregCoef;
         Rreg << reg;
         time << i * samplePeriod;
     }
@@ -504,8 +505,8 @@ void WgComRpt::BuildTapDefault()
     }
     QList<QVector<fBit64>> xdata;
     QList<QVector<fBit64>> ydata;
-    Bit32 totalCount = HmiComRpt::Instance().GetTotalPosNum();
-    QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    Bit32 totalCount = DataComRpt::Instance().GetTotalPosNum();
+    QStringList coefList = DataComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
     QVector<fBit64> axisVel;
     fBit64 axisVelCoef = coefList.at(0).toDouble() * 60000.0;   // 转换单位
     QVector<fBit64> syncAxisVel;
@@ -514,12 +515,12 @@ void WgComRpt::BuildTapDefault()
     fBit64 samplePeriod = 1.0;
     QVector<fBit64> syncErr;
     fBit64 syncErrCoef = 1000;
-    fBit64 pitch = HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_PITCH").toDouble();
+    fBit64 pitch = DataComRpt::Instance().GetValue(CONFIG_PART, "CONF_PITCH").toDouble();
     fBit64 syncErrVal = 0.0;
     for (Bit32 i = 0; i < totalCount; i++)
     {
-        fBit64 axisVal = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * axisVelCoef;
-        fBit64 syncAxisVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * syncAxisVelCoef;
+        fBit64 axisVal = DataComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * axisVelCoef;
+        fBit64 syncAxisVal = DataComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * syncAxisVelCoef;
         syncErrVal += (syncAxisVal * pitch - axisVal) / 60000.0 * samplePeriod * syncErrCoef;
         axisVel << axisVal;
         syncAxisVel << syncAxisVal;
@@ -545,8 +546,8 @@ void WgComRpt::BuildCircleDefault()
     }
     QList<QVector<fBit64>> xdata;
     QList<QVector<fBit64>> ydata;
-    Bit32 totalCount = HmiComRpt::Instance().GetTotalPosNum();
-    QStringList coefList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    Bit32 totalCount = DataComRpt::Instance().GetTotalPosNum();
+    QStringList coefList = DataComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
     QVector<fBit64> hAxis;
     fBit64 hAxisCoef = coefList.at(0).toDouble();
     QVector<fBit64> vAxis;
@@ -555,8 +556,8 @@ void WgComRpt::BuildCircleDefault()
 
     for (Bit32 i = 0; i < totalCount; i++)
     {
-        fBit64 hAxisVal = HmiComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * hAxisCoef;
-        fBit64 vAxisVal = HmiComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * vAxisCoef;
+        fBit64 hAxisVal = DataComRpt::Instance().GetValue(DATA_PART, 0, i).toLongLong() * hAxisCoef;
+        fBit64 vAxisVal = DataComRpt::Instance().GetValue(DATA_PART, 1, i).toLongLong() * vAxisCoef;
 
         hAxis << hAxisVal;
         vAxis << vAxisVal;
@@ -671,9 +672,9 @@ void WgComRpt::on_OpenBtn_clicked()
         return;
     }
 
-    HmiComRpt::Instance().SetPath(filePath);
+    DataComRpt::Instance().SetPath(filePath);
     LogDt::Instance().AddLog(INFO_LOG, TR("打开%1采样文件").arg(filePath));
-    ReadFileThread *threadp = HmiComRpt::Instance().GetThreadClass();
+    ReadFileThread *threadp = DataComRpt::Instance().GetThreadClass();
     connect(threadp, &ReadFileThread::ProcessSignal, ui->progressBar, &QProgressBar::setValue);
 }
 
@@ -682,9 +683,9 @@ void WgComRpt::ProcessChangeHandle(int changeValue)
     if (changeValue == 100)
     {
         // 解绑信号
-        disconnect(HmiComRpt::Instance().GetThreadClass(), &ReadFileThread::ProcessSignal, ui->progressBar, &QProgressBar::setValue);
+        disconnect(DataComRpt::Instance().GetThreadClass(), &ReadFileThread::ProcessSignal, ui->progressBar, &QProgressBar::setValue);
         ui->OpenBtn->setEnabled(true);
-        QString smplType = HmiComRpt::Instance().GetValue(CONFIG_PART, "SMPL_TYPE").toString();
+        QString smplType = DataComRpt::Instance().GetValue(CONFIG_PART, "SMPL_TYPE").toString();
         if (smplType.endsWith(";"))
         {
             smplType.remove(smplType.size() - 1, 1);
@@ -700,7 +701,7 @@ void WgComRpt::ProcessChangeHandle(int changeValue)
         ui->xAxisComboBox->addItems(smplTypelist);
         ui->yAxisComboBox->addItems(smplTypelist);
         ui->yAxisComboBox->setCurrentIndex(AXIS_TYPE_NUM);
-        QString fileName = HmiComRpt::Instance().GetFileName();
+        QString fileName = DataComRpt::Instance().GetFileName();
         QRegularExpression re("^(?<type>MC_\\d+)_.*$");
         QRegularExpressionMatch match = re.match(fileName);
         if (match.hasMatch())
@@ -805,11 +806,11 @@ void WgComRpt::MouseMoveEventHandle(QMouseEvent *event)
 
 void WgComRpt::on_drawBtn_clicked()
 {
-    Bit32 totalNum = HmiComRpt::Instance().GetTotalPosNum();
+    Bit32 totalNum = DataComRpt::Instance().GetTotalPosNum();
     Bit32 xSamplIdx = ui->xAxisComboBox->currentIndex();
     Bit32 ySamplIdx = ui->yAxisComboBox->currentIndex();
     // 获取转换系数
-    QStringList coefStrList = HmiComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
+    QStringList coefStrList = DataComRpt::Instance().GetValue(CONFIG_PART, "COEF").toString().split(";");
     fBit64 xCoef = 1;
     fBit64 yCoef = 1;
     if (xSamplIdx - AXIS_TYPE_NUM >= 0)
@@ -818,7 +819,7 @@ void WgComRpt::on_drawBtn_clicked()
     }
     else
     {
-        xCoef = (fBit64)HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toInt();
+        xCoef = (fBit64)DataComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toInt();
     }
     if (ySamplIdx - AXIS_TYPE_NUM >= 0)
     {
@@ -826,7 +827,7 @@ void WgComRpt::on_drawBtn_clicked()
     }
     else
     {
-        yCoef = (fBit64)HmiComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toInt();
+        yCoef = (fBit64)DataComRpt::Instance().GetValue(CONFIG_PART, "CONF_SMPL_PERIOD").toInt();
     }
     // 清空画布，增加新画布和轴名
     if (ui->plot->graphCount() != 0)
@@ -852,7 +853,7 @@ void WgComRpt::on_drawBtn_clicked()
         }
         else
         {
-            x = HmiComRpt::Instance().GetValue(DATA_PART, xSamplIdx - AXIS_TYPE_NUM, i).toLongLong();
+            x = DataComRpt::Instance().GetValue(DATA_PART, xSamplIdx - AXIS_TYPE_NUM, i).toLongLong();
         }
         if (ySamplIdx == TIME)
         {
@@ -860,7 +861,7 @@ void WgComRpt::on_drawBtn_clicked()
         }
         else
         {
-            y = HmiComRpt::Instance().GetValue(DATA_PART, ySamplIdx - AXIS_TYPE_NUM, i).toLongLong();
+            y = DataComRpt::Instance().GetValue(DATA_PART, ySamplIdx - AXIS_TYPE_NUM, i).toLongLong();
         }
         fBit64 xValue = x * xCoef;
         fBit64 yValue = y * yCoef;
@@ -886,7 +887,7 @@ void WgComRpt::DefaultRadioHandle(bool checked)
 {
     if (checked) // 使用预定组合图
     {
-        QString mask = HmiComRpt::Instance().GetMask();
+        QString mask = DataComRpt::Instance().GetMask();
         BuildUnioPlot(mask);
         UnionReplot();
         ui->stackedWidget->setCurrentIndex(1);

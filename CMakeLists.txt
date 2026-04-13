@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(toolkits LANGUAGES CXX)
+project(DQToolKits LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -29,17 +29,17 @@ endif()
 set(PROJECT_SOURCES
     ./src/basewidget.cpp
     ./src/common.cpp
-    ./src/hmi/hmicomrpt.cpp
-    ./src/hmi/hmilog.cpp
-    ./src/hmi/sysapi.cpp
+    ./src/data/datacomrpt.cpp
+    ./src/data/datalog.cpp
+    ./src/data/sysapi.cpp
     ./src/logdt.cpp
     ./src/main.cpp
     ./src/mainwindow.cpp
     ./src/msgdata.cpp
     ./src/service/dataservice.cpp
-    ./src/hmi/hmiconfig.cpp
-    ./src/hmi/hmipainter.cpp
-    ./src/hmi/hmixmleditor.cpp
+    ./src/data/dataconfig.cpp
+    ./src/data/datapainter.cpp
+    ./src/data/dataxmleditor.cpp
     ./src/widget/control/basetable.cpp
     ./src/widget/dlgabout.cpp
     ./src/widget/dlgbtfmakeinfo.cpp
@@ -63,16 +63,16 @@ set(PROJECT_HEADERS
     ./src/basewidget.h
     ./src/common.h
     ./src/datadef.h
-    ./src/hmi/hmicomrpt.h
-    ./src/hmi/hmilog.h
-    ./src/hmi/sysapi.h
+    ./src/data/datacomrpt.h
+    ./src/data/datalog.h
+    ./src/data/sysapi.h
     ./src/logdt.h
     ./src/mainwindow.h
     ./src/msgdata.h
     ./src/service/dataservice.h
-    ./src/hmi/hmiconfig.h
-    ./src/hmi/hmipainter.h
-    ./src/hmi/hmixmleditor.h
+    ./src/data/dataconfig.h
+    ./src/data/datapainter.h
+    ./src/data/dataxmleditor.h
     ./src/widget/control/basetable.h
     ./src/widget/dlgabout.h
     ./src/widget/dlgbtfmakeinfo.h
@@ -95,7 +95,7 @@ set(PROJECT_HEADERS
 set(PROJECT_UI
     ./src/basewidget.ui
     ./src/mainwindow.ui
-    ./src/hmi/hmipainter.ui
+    ./src/data/datapainter.ui
     ./src/widget/control/basetable.ui
     ./src/widget/dlgabout.ui
     ./src/widget/dlgbtfmakeinfo.ui
@@ -114,7 +114,7 @@ set(PROJECT_UI
     ./src/widget/widgetmanger.ui
 )
 
-add_executable(toolkits WIN32
+add_executable(DQToolKits WIN32
     ${PROJECT_SOURCES}
     ${PROJECT_HEADERS}
     ${PROJECT_UI}
@@ -122,10 +122,10 @@ add_executable(toolkits WIN32
     ${APP_ICON_RESOURCE}
 )
 
-target_include_directories(toolkits PRIVATE
+target_include_directories(DQToolKits PRIVATE
     ./src
     ./src/widget
-    ./src/hmi
+    ./src/data
     ./src/service
     ./src/thirdparty
     ./src/thirdparty/easyqtsql
@@ -145,7 +145,7 @@ set_target_properties(qhotkey PROPERTIES
     IMPORTED_LOCATION "${LIBS_DIR}/qhotkey.lib"
 )
 
-target_link_libraries(toolkits PRIVATE
+target_link_libraries(DQToolKits PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
     Qt${QT_VERSION_MAJOR}::Sql
@@ -158,7 +158,7 @@ target_link_libraries(toolkits PRIVATE
 )
 
 if (MSVC)
-    target_compile_options(toolkits PRIVATE /utf-8)
+    target_compile_options(DQToolKits PRIVATE /utf-8)
 endif()
 
-install(TARGETS toolkits RUNTIME DESTINATION bin)
+install(TARGETS DQToolKits RUNTIME DESTINATION bin)

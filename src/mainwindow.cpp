@@ -1,9 +1,9 @@
 ﻿#include <QSize>
 
 #include "basewidget.h"
-#include "hmipainter.h"
+#include "datapainter.h"
 #include "sysapi.h"
-#include "hmicomrpt.h"
+#include "datacomrpt.h"
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setStyleSheet(HmiPainter::GetInstance().GetStyleSheetStr()); // 设置样式表
+    setStyleSheet(DataPainter::GetInstance().GetStyleSheetStr()); // 设置样式表
 
     m_pWidgetManger = new WidgetManger(this);
     ui->verticalLayout_2->addWidget(m_pWidgetManger);

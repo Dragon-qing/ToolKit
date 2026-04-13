@@ -1,5 +1,5 @@
-﻿#ifndef HMICOMRPT_H
-#define HMICOMRPT_H
+#ifndef DATACOMRPT_H
+#define DATACOMRPT_H
 
 #include <QString>
 #include <QMap>
@@ -37,13 +37,13 @@ typedef struct ComResult
 
 Q_DECLARE_METATYPE(ComResult)  // 注册到 Qt 的类型系统
 
-class HmiComRpt : public QObject
+class DataComRpt : public QObject
 {
     Q_OBJECT
 public:
-    HmiComRpt(QObject *parent = nullptr);
-    ~HmiComRpt();
-    static HmiComRpt &Instance();
+    DataComRpt(QObject *parent = nullptr);
+    ~DataComRpt();
+    static DataComRpt &Instance();
     void SetPath(QString path);
     ReadFileThread *GetThreadClass();
     Bit32 GetTotalPosNum();
@@ -91,4 +91,4 @@ private:
     QPair<fBit64, fBit64> Str2Range(QString str);
 };
 
-#endif // HMICOMRPT_H
+#endif // DATACOMRPT_H
