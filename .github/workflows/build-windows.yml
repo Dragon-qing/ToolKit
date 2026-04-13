@@ -29,6 +29,8 @@ jobs:
         # 配置msvc
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
+        with:
+            arch: x64
 
         # 安装Ninja
       - name: Install Ninja
@@ -40,12 +42,13 @@ jobs:
         run: >
           cmake -S . -B build -G Ninja
           -DCMAKE_BUILD_TYPE=Release
-          -DCMAKE_PREFIX_PATH=${{ env.Qt5_DIR }}
+          -DCMAKE_PREFIX_PATH=%Qt5_DIR%
           -DCMAKE_GENERATOR_TOOLSET=v142
 
       - name: Check MSVC version
+        shell: cmd
         run: cl
-        
+
         # 编译
       - name: Build
         shell: cmd
