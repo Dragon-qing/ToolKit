@@ -3,7 +3,7 @@
 
 ---
 
-## Introduction
+## :book: Introduction
 
 这是一个用于收集我日常开发过程中自用工具的仓库，主要面向实际开发中遇到的各种效率问题与重复性工作。
 
@@ -51,4 +51,10 @@ graph TD
 
   style Data font-size:32px
 ```
+---
+## :link: Reference
+- [spdlog](https://github.com/gabime/spdlog) - 轻量级日志库  
+- [qhotkey](https://github.com/Skycoder42/QHotkey) - Qt桌面应用的全局快捷键
+- [EasyQtSql](https://github.com/kramolnic/EasyQtSql) - 轻量级QtSql头文件库
+
 ---
