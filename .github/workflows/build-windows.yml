@@ -1,0 +1,62 @@
+name: build-windows
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    types: [ opened ]
+
+
+jobs:
+  build:
+    runs-on: [windows-latest]
+
+    steps:
+        # 拉取代码
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+        # 安装qt环境
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 5.15.2
+          host: windows
+          target: desktop
+          arch: win64_msvc2019_64
+    
+        # 配置msvc
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+        # 安装Ninja
+      - name: Install Ninja
+        run: choco install ninja
+
+        # CMake 配置
+      - name: Configure CMake
+        shell: cmd
+        run: >
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_PREFIX_PATH=${{ env.Qt5_DIR }}
+
+        # 编译
+      - name: Build
+        shell: cmd
+        run: cmake --build build
+
+        # 拉取动态库
+      - name: Deploy Qt
+        run: |
+          mkdir deploy
+          copy bin\DQToolKits.exe deploy\
+          windeployqt deploy\DQToolKits.exe
+
+        # 发布包
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ToolKit-windows
+          path: deploy
