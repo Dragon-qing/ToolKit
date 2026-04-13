@@ -1,7 +1,6 @@
 <h1 align=center> <img align=center width=48 src="img/toolbox.ico" alt="CMake Logo"/> DQToolKits </h1>
 <p align=center ><i>Self-use toolbox.</i></p>
 
----
 
 ## :book: Introduction
 
@@ -9,13 +8,11 @@
 
 工具箱以 C++ / Qt 开发环境 为核心，涵盖了一些轻量、实用、可复用的小工具与模块，旨在提升开发效率、简化流程，并减少重复劳动。
 
----
 
 ## :sparkles: Features
 - BTF包制作
 - 数据文件分析
 - xml编辑器
----
 
 ## :wrench: Build Environment
 
@@ -23,7 +20,6 @@
 - msvc2019_64
 - Cmake >= 3.16 or qmake
 - Ninja or jom
----
 
 ## Structure
 
@@ -51,10 +47,7 @@ graph TD
 
   style Data font-size:32px
 ```
----
 ## :link: Reference
 - [spdlog](https://github.com/gabime/spdlog) - 轻量级日志库  
 - [qhotkey](https://github.com/Skycoder42/QHotkey) - Qt桌面应用的全局快捷键
 - [EasyQtSql](https://github.com/kramolnic/EasyQtSql) - 轻量级QtSql头文件库
-
----
