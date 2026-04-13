@@ -142,7 +142,8 @@ target_include_directories(EasyQtSql INTERFACE
 
 add_library(qhotkey STATIC IMPORTED)
 set_target_properties(qhotkey PROPERTIES
-    IMPORTED_LOCATION "${LIBS_DIR}/qhotkey.lib"
+    IMPORTED_LOCATION_RELEASE "${LIBS_DIR}/qhotkey.lib"
+    IMPORTED_LOCATION_DEBUG   "${LIBS_DIR}/debug/qhotkey.lib"
 )
 
 target_link_libraries(DQToolKits PRIVATE
