@@ -5,6 +5,7 @@
  * @date 2025/04/25
  */
 #include <QPainter>
+#include <QPainterPath>
 
 #include "dlgprompt.h"
 #include "ui_dlgprompt.h"

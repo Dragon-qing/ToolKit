@@ -9,6 +9,7 @@
 #include "ui_dlgbtfprocess.h"
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QStyleOption>
 #include <QMouseEvent>
 

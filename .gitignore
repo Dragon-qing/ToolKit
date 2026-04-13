@@ -1,13 +1,13 @@
+# dirs
+.qtcreator/
 .vscode/
-.qtc_clangd
-moc
-obj
-ui
-build/*
-!build/*.pro
-!build/CMakeLists.txt
+build
 bin/*
-!bin/tools
-!bin/style.qss
 !bin/sqldrivers
+!bin/tools
 log
+
+# files
+msvc_make.bat
+!bin/style.qss
+!build/toolkits.pro
