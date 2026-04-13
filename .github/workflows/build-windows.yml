@@ -26,14 +26,13 @@ jobs:
 
         # 安装qt环境
       - name: Install Qt
-        if: steps.cache-qt.outputs.cache-hit != 'true'
         uses: jurplel/install-qt-action@v4
         with:
           version: 5.15.2
           host: windows
           target: desktop
           arch: win64_msvc2019_64
-    
+
         # 配置msvc
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
