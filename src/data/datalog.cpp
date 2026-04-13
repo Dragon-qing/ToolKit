@@ -8,7 +8,7 @@
 #include <QTextStream>
 #include <QRegularExpression>
 
-#include "logdt.h"
+#include "logger.h"
 #include "EasyQtSql.h"
 
 #include "datalog.h"
@@ -29,7 +29,7 @@ void DataLog::LoadLog(QStandardItemModel *model)
     {
         return;
     }
-    QList<LogData> logList = LogDt::Instance().GetAllLog();
+    QList<LogData> logList = Logger::Instance().GetAllLog();
     for (Bit32 i = logList.count() - 1, row = 0; i >= 0; i--, row++)
     {
         const LogData &data = logList.at(i);

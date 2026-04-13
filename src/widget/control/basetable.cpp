@@ -6,7 +6,7 @@
  */
 #include <QHeaderView>
 
-#include "logdt.h"
+#include "logger.h"
 #include "common.h"
 
 #include "basetable.h"
@@ -66,7 +66,7 @@ Bit32 BaseTable::InitTable(QStringList headList, QVector<Bit32> scale)
 {
     if (headList.count() != scale.count())
     {
-        LogDt::Instance().AddLog(CRITICAL_LOG, TR("表格初始化失败, 数据长度不一致"));
+        Logger::Instance().AddLog(CRITICAL_LOG, TR("表格初始化失败, 数据长度不一致"));
         return -1;
     }
 

@@ -673,7 +673,7 @@ void WgComRpt::on_OpenBtn_clicked()
     }
 
     DataComRpt::Instance().SetPath(filePath);
-    LogDt::Instance().AddLog(INFO_LOG, TR("打开%1采样文件").arg(filePath));
+    Logger::Instance().AddLog(INFO_LOG, TR("打开%1采样文件").arg(filePath));
     ReadFileThread *threadp = DataComRpt::Instance().GetThreadClass();
     connect(threadp, &ReadFileThread::ProcessSignal, ui->progressBar, &QProgressBar::setValue);
 }

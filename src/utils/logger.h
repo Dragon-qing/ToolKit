@@ -1,5 +1,5 @@
-﻿#ifndef LOGDT_H
-#define LOGDT_H
+#ifndef LOGGER_H
+#define LOGGER_H
 #include <QMap>
 
 #include "datadef.h"
@@ -28,11 +28,11 @@ typedef struct LogData
     }
 }LogData;
 
-class LogDt
+class Logger
 {
 public:
-    static LogDt& Instance();   // 单例
-    ~LogDt();
+    static Logger& Instance();   // 单例
+    ~Logger();
 
     Bit32 AddLog(LogDataType type, QString logStr); // 添加日志
     QString GetLogPath();
@@ -43,9 +43,9 @@ public:
 private:
     QSqlDatabase m_sqlDB;
 
-    explicit LogDt();
+    explicit Logger();
     void WriteLog(Bit32 type, QString logStr);
     bool ClearFile(const QString &filePath);
 };
 
-#endif // LOGDT_H
+#endif // LOGGER_H

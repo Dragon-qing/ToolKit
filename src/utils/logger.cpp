@@ -1,6 +1,6 @@
 ﻿/*!
- * @brief 日志模块
- * @file logdt.cpp
+ * @brief 日志工具类
+ * @file logger.cpp
  * @author Dragon_qing
  * @date 2025/04/16
  */
@@ -14,7 +14,7 @@
 #include "common.h"
 #include "sysapi.h"
 
-#include "logdt.h"
+#include "logger.h"
 
 #define LOG_FILE_BASE_NAME "syslog"
 #define LOG_FILE_SUFFIX ".db3"
@@ -22,18 +22,18 @@
 
 using namespace EasyQtSql;
 
-LogDt &LogDt::Instance()
+Logger &Logger::Instance()
 {
-    static LogDt s_data;
+    static Logger s_data;
     return s_data;
 }
 
-LogDt::~LogDt()
+Logger::~Logger()
 {
     m_sqlDB.close();
 }
 
-LogDt::LogDt()
+Logger::Logger()
 {
     m_sqlDB = QSqlDatabase::addDatabase("QSQLITE");
     m_sqlDB.setDatabaseName(GetLogPath());
@@ -49,7 +49,7 @@ LogDt::LogDt()
     }
 }
 
-void LogDt::WriteLog(Bit32 type, QString logStr)
+void Logger::WriteLog(Bit32 type, QString logStr)
 {
     QString timeSt = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
     try
@@ -65,7 +65,7 @@ void LogDt::WriteLog(Bit32 type, QString logStr)
     }
 }
 
-Bit32 LogDt::AddLog(LogDataType type, QString logStr)
+Bit32 Logger::AddLog(LogDataType type, QString logStr)
 {
     if (type < DEBUG_LOG || type >= TYPE_NUM)
     {
@@ -79,7 +79,7 @@ Bit32 LogDt::AddLog(LogDataType type, QString logStr)
     return 0;
 }
 
-QString LogDt::GetLogPath()
+QString Logger::GetLogPath()
 {
     QDir exeDir(QCoreApplication::applicationDirPath());
     QDir logDir(exeDir.filePath(GetSysPath(LOG_PATH)));
@@ -88,7 +88,7 @@ QString LogDt::GetLogPath()
     return path;
 }
 
-Bit32 LogDt::GetLogNum()
+Bit32 Logger::GetLogNum()
 {
     Bit32 num = 0;
     try
@@ -106,10 +106,10 @@ Bit32 LogDt::GetLogNum()
 }
 
 /**
- * @brief LogDt::GetAllLog 获取所有日志
+ * @brief Logger::GetAllLog 获取所有日志
  * @return
  */
-QList<LogData> LogDt::GetAllLog()
+QList<LogData> Logger::GetAllLog()
 {
     QList<LogData> logList;
     logList.clear();
@@ -132,11 +132,11 @@ QList<LogData> LogDt::GetAllLog()
 }
 
 /**
- * @brief LogDt::DeleteLog 删除日志
+ * @brief Logger::DeleteLog 删除日志
  * @param from 起始位置
  * @param count 数量
  */
-void LogDt::DeleteLog(Bit32 from, Bit32 count)
+void Logger::DeleteLog(Bit32 from, Bit32 count)
 {
     if (from > GetLogNum() || from < 0)
     {
@@ -158,7 +158,7 @@ void LogDt::DeleteLog(Bit32 from, Bit32 count)
     }
 }
 
-void LogDt::DeleteAllLog()
+void Logger::DeleteAllLog()
 {
     QString sql = QString("delete FROM logtb;");
     try
@@ -174,11 +174,11 @@ void LogDt::DeleteAllLog()
 }
 
 /**
- * @brief LogDt::ClearFile 清空文件内容
+ * @brief Logger::ClearFile 清空文件内容
  * @param filePath 文件路径
  * @return 执行结果
  */
-bool LogDt::ClearFile(const QString &filePath)
+bool Logger::ClearFile(const QString &filePath)
 {
     QFile file(filePath);
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {

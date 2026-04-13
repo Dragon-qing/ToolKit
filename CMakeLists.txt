@@ -29,17 +29,19 @@ endif()
 set(PROJECT_SOURCES
     ./src/basewidget.cpp
     ./src/common.cpp
-    ./src/data/datacomrpt.cpp
-    ./src/data/datalog.cpp
-    ./src/data/sysapi.cpp
-    ./src/logdt.cpp
     ./src/main.cpp
     ./src/mainwindow.cpp
     ./src/msgdata.cpp
-    ./src/service/dataservice.cpp
+    # 数据层
+    ./src/data/datacomrpt.cpp
+    ./src/data/datalog.cpp
+    ./src/data/sysapi.cpp
     ./src/data/dataconfig.cpp
     ./src/data/datapainter.cpp
     ./src/data/dataxmleditor.cpp
+    # 服务层
+    ./src/service/dataservice.cpp
+    # 界面层
     ./src/widget/control/basetable.cpp
     ./src/widget/dlgabout.cpp
     ./src/widget/dlgbtfmakeinfo.cpp
@@ -56,6 +58,9 @@ set(PROJECT_SOURCES
     ./src/widget/wgtyproaimgcleaner.cpp
     ./src/widget/wgxmleditor.cpp
     ./src/widget/widgetmanger.cpp
+    # 工具类
+    ./src/utils/logger.cpp
+    # 第三方
     ./src/thirdparty/qcustomplot.cpp
 )
 
@@ -63,16 +68,18 @@ set(PROJECT_HEADERS
     ./src/basewidget.h
     ./src/common.h
     ./src/datadef.h
-    ./src/data/datacomrpt.h
     ./src/data/datalog.h
     ./src/data/sysapi.h
-    ./src/logdt.h
     ./src/mainwindow.h
     ./src/msgdata.h
-    ./src/service/dataservice.h
+    # 数据层
+    ./src/data/datacomrpt.h
     ./src/data/dataconfig.h
     ./src/data/datapainter.h
     ./src/data/dataxmleditor.h
+    # 服务层
+    ./src/service/dataservice.h
+    # 界面层
     ./src/widget/control/basetable.h
     ./src/widget/dlgabout.h
     ./src/widget/dlgbtfmakeinfo.h
@@ -89,8 +96,11 @@ set(PROJECT_HEADERS
     ./src/widget/wgtyproaimgcleaner.h
     ./src/widget/wgxmleditor.h
     ./src/widget/widgetmanger.h
+    # 工具类
+    ./src/utils/logger.h
+    # 第三方
     ./src/thirdparty/qcustomplot.h
-)
+    )
 
 set(PROJECT_UI
     ./src/basewidget.ui
@@ -130,6 +140,7 @@ target_include_directories(DQToolKits PRIVATE
     ./src/thirdparty
     ./src/thirdparty/easyqtsql
     ./src/widget/control
+    ./src/utils
     ./include
 )
 

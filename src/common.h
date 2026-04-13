@@ -7,7 +7,7 @@
 #include <QLayout>
 
 #include "datadef.h"
-#include "logdt.h"
+#include "logger.h"
 
 #define UTF8 QTextCodec::codecForName("UTF-8")
 #define TR(str) tr((UTF8->fromUnicode(str).data()))

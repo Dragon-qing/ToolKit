@@ -75,7 +75,7 @@ Bit32 GetXmlDoc(QString path, QDomDocument &doc)
     }
     if (!errorMsg.isEmpty())
     {
-        LogDt::Instance().AddLog(WARNING_LOG, errorMsg);
+        Logger::Instance().AddLog(WARNING_LOG, errorMsg);
     }
 
     file.close();
