@@ -16,13 +16,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6.0.2
 
-        # 缓存qt
-      - name: Cache Qt
-        id: cache-qt
-        uses: actions/cache@v5
-        with:
-            path: ${{ runner.workspace }}/Qt
-            key: qt-5.15.2-msvc2019
+    #     # 缓存qt
+    #   - name: Cache Qt
+    #     id: cache-qt
+    #     uses: actions/cache@v5
+    #     with:
+    #         path: ${{ runner.workspace }}/Qt
+    #         key: qt-5.15.2-msvc2019
 
         # 安装qt环境
       - name: Install Qt
@@ -32,6 +32,7 @@ jobs:
           host: windows
           target: desktop
           arch: win64_msvc2019_64
+          cache: true
 
         # 配置msvc
       - name: Setup MSVC
