@@ -35,21 +35,13 @@ jobs:
       - name: Install Ninja
         run: choco install ninja
 
-        # CMake 配置
+        # CMake 配置编译
       - name: Configure CMake
         shell: cmd
         run: |
           call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64 -vcvars_ver=14.29
           cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=%Qt5_DIR%
-
-      - name: Check MSVC version
-        shell: cmd
-        run: cl
-
-        # 编译
-      - name: Build
-        shell: cmd
-        run: cmake --build build
+          cmake --build build
 
         # 拉取动态库
       - name: Deploy Qt
