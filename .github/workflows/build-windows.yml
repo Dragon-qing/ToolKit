@@ -41,7 +41,11 @@ jobs:
           cmake -S . -B build -G Ninja
           -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_PREFIX_PATH=${{ env.Qt5_DIR }}
+          -DCMAKE_GENERATOR_TOOLSET=v142
 
+      - name: Check MSVC version
+        run: cl
+        
         # 编译
       - name: Build
         shell: cmd
