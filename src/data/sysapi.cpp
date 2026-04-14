@@ -7,6 +7,7 @@
 #include <QDir>
 
 #include "sysapi.h"
+#include "common.h"
 
 
 QString GetSysPath(_Path_Type type)
@@ -24,7 +25,7 @@ QString GetSysPath(_Path_Type type)
         path = "../tmp";
         break;
     case LOG_PATH:
-        path = "../log";
+        path = "../logs";
         break;
     case SCRIPT_PATH:
         path = "../script";
@@ -35,6 +36,6 @@ QString GetSysPath(_Path_Type type)
     default:
         break;
     }
-
+    path = QDir::cleanPath(QDir(QCoreApplication::applicationDirPath()).filePath(path));
     return QDir::toNativeSeparators(path);
 }

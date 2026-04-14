@@ -16,7 +16,7 @@
 
 #include "common.h"
 #include "dataconfig.h"
-#include "logdt.h"
+#include "tklogger.h"
 
 #include "wgbtfmake.h"
 #include "ui_wgbtfmake.h"
@@ -423,7 +423,7 @@ void BTFProcessThread::run()
 {
     if (m_sSaveName.isEmpty() || m_fileList.isEmpty())
     {
-        LogDt::Instance().AddLog(CRITICAL_LOG, TR("打包失败，文件列表为空或保存名字为空"));
+        TKLogger::Instance().AddLog(CRITICAL_LOG, TR("打包失败，文件列表为空或保存名字为空"));
         return;
     }
     QProcess runLogProcess;
@@ -451,12 +451,12 @@ void BTFProcessThread::run()
         runLogProcess.write(cmdStr.toLocal8Bit().data());
         runLogProcess.write("exit\n");
         runLogProcess.waitForFinished(-1);
-        LogDt::Instance().AddLog(INFO_LOG, TR("%1已完成BTF打包").arg(m_sSaveName));
+        TKLogger::Instance().AddLog(INFO_LOG, TR("%1已完成BTF打包").arg(m_sSaveName));
         emit MakeDone();
     }
     else
     {
-        LogDt::Instance().AddLog(CRITICAL_LOG, res);
+        TKLogger::Instance().AddLog(CRITICAL_LOG, res);
         emit MakeFaild();
     }
     runLogProcess.close();

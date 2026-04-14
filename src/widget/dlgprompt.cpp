@@ -6,6 +6,7 @@
  */
 #include <QPainter>
 #include <QPainterPath>
+#include <QStyleOption>
 
 #include "dlgprompt.h"
 #include "ui_dlgprompt.h"
@@ -24,6 +25,10 @@ void DlgPrompt::InitUi()
     ui->ok_Btn->setVisible(false);
     ui->cancel_Btn->setVisible(false);
     ui->label->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    ui->label->setFont(QFont(FONT_STYLE, 10)); // 设置内容字体
+    ui->title_label->setAlignment(Qt::AlignCenter); // 标题居中
+    ui->title_label->setFont(QFont(FONT_STYLE, 12, QFont::Bold)); // 设置标题字体和加粗
+    ui->title_label->setVisible(false); // 默认隐藏标题，调用SetTitle后显示
 }
 
 void DlgPrompt::HandleClicked(int id)
@@ -68,6 +73,12 @@ Bit32 DlgPrompt::ExecAndRet(const QString &context)
     ui->label->setText(context);
     this->exec();
     return m_nCurrentCode;
+}
+
+void DlgPrompt::SetTitle(const QString &title)
+{
+    ui->title_label->setText(title);
+    ui->title_label->setVisible(true);
 }
 
 void DlgPrompt::paintEvent(QPaintEvent *event)

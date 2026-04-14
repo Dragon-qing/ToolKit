@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    TKLogger::Instance().AddLog(INFO_LOG, TR("主程序关闭"));
     delete ui;
 }
 
@@ -38,7 +39,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
         BaseWidget *baseWidget = dynamic_cast<BaseWidget *>(m_pWidgetManger->GetCurrentWidget());
         if (baseWidget != NULL)
         {
-            baseWidget->MessageQueue(MsgData::REFRESH, "");
+            baseWidget->MessageFlows(MsgData::REFRESH, "");
         }
     }
     else if (event->timerId() == m_nTimer2)

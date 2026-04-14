@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QTimer>
+#include <QThread>
 
 #include "basewidget.h"
 #include "datadef.h"

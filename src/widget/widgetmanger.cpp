@@ -189,8 +189,8 @@ void WidgetManger::WidgetChangeSlot(int index)
     BaseWidget *wg = dynamic_cast<BaseWidget *>(m_widgetContainer.at(index));
     if (wg != NULL)
     {
-        wg->MessageQueue(MsgData::REDRAW, "");
-        wg->MessageQueue(MsgData::SETFOCUS, "");
+        wg->MessageFlows(MsgData::REDRAW, "");
+        wg->MessageFlows(MsgData::SETFOCUS, "");
     }
 }
 

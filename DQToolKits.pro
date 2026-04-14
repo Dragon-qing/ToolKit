@@ -29,25 +29,35 @@ INCLUDEPATH += \
     src/data src/service\
     src/thirdparty src/thirdparty/easyqtsql\
     src/widget/control\
+    src/utils\
 INCLUDEPATH += $$PWD/include
 LIBS += -luser32
-LIBS += -L$$PWD/lib
-LIBS += -lqhotkey
+CONFIG(debug, debug|release) {
+    LIBS += -L$$PWD/lib/debug -lqhotkey
+    LIBS += -L$$PWD/lib/debug -lspdlogd
+    LIBS += -L$$PWD/lib/debug -lfmtd
+} else {
+    LIBS += -L$$PWD/lib -lqhotkey
+    LIBS += -L$$PWD/lib -lspdlog
+    LIBS += -L$$PWD/lib -lfmt
+}
 
 SOURCES += \
     src/basewidget.cpp \
     src/common.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/msgdata.cpp \
+    # 数据层
     src/data/datacomrpt.cpp \
     src/data/dataconfig.cpp \
     src/data/datalog.cpp \
     src/data/datapainter.cpp \
     src/data/dataxmleditor.cpp \
     src/data/sysapi.cpp \
-    src/logdt.cpp \
-    src/main.cpp \
-    src/mainwindow.cpp \
-    src/msgdata.cpp \
+    # 服务层
     src/service/dataservice.cpp \
+    # 界面
     src/widget/control/basetable.cpp \
     src/widget/dlgabout.cpp \
     src/widget/dlgbtfmakeinfo.cpp \
@@ -64,23 +74,27 @@ SOURCES += \
     src/widget/wgtyproaimgcleaner.cpp \
     src/widget/wgxmleditor.cpp \
     src/widget/widgetmanger.cpp\
+    # 工具类
+    src/utils/tklogger.cpp \
     # QCP第三方绘图模块引入
     src/thirdparty/qcustomplot.cpp
 
 HEADERS += \
     src/basewidget.h \
     src/common.h \
+    src/datadef.h \
+    src/mainwindow.h \
+    src/msgdata.h \
+    # 数据层
     src/data/datacomrpt.h \
     src/data/dataconfig.h \
     src/data/datalog.h \
     src/data/datapainter.h \
     src/data/dataxmleditor.h \
-    src/datadef.h \
     src/data/sysapi.h \
-    src/logdt.h \
-    src/mainwindow.h \
-    src/msgdata.h \
+    # 服务层
     src/service/dataservice.h \
+    # 界面
     src/widget/control/basetable.h \
     src/widget/dlgabout.h \
     src/widget/dlgbtfmakeinfo.h \
@@ -97,6 +111,8 @@ HEADERS += \
     src/widget/wgtyproaimgcleaner.h \
     src/widget/wgxmleditor.h \
     src/widget/widgetmanger.h\
+    # 工具类
+    src/utils/tklogger.h \
     # QCP第三方绘图模块引入
     src/thirdparty/qcustomplot.h
 

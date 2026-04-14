@@ -75,7 +75,7 @@ Bit32 GetXmlDoc(QString path, QDomDocument &doc)
     }
     if (!errorMsg.isEmpty())
     {
-        LogDt::Instance().AddLog(WARNING_LOG, errorMsg);
+        TKLogger::Instance().AddLog(WARNING_LOG, errorMsg);
     }
 
     file.close();
@@ -192,24 +192,7 @@ bool LayoutContainsWidget(QLayout *layout, QWidget *widget)
     return false;
 }
 
-/**
- * @brief ErrOutput 记录错误日志
- * @note 以文本形式记录到log/error.txt中
- * @param content 内容
- */
-void ErrOutput(const QString content)
+QString GetExePath()
 {
-    QString path = QDir(GetSysPath(LOG_PATH)).filePath("error.txt");
-    QFile file(path);
-    if (!file.open(QIODevice::Append | QIODevice::Text))
-    {
-        return;
-    }
-    QTextStream out(&file);
-    out.setCodec(UTF_8);
-    QString timeStr = QDateTime::currentDateTime().toString("[yy-MM-dd hh:mm:ss]");
-    out << QString("%1 %2\n").arg(timeStr).arg(content);
-    out.flush();
-    file.flush();
-    file.close();
+    return QCoreApplication::applicationDirPath();
 }

@@ -673,7 +673,7 @@ void WgComRpt::on_OpenBtn_clicked()
     }
 
     DataComRpt::Instance().SetPath(filePath);
-    LogDt::Instance().AddLog(INFO_LOG, TR("打开%1采样文件").arg(filePath));
+    TKLogger::Instance().AddLog(INFO_LOG, TR("打开%1采样文件").arg(filePath));
     ReadFileThread *threadp = DataComRpt::Instance().GetThreadClass();
     connect(threadp, &ReadFileThread::ProcessSignal, ui->progressBar, &QProgressBar::setValue);
 }
@@ -898,7 +898,7 @@ void WgComRpt::DefaultRadioHandle(bool checked)
     }
 }
 
-void WgComRpt::MessageQueue(QVariant messageid, QVariant messageValue)
+void WgComRpt::MessageFlows(QVariant messageid, QVariant messageValue)
 {
     Q_UNUSED(messageValue);
     if (messageid == MsgData::SETFOCUS)

@@ -20,7 +20,11 @@ WgLog::WgLog(QWidget *parent)
     m_pModel = new QStandardItemModel(this);
     m_pModel->setHorizontalHeaderLabels(QStringList() << "时间" << "类型" << "内容"); // 设置表头
     ui->tableView->setModel(m_pModel);
-    m_pDlg = new DlgPrompt(DlgPrompt::OK_BUTTON | DlgPrompt::CANCEL_BUTTON, this);
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows); // 设置选择行为为选择整行
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection); // 设置选择模式为单选
+    m_pDelDlg = new DlgPrompt(DlgPrompt::OK_BUTTON | DlgPrompt::CANCEL_BUTTON, this);
+    m_pDetailDlg = new DlgPrompt(DlgPrompt::OK_BUTTON, this);
+    m_pDetailDlg->SetTitle(TR("详情"));
 
     DataLog::GetInstance().LoadLog(m_pModel);
     connect(ui->tableView, &LogTab::doubleClicked, this, &WgLog::DoubleClickHandle);
@@ -31,7 +35,7 @@ WgLog::~WgLog()
     delete ui;
 }
 
-void WgLog::MessageQueue(QVariant messageid, QVariant messageValue)
+void WgLog::MessageFlows(QVariant messageid, QVariant messageValue)
 {
     Q_UNUSED(messageValue);
     if (messageid == MsgData::REDRAW)
@@ -46,11 +50,11 @@ void WgLog::keyPressEvent(QKeyEvent *event)
 {
     if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_D)
     {
-        Bit32 ret = m_pDlg->ExecAndRet(TR("是否清空日志?"));
+        Bit32 ret = m_pDelDlg->ExecAndRet(TR("是否清空常规日志?"));
         if (ret == DlgPrompt::OK_CODE)
         {
-            LogDt::Instance().DeleteAllLog();
-            MessageQueue(MsgData::REDRAW, "");
+            TKLogger::Instance().DeleteAllLog(NORMAL_FILE);
+            MessageFlows(MsgData::REDRAW, "");
         }
     }
 }
@@ -67,7 +71,7 @@ QStringList WgLog::GetHelpText()
 void WgLog::DoubleClickHandle(const QModelIndex &index)
 {
     QString content = m_pModel->data(index, Qt::DisplayRole).toString();
-    m_pDlg->ExecAndRet(content);
+    m_pDetailDlg->ExecAndRet(content);
 }
 
 LogTab::LogTab(QWidget *parent)

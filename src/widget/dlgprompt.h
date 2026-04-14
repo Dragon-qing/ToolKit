@@ -30,6 +30,13 @@ public:
     explicit DlgPrompt(Bit32 buttons = (OK_BUTTON | CANCEL_BUTTON), QWidget *parent = nullptr);
     ~DlgPrompt();
     Bit32 ExecAndRet(const QString &context);
+
+    /**
+     * @brief: 设置标题
+     * @param {QString} &title: 
+     * @return {*}
+     */
+    void SetTitle(const QString &title);
 protected:
     void paintEvent(QPaintEvent *event) override;
 

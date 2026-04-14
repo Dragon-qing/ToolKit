@@ -1,6 +1,12 @@
 <h1 align=center> <img align=center width=48 src="img/toolbox.ico" alt="CMake Logo"/> DQToolKits </h1>
 <p align=center ><i>Self-use toolbox.</i></p>
 
+<p align="center">
+   <a href="https://github.com/Dragon-qing/ToolKit/actions"><img src="https://github.com/Dragon-qing/ToolKit/actions/workflows/build-windows.yml/badge.svg" alt="Github Actions"></a>
+   <a href="https://www.qt.io/"><img src="https://img.shields.io/badge/Made%20with-Qt-1f425f.svg" alt="made-with-Qt"></a>
+   <a href="https://github.com/Dragon-qing/ToolKit"><img src="https://img.shields.io/badge/Qt-5.15.2-green.svg" alt="Qt version"></a>
+   <a href="https://github.com/Dragon-qing/ToolKit/releases/"><img src="https://img.shields.io/github/release/Dragon-qing/ToolKit.svg" alt="Latest release"></a>
+</p>
 
 ## :book: Introduction
 
@@ -16,12 +22,12 @@
 
 ## :wrench: Build Environment
 
-- qt5.15.2
-- msvc2019_64
-- Cmake >= 3.16 or qmake
-- Ninja or jom
+> qt5.15.2
+> msvc2019_64
+> Cmake >= 3.16 or qmake
+> Ninja or jom
 
-## Structure
+## :triangular_ruler: Structure
 
 ```mermaid
 graph TD
@@ -47,7 +53,10 @@ graph TD
 
   style Data font-size:32px
 ```
-## :link: Reference
+## :link: Acknowledgements
 - [spdlog](https://github.com/gabime/spdlog) - 轻量级日志库  
 - [qhotkey](https://github.com/Skycoder42/QHotkey) - Qt桌面应用的全局快捷键
 - [EasyQtSql](https://github.com/kramolnic/EasyQtSql) - 轻量级QtSql头文件库
+- [fmt](https://github.com/fmtlib/fmt) - 现代化C++开源高性能格式化库
+
+[![fmt](https://img.shields.io/badge/fmt-library-blue)](https://github.com/fmtlib/fmt) [![spdlog](https://img.shields.io/badge/spdlog-lib-green)](https://github.com/gabime/spdlog) [![qhotkey](https://img.shields.io/badge/qhotkey-lib-green)](https://github.com/Skycoder42/QHotkey) [![EasyQtSql](https://img.shields.io/badge/EasyQtSql-header--only-darkgreen)](https://github.com/kramolnic/EasyQtSql)

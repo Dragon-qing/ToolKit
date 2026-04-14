@@ -19,15 +19,16 @@ class WgLog : public BaseWidget
 public:
     explicit WgLog(QWidget *parent = nullptr);
     ~WgLog();
-    void MessageQueue(QVariant messageid, QVariant messageValue);
+    void MessageFlows(QVariant messageid, QVariant messageValue);
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 private:
     Ui::WgLog *ui;
-    QStandardItemModel *m_pModel;
-    DlgPrompt *m_pDlg;
+    QStandardItemModel *m_pModel; // 日志数据模型
+    DlgPrompt *m_pDelDlg; // 删除交互对话框
+    DlgPrompt *m_pDetailDlg; // 详情对话框
 
     QStringList GetHelpText() override;
 private slots:

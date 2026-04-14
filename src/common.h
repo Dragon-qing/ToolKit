@@ -5,9 +5,10 @@
 #include <QDomDocument>
 #include <QStatusBar>
 #include <QLayout>
+#include <QCoreApplication>
 
 #include "datadef.h"
-#include "logdt.h"
+#include "tklogger.h"
 
 #define UTF8 QTextCodec::codecForName("UTF-8")
 #define TR(str) tr((UTF8->fromUnicode(str).data()))
@@ -31,8 +32,6 @@ void ComDebug(const fBit32 &content, const QString &title = "");
 void ComDebug(const fBit64 &content, const QString &title = "");
 void ComDebug(const QStringList content, const QString &title = "");
 
-void ErrOutput(const QString content); //记录错误日志
-
 Bit32 GetXmlDoc(QString path, QDomDocument &doc);
 Bit32 SaveXmlDoc(QString path, const QDomDocument &doc);
 
@@ -44,4 +43,11 @@ void PromptOut(const QString &content, Bit32 outtime = 0);
 QPair<fBit64, fBit64> GetRange(const QVector<fBit64> &in);
 
 bool LayoutContainsWidget(QLayout *layout, QWidget* widget);
+
+
+/**
+ * @brief: 获取可执行文件路径
+ * @return {QString} 路径字符串
+ */
+QString GetExePath();
 #endif // COMMON_H

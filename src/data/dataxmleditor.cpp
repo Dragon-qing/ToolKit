@@ -32,7 +32,7 @@ void DataXmlEditor::SetXmlFile(QString path, QStandardItemModel *model)
     QFileInfo xmlInfo(path);
     if (!xmlInfo.exists())
     {
-        LogDt::Instance().AddLog(WARNING_LOG, QObject::TR("xmlEditor: %1文件不存在！").arg(path));
+        TKLogger::Instance().AddLog(WARNING_LOG, QObject::TR("xmlEditor: %1文件不存在！").arg(path));
     }
     Bit32 ret = GetXmlDoc(path, m_docXml);
     if (ret < 0)

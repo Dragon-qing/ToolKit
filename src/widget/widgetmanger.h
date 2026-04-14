@@ -2,6 +2,7 @@
 #define WIDGETMANGER_H
 
 #include <QWidget>
+#include <QMenu>
 
 #include "basewidget.h"
 

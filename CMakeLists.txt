@@ -11,13 +11,16 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 enable_language(RC)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Keep generated files and runtime output close to the original .pro layout.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 set(LIBS_DIR "${CMAKE_SOURCE_DIR}/lib")
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Sql Xml Widgets PrintSupport)
+# find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Sql Xml Widgets PrintSupport)
+set(QT_VERSION_MAJOR 5)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Sql Xml Widgets PrintSupport)
 
 qt5_add_resources(QT_RESOURCES ${CMAKE_SOURCE_DIR}/res.qrc)
@@ -29,17 +32,19 @@ endif()
 set(PROJECT_SOURCES
     ./src/basewidget.cpp
     ./src/common.cpp
-    ./src/data/datacomrpt.cpp
-    ./src/data/datalog.cpp
-    ./src/data/sysapi.cpp
-    ./src/logdt.cpp
     ./src/main.cpp
     ./src/mainwindow.cpp
     ./src/msgdata.cpp
-    ./src/service/dataservice.cpp
+    # 数据层
+    ./src/data/datacomrpt.cpp
+    ./src/data/datalog.cpp
+    ./src/data/sysapi.cpp
     ./src/data/dataconfig.cpp
     ./src/data/datapainter.cpp
     ./src/data/dataxmleditor.cpp
+    # 服务层
+    ./src/service/dataservice.cpp
+    # 界面层
     ./src/widget/control/basetable.cpp
     ./src/widget/dlgabout.cpp
     ./src/widget/dlgbtfmakeinfo.cpp
@@ -56,6 +61,9 @@ set(PROJECT_SOURCES
     ./src/widget/wgtyproaimgcleaner.cpp
     ./src/widget/wgxmleditor.cpp
     ./src/widget/widgetmanger.cpp
+    # 工具类
+    ./src/utils/tklogger.cpp
+    # 第三方
     ./src/thirdparty/qcustomplot.cpp
 )
 
@@ -63,16 +71,18 @@ set(PROJECT_HEADERS
     ./src/basewidget.h
     ./src/common.h
     ./src/datadef.h
-    ./src/data/datacomrpt.h
     ./src/data/datalog.h
     ./src/data/sysapi.h
-    ./src/logdt.h
     ./src/mainwindow.h
     ./src/msgdata.h
-    ./src/service/dataservice.h
+    # 数据层
+    ./src/data/datacomrpt.h
     ./src/data/dataconfig.h
     ./src/data/datapainter.h
     ./src/data/dataxmleditor.h
+    # 服务层
+    ./src/service/dataservice.h
+    # 界面层
     ./src/widget/control/basetable.h
     ./src/widget/dlgabout.h
     ./src/widget/dlgbtfmakeinfo.h
@@ -89,8 +99,11 @@ set(PROJECT_HEADERS
     ./src/widget/wgtyproaimgcleaner.h
     ./src/widget/wgxmleditor.h
     ./src/widget/widgetmanger.h
+    # 工具类
+    ./src/utils/tklogger.h
+    # 第三方
     ./src/thirdparty/qcustomplot.h
-)
+    )
 
 set(PROJECT_UI
     ./src/basewidget.ui
@@ -114,12 +127,18 @@ set(PROJECT_UI
     ./src/widget/widgetmanger.ui
 )
 
-add_executable(DQToolKits WIN32
+
+add_executable(DQToolKits
     ${PROJECT_SOURCES}
     ${PROJECT_HEADERS}
     ${PROJECT_UI}
     ${QT_RESOURCES}
     ${APP_ICON_RESOURCE}
+)
+
+# Debug 不加 WIN32，Release 加 WIN32(无控制台的 GUI 程序)
+set_target_properties(DQToolKits PROPERTIES
+    WIN32_EXECUTABLE $<$<NOT:$<CONFIG:Debug>>:ON>
 )
 
 target_include_directories(DQToolKits PRIVATE
@@ -130,6 +149,7 @@ target_include_directories(DQToolKits PRIVATE
     ./src/thirdparty
     ./src/thirdparty/easyqtsql
     ./src/widget/control
+    ./src/utils
     ./include
 )
 
@@ -146,6 +166,18 @@ set_target_properties(qhotkey PROPERTIES
     IMPORTED_LOCATION_DEBUG   "${LIBS_DIR}/debug/qhotkey.lib"
 )
 
+add_library(spdlog STATIC IMPORTED)
+set_target_properties(spdlog PROPERTIES
+    IMPORTED_LOCATION_RELEASE "${LIBS_DIR}/spdlog.lib"
+    IMPORTED_LOCATION_DEBUG   "${LIBS_DIR}/debug/spdlogd.lib"
+)
+
+add_library(fmt STATIC IMPORTED)
+set_target_properties(fmt PROPERTIES
+    IMPORTED_LOCATION_RELEASE "${LIBS_DIR}/fmt.lib"
+    IMPORTED_LOCATION_DEBUG   "${LIBS_DIR}/debug/fmtd.lib"
+)
+
 target_link_libraries(DQToolKits PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
@@ -156,6 +188,8 @@ target_link_libraries(DQToolKits PRIVATE
     user32
     qhotkey
     EasyQtSql
+    spdlog
+    fmt
 )
 
 if (MSVC)
