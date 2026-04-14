@@ -10,20 +10,18 @@
 #include <QDir>
 #include <QTextStream>
 #include <QCoreApplication>
+#include <QRegularExpression>
 
 #include "common.h"
 #include "sysapi.h"
 
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/rotating_file_sink.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
 
 #include "tklogger.h"
 
-// #define LOG_FILE_BASE_NAME "syslog"
 #define LOG_FILE_SUFFIX ".txt"
-// #define LOG_MAX_NUM (3000) // 日志文件最大条数
-
-using namespace EasyQtSql;
 
 TKLogger &TKLogger::Instance()
 {
@@ -46,6 +44,10 @@ QString TKLogger::GetLogFileTypeStr(LogFileType type)
         break;
     case ERROR_FILE:
         s = "error_logger";
+        break;
+    case MULTI_FILE:
+        s = "multi_logger";
+        break;
     default:
         break;
     }
@@ -55,15 +57,52 @@ QString TKLogger::GetLogFileTypeStr(LogFileType type)
 
 void TKLogger::InitLogger()
 {
-    auto logger = spdlog::rotating_logger_mt(
-                GetLogFileTypeStr(LogFileType::NORMAL_FILE).toStdString(),
+    auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
                 GetLogPath(NORMAL_FILE).toStdString(),
-                1024 * 1024 * 5,   // 5MB
+                1024 * 1024 * 10,   // 10MB
                 5                  // 最多5个文件
-                );
+    );
+    auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 
-    spdlog::set_default_logger(logger); // 设置为默认日志
-    spdlog::set_level(spdlog::level::info); // 设置日志过滤级别
+    console_sink->set_pattern("[%H:%M:%S] [%^%l%$] %v");
+    console_sink->set_level(spdlog::level::info);
+    file_sink->set_pattern("[%Y-%m-%d %H:%M:%S] [%l] %v");
+    file_sink->set_level(spdlog::level::debug);
+
+    // 创建 logger
+    auto logger = std::make_shared<spdlog::logger>(
+        GetLogFileTypeStr(MULTI_FILE).toStdString(), 
+        spdlog::sinks_init_list{console_sink, file_sink}
+    );
+    // 注册
+    spdlog::register_logger(logger);
+    // 设置为默认日志
+    spdlog::set_default_logger(logger); 
+    // 设置日志过滤级别
+    spdlog::set_level(spdlog::level::info); 
+    // 每3秒自动刷新日志
+    spdlog::flush_every(std::chrono::seconds(3)); 
+}
+
+QString TKLogger::Type2LogFileName(LogFileType type)
+{
+    if (type < 0 || type >= LOG_FILE_TYPE_NUM)
+    {
+        return QString();
+    }
+
+    switch (type)
+    {
+    case NORMAL_FILE:
+        return QString("log");
+        break;
+    case ERROR_FILE:
+        return QString("error");
+        break;
+    default:
+        break;
+    }
+    return QString();
 }
 
 TKLogger::TKLogger()
@@ -71,7 +110,7 @@ TKLogger::TKLogger()
     InitLogger(); // 初始化日志
 }
 
-Bit32 TKLogger::AddLog(LogDataType type, QString logStr, bool isFlush)
+Bit32 TKLogger::AddLog(LogDataType type, QString logStr, bool immediate)
 {
     if (type < DEBUG_LOG || type >= LOG_DATA_TYPE_NUM)
     {
@@ -99,39 +138,33 @@ Bit32 TKLogger::AddLog(LogDataType type, QString logStr, bool isFlush)
         break;
     }
 
-    if (isFlush)
+    if (immediate)
     {
         // 立刻落盘
-        spdlog::get(GetLogFileTypeStr(NORMAL_FILE).toStdString())->flush();
+        spdlog::get(GetLogFileTypeStr(MULTI_FILE).toStdString())->flush();
     }
     return 0;
 }
 
 QString TKLogger::GetLogPath(LogFileType type)
 {
-    QDir exeDir(GetExePath());
-    QDir logDir(exeDir.filePath(GetSysPath(LOG_PATH)));
-    QString path = "";
-    switch (type)
+    if (type < 0 || type >= LOG_FILE_TYPE_NUM)
     {
-    case NORMAL_FILE:
-        path = QDir::cleanPath(logDir.filePath(QString("%1%2").arg("log").arg(LOG_FILE_SUFFIX)));
-        break;
-    case ERROR_FILE:
-        path = QDir::cleanPath(logDir.filePath(QString("%1%2").arg("error").arg(LOG_FILE_SUFFIX)));
-        break;
-    default:
-        break;
+        return QString();
     }
+
+    QDir logDir(GetSysPath(LOG_PATH));
+    QString path = "";
+    path = QDir::cleanPath(logDir.filePath(QString("%1%2").arg(Type2LogFileName(type)).arg(LOG_FILE_SUFFIX)));
 
     return path;
 }
 
-QList<LogData> TKLogger::GetAllLog()
+QStringList TKLogger::GetAllLog(LogFileType type)
 {
     QStringList logList;
     QDir dir(GetSysPath(LOG_PATH));
-    QString fileName = QFileInfo(GetLogPath(NORMAL_FILE)).fileName();
+    QString fileName = QFileInfo(GetLogPath(type)).fileName();
     QString prefix = fileName.split('.').front();
     QString suffix = fileName.split('.').back();
 
@@ -147,17 +180,23 @@ QList<LogData> TKLogger::GetAllLog()
         }
     }
 
-    return {}; // todo
+    return logList;
 }
 
-void TKLogger::DeleteAllLog()
+void TKLogger::DeleteAllLog(LogFileType type)
 {
-    spdlog::drop_all(); // 释放所有注册的logger，避免无法删除
+    if (type < 0 || type >= LOG_FILE_TYPE_NUM)
+    {
+        AddLog(ERROR_LOG, QString("无效的日志文件类型: %1").arg(type));
+        return;
+    }
+    spdlog::shutdown(); // 释放所有的logger,并flush,避免无法删除
     QDir dir(GetSysPath(LOG_PATH));
 
     QStringList filters;
-    filters << QString("*.%1").arg(LOG_FILE_SUFFIX);
-    QRegularExpression re("^log(\\.\\d+)?\\.txt$");
+    filters << QString("*%1").arg(LOG_FILE_SUFFIX);
+    QString patten = QString("^%1(\\.\\d+)?\\%2$").arg(Type2LogFileName(type)).arg(LOG_FILE_SUFFIX);
+    QRegularExpression re(patten);
 
     for (const QString& file : dir.entryList(filters, QDir::Files)) {
         if (re.match(file).hasMatch())
@@ -167,23 +206,6 @@ void TKLogger::DeleteAllLog()
     }
 
     InitLogger(); // 重新初始化注册
-}
-
-/**
- * @brief TKLogger::ClearFile 清空文件内容
- * @param filePath 文件路径
- * @return 执行结果
- */
-bool TKLogger::ClearFile(const QString &filePath)
-{
-    QFile file(filePath);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        file.flush();
-        file.close();  // 文件已经被清空，立即关闭
-        return true;
-    } else {
-        return false;
-    }
 }
 
 void TKLogger::ErrOutput(const QString &content)
@@ -201,4 +223,57 @@ void TKLogger::ErrOutput(const QString &content)
     out.flush();
     file.flush();
     file.close();
+}
+
+LogDataType TKLogger::Str2LogDataType(const QString &typeStr)
+{
+    if (typeStr == "debug")
+    {
+        return DEBUG_LOG;
+    }
+    else if (typeStr == "info")
+    {
+        return INFO_LOG;
+    }
+    else if (typeStr == "warning")
+    {
+        return WARNING_LOG;
+    }
+    else if (typeStr == "error")
+    {
+        return ERROR_LOG;
+    }
+    else if (typeStr == "critical")
+    {
+        return CRITICAL_LOG;
+    }
+
+    return INVALID_LOG;
+}
+
+QString TKLogger::LogDataType2Str(LogDataType type)
+{
+    QString typeStr = "";
+    switch (type)
+    {
+    case DEBUG_LOG:
+        typeStr = "debug";
+        break;
+    case INFO_LOG:
+        typeStr = "info";
+        break;
+    case WARNING_LOG:
+        typeStr = "warning";
+        break;
+    case CRITICAL_LOG:
+        typeStr = "critical";
+        break;
+    case ERROR_LOG:
+        typeStr = "error";
+        break;
+    default:
+        break;
+    }
+
+    return typeStr;
 }

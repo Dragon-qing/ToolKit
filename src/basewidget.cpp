@@ -1,9 +1,9 @@
 ﻿/*
  * @Author: dragon-qing
  * @Date: 2025-04-25 10:28:24
- * @LastEditors: dragon-qing
- * @LastEditTime: 2025-05-30 08:43:54
- * @FilePath: src\basewidget.cpp
+ * @LastEditors: Dragon-qing
+ * @LastEditTime: 2026-04-14
+ * @FilePath: \ToolKit\src\basewidget.cpp
  * @Description: 
  */
 #include "basewidget.h"

@@ -6,6 +6,7 @@
  */
 #include <QPainter>
 #include <QPainterPath>
+#include <QStyleOption>
 
 #include "dlgprompt.h"
 #include "ui_dlgprompt.h"

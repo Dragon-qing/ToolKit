@@ -11,13 +11,16 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 enable_language(RC)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Keep generated files and runtime output close to the original .pro layout.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 set(LIBS_DIR "${CMAKE_SOURCE_DIR}/lib")
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Sql Xml Widgets PrintSupport)
+# find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Gui Sql Xml Widgets PrintSupport)
+set(QT_VERSION_MAJOR 5)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Sql Xml Widgets PrintSupport)
 
 qt5_add_resources(QT_RESOURCES ${CMAKE_SOURCE_DIR}/res.qrc)
@@ -124,12 +127,18 @@ set(PROJECT_UI
     ./src/widget/widgetmanger.ui
 )
 
-add_executable(DQToolKits WIN32
+
+add_executable(DQToolKits
     ${PROJECT_SOURCES}
     ${PROJECT_HEADERS}
     ${PROJECT_UI}
     ${QT_RESOURCES}
     ${APP_ICON_RESOURCE}
+)
+
+# Debug 不加 WIN32，Release 加 WIN32(无控制台的 GUI 程序)
+set_target_properties(DQToolKits PROPERTIES
+    WIN32_EXECUTABLE $<$<NOT:$<CONFIG:Debug>>:ON>
 )
 
 target_include_directories(DQToolKits PRIVATE

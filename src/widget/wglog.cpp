@@ -46,10 +46,10 @@ void WgLog::keyPressEvent(QKeyEvent *event)
 {
     if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_D)
     {
-        Bit32 ret = m_pDlg->ExecAndRet(TR("是否清空日志?"));
+        Bit32 ret = m_pDlg->ExecAndRet(TR("是否清空常规日志?"));
         if (ret == DlgPrompt::OK_CODE)
         {
-            TKLogger::Instance().DeleteAllLog();
+            TKLogger::Instance().DeleteAllLog(NORMAL_FILE);
             MessageQueue(MsgData::REDRAW, "");
         }
     }

@@ -5,6 +5,7 @@
 #include <QDomDocument>
 #include <QStatusBar>
 #include <QLayout>
+#include <QCoreApplication>
 
 #include "datadef.h"
 #include "tklogger.h"
