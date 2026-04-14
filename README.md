@@ -21,7 +21,7 @@
 - Cmake >= 3.16 or qmake
 - Ninja or jom
 
-## Structure
+## :triangular_ruler: Structure
 
 ```mermaid
 graph TD
