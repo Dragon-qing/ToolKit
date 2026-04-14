@@ -52,7 +52,7 @@ jobs:
           copy bin\style.qss deploy\bin
           Copy-Item -Path bin\tools -Destination deploy\bin\tools -Recurse -Force
 
-          windeployqt deploy\DQToolKits.exe
+          windeployqt deploy\bin\DQToolKits.exe
 
         # 发布包
       - name: Upload artifact
