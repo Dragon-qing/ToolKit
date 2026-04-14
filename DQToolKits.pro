@@ -25,10 +25,11 @@ msvc {
 }
 RC_ICONS = img/toolbox.ico
 INCLUDEPATH += \
-    src src/widget\
-    src/data src/service\
+    src src/core\
+    src/widget\
+    src/model src/service\
     src/thirdparty src/thirdparty/easyqtsql\
-    src/widget/control\
+    src/widget/components\
     src/utils\
 INCLUDEPATH += $$PWD/include
 LIBS += -luser32
@@ -43,22 +44,25 @@ CONFIG(debug, debug|release) {
 }
 
 SOURCES += \
-    src/basewidget.cpp \
-    src/common.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/msgdata.cpp \
+    # core
+    src/core/basewidget.cpp \
+    src/core/sysapi.cpp \
+    src/core/widgetmanger.cpp\
     # 数据层
-    src/data/datacomrpt.cpp \
-    src/data/dataconfig.cpp \
-    src/data/datalog.cpp \
-    src/data/datapainter.cpp \
-    src/data/dataxmleditor.cpp \
-    src/data/sysapi.cpp \
+    src/model/datacomrpt.cpp \
+    src/model/dataconfig.cpp \
+    src/model/datalog.cpp \
+    src/model/datapainter.cpp \
+    src/model/dataxmleditor.cpp \
+    src/model/msgdata.cpp \
     # 服务层
     src/service/dataservice.cpp \
+    # 组件
+    src/widget/components/basetable.cpp \
+    src/widget/components/unionplot.cpp \
     # 界面
-    src/widget/control/basetable.cpp \
     src/widget/dlgabout.cpp \
     src/widget/dlgbtfmakeinfo.cpp \
     src/widget/dlgbtfprocess.cpp \
@@ -66,36 +70,38 @@ SOURCES += \
     src/widget/dlghelp.cpp \
     src/widget/dlgprompt.cpp \
     src/widget/dlgunionplotsubline.cpp \
-    src/widget/unionplot.cpp \
     src/widget/wgbtfmake.cpp \
     src/widget/wgcomrpt.cpp \
     src/widget/wglog.cpp \
     src/widget/wgrenametool.cpp \
     src/widget/wgtyproaimgcleaner.cpp \
     src/widget/wgxmleditor.cpp \
-    src/widget/widgetmanger.cpp\
     # 工具类
     src/utils/tklogger.cpp \
+    src/utils/common.cpp \
     # QCP第三方绘图模块引入
     src/thirdparty/qcustomplot.cpp
 
 HEADERS += \
-    src/basewidget.h \
-    src/common.h \
-    src/datadef.h \
     src/mainwindow.h \
-    src/msgdata.h \
+    # core
+    src/core/basewidget.h \
+    src/core/datadef.h \
+    src/core/sysapi.h \
+    src/core/widgetmanger.h\
     # 数据层
-    src/data/datacomrpt.h \
-    src/data/dataconfig.h \
-    src/data/datalog.h \
-    src/data/datapainter.h \
-    src/data/dataxmleditor.h \
-    src/data/sysapi.h \
+    src/model/datacomrpt.h \
+    src/model/dataconfig.h \
+    src/model/datalog.h \
+    src/model/datapainter.h \
+    src/model/dataxmleditor.h \
+    src/model/msgdata.h \
     # 服务层
     src/service/dataservice.h \
+    # 组件
+    src/widget/components/basetable.h \
+    src/widget/components/unionplot.h \
     # 界面
-    src/widget/control/basetable.h \
     src/widget/dlgabout.h \
     src/widget/dlgbtfmakeinfo.h \
     src/widget/dlgbtfprocess.h \
@@ -103,24 +109,29 @@ HEADERS += \
     src/widget/dlghelp.h \
     src/widget/dlgprompt.h \
     src/widget/dlgunionplotsubline.h \
-    src/widget/unionplot.h \
     src/widget/wgbtfmake.h \
     src/widget/wgcomrpt.h \
     src/widget/wglog.h \
     src/widget/wgrenametool.h \
     src/widget/wgtyproaimgcleaner.h \
     src/widget/wgxmleditor.h \
-    src/widget/widgetmanger.h\
     # 工具类
     src/utils/tklogger.h \
+    src/utils/common.h \
     # QCP第三方绘图模块引入
-    src/thirdparty/qcustomplot.h
+    src/thirdparty/qcustomplot.h \
 
 FORMS += \
-    src/basewidget.ui \
-    src/data/datapainter.ui \
     src/mainwindow.ui \
-    src/widget/control/basetable.ui \
+    # core
+    src/core/basewidget.ui \
+    src/core/widgetmanger.ui\
+    # 数据层
+    src/model/datapainter.ui \
+    # 组件
+    src/widget/components/basetable.ui \
+    src/widget/components/unionplot.ui \
+    # 界面层
     src/widget/dlgabout.ui \
     src/widget/dlgbtfmakeinfo.ui \
     src/widget/dlgbtfprocess.ui \
@@ -128,14 +139,12 @@ FORMS += \
     src/widget/dlghelp.ui \
     src/widget/dlgprompt.ui \
     src/widget/dlgunionplotsubline.ui \
-    src/widget/unionplot.ui \
     src/widget/wgbtfmake.ui \
     src/widget/wgcomrpt.ui \
     src/widget/wglog.ui \
     src/widget/wgrenametool.ui \
     src/widget/wgtyproaimgcleaner.ui \
     src/widget/wgxmleditor.ui \
-    src/widget/widgetmanger.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

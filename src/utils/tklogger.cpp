@@ -64,9 +64,9 @@ void TKLogger::InitLogger()
     );
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 
-    console_sink->set_pattern("[%H:%M:%S] [%^%l%$] %v");
+    console_sink->set_pattern("[%H:%M:%S.%e] [%^%l%$] %v");
     console_sink->set_level(spdlog::level::info);
-    file_sink->set_pattern("[%Y-%m-%d %H:%M:%S] [%l] %v");
+    file_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
     file_sink->set_level(spdlog::level::debug);
 
     // 创建 logger

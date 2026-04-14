@@ -415,19 +415,24 @@ void UnionPlot::MouseMoveHandleSlot(QMouseEvent *event, Bit32 block)
 
 void UnionPlot::keyPressEvent(QKeyEvent *event)
 {
+    bool handled = false;
     if (event->modifiers() & Qt::ControlModifier)
     {
         if (event->key() == Qt::Key_Z)
         {
             RePlot();
+            handled = true;
         }
         else if (event->key() == Qt::Key_Plus)
         {
             EnlargeGraph(m_nCurBlock, 0);
+            handled = true;
         }
         else if (event->key() == Qt::Key_Minus)
         {
             ReduceGraph(m_nCurBlock, 0);
+            handled = true;
+
         }
         else if (event->key() == Qt::Key_F)
         {
@@ -439,22 +444,30 @@ void UnionPlot::keyPressEvent(QKeyEvent *event)
 
                 }
             }
+            handled = true;
         }
         else if (event->key() == Qt::Key_I)
         {
             QList<QPair<fBit64, fBit64>> rangeList = m_pDlg->ExecAndRet();
             RedrawVline(rangeList);
+            handled = true;
         }
     }
     else if (event->key() == Qt::Key_Plus)
     {
         EnlargeGraph(m_nCurBlock, 1);
+        handled = true;
     }
     else if (event->key() == Qt::Key_Minus)
     {
         ReduceGraph(m_nCurBlock, 1);
+        handled = true;
     }
 
+    if (handled)
+        event->accept(); 
+    else
+        event->ignore();   //未处理 → 交给父类
 }
 
 void UnionPlot::EnlargeGraph(Bit32 block, Bit16 axis, fBit64 scaleFactor)
