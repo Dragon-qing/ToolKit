@@ -35,9 +35,11 @@ LIBS += -luser32
 CONFIG(debug, debug|release) {
     LIBS += -L$$PWD/lib/debug -lqhotkey
     LIBS += -L$$PWD/lib/debug -lspdlogd
+    LIBS += -L$$PWD/lib/debug -lfmtd
 } else {
     LIBS += -L$$PWD/lib -lqhotkey
     LIBS += -L$$PWD/lib -lspdlog
+    LIBS += -L$$PWD/lib -lfmt
 }
 
 SOURCES += \
