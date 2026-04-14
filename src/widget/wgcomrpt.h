@@ -18,7 +18,7 @@ public:
     explicit WgComRpt(QWidget *parent = nullptr);
     ~WgComRpt();
 
-    void MessageQueue(QVariant messageid, QVariant messageValue) override;
+    void MessageFlows(QVariant messageid, QVariant messageValue) override;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;

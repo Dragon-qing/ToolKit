@@ -898,7 +898,7 @@ void WgComRpt::DefaultRadioHandle(bool checked)
     }
 }
 
-void WgComRpt::MessageQueue(QVariant messageid, QVariant messageValue)
+void WgComRpt::MessageFlows(QVariant messageid, QVariant messageValue)
 {
     Q_UNUSED(messageValue);
     if (messageid == MsgData::SETFOCUS)

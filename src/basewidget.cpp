@@ -27,7 +27,7 @@ BaseWidget::~BaseWidget()
  * @param {QVariant} messageValue
  * @return
  */
-void BaseWidget::MessageQueue(QVariant messageid, QVariant messageValue)
+void BaseWidget::MessageFlows(QVariant messageid, QVariant messageValue)
 {
     Q_UNUSED(messageid);
     Q_UNUSED(messageValue);

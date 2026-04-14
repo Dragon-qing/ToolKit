@@ -67,4 +67,6 @@ void DataLog::LoadLog(QStandardItemModel *model)
             });
         }
     }
+    model->sort(0, Qt::DescendingOrder); // 按时间降序排序
+    file.close();
 }

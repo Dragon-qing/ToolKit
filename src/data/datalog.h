@@ -36,6 +36,7 @@ public:
      */
     void LoadLog(QStandardItemModel *model);
 private:
+    // TODO: 增加日志切换功能
     QStringList m_slFiles; // 日志文件列表
     QString m_sCurFile; // 当前日志文件
 };
