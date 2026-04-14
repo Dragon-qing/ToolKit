@@ -1,6 +1,12 @@
 <h1 align=center> <img align=center width=48 src="img/toolbox.ico" alt="CMake Logo"/> DQToolKits </h1>
 <p align=center ><i>Self-use toolbox.</i></p>
 
+<p align="center">
+   <a href="https://github.com/Dragon-qing/ToolKit/actions"><img src="https://github.com/Dragon-qing/ToolKit/actions/workflows/build-windows.yml/badge.svg" alt="Github Actions"></a>
+   <a href="https://www.qt.io/"><img src="https://img.shields.io/badge/Made%20with-Qt-1f425f.svg" alt="made-with-Qt"></a>
+   <a href="https://github.com/Dragon-qing/ToolKit"><img src="https://img.shields.io/badge/Qt-5.15.2-green.svg" alt="Qt version"></a>
+   <a href="https://github.com/Dragon-qing/ToolKit/releases/"><img src="https://img.shields.io/github/release/Dragon-qing/ToolKit.svg" alt="Latest release"></a>
+</p>
 
 ## :book: Introduction
 
@@ -16,10 +22,10 @@
 
 ## :wrench: Build Environment
 
-- qt5.15.2
-- msvc2019_64
-- Cmake >= 3.16 or qmake
-- Ninja or jom
+> qt5.15.2
+> msvc2019_64
+> Cmake >= 3.16 or qmake
+> Ninja or jom
 
 ## :triangular_ruler: Structure
 
