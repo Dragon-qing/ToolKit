@@ -172,6 +172,12 @@ set_target_properties(spdlog PROPERTIES
     IMPORTED_LOCATION_DEBUG   "${LIBS_DIR}/debug/spdlogd.lib"
 )
 
+add_library(fmt STATIC IMPORTED)
+set_target_properties(fmt PROPERTIES
+    IMPORTED_LOCATION_RELEASE "${LIBS_DIR}/fmt.lib"
+    IMPORTED_LOCATION_DEBUG   "${LIBS_DIR}/debug/fmtd.lib"
+)
+
 target_link_libraries(DQToolKits PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
@@ -183,6 +189,7 @@ target_link_libraries(DQToolKits PRIVATE
     qhotkey
     EasyQtSql
     spdlog
+    fmt
 )
 
 if (MSVC)
