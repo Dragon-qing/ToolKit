@@ -41,7 +41,7 @@ DataPainter::~DataPainter()
 void DataPainter::Init()
 {
     // 获取qss文件样式
-    QFile qssFile(STYLESHEET_FILE);
+    QFile qssFile(QString(":/style/%1").arg(STYLESHEET_FILE));
     if (qssFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         m_sStyleSheet = qssFile.readAll();
