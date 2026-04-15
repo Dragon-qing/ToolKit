@@ -55,9 +55,11 @@ graph TD
   style Data font-size:32px
 ```
 ## :link: Acknowledgements
-- [![spdlog](https://img.shields.io/badge/spdlog-lib-green)](https://github.com/gabime/spdlog) : 轻量级日志库  
-- [![qhotkey](https://img.shields.io/badge/qhotkey-lib-green)](https://github.com/Skycoder42/QHotkey) : Qt桌面应用的全局快捷键
-- [![EasyQtSql](https://img.shields.io/badge/EasyQtSql-header--only-darkgreen)](https://github.com/kramolnic/EasyQtSql) : 轻量级QtSql头文件库
-- [![fmt](https://img.shields.io/badge/fmt-lib-green)](https://github.com/fmtlib/fmt) : 现代化C++开源高性能格式化库
+- <a href = "https://github.com/gabime/spdlog"><img src="https://img.shields.io/badge/spdlog-lib-green" style="vertical-align: -4px; margin-right: 4px;"></a> : 轻量级日志库
 
+- <a href="https://github.com/Skycoder42/QHotkey"><img src="https://img.shields.io/badge/qhotkey-lib-green" style="vertical-align: -4px; margin-right: 4px;"></a> : Qt桌面应用的全局快捷键</p>
+
+- <a href="https://github.com/kramolnic/EasyQtSql"><img src="https://img.shields.io/badge/EasyQtSql-header--only-darkgreen" style="vertical-align: -4px; margin-right: 4px;"></a> : 轻量级QtSql头文件库
+
+- <a href = "https://github.com/fmtlib/fmt"><img src="https://img.shields.io/badge/fmt-lib-green" style="vertical-align: -4px; margin-right: 4px;"></a> :  现代化C++开源高性能格式化库
    
