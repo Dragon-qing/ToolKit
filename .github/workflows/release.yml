@@ -5,6 +5,9 @@ on:
     tags:
       - 'release-*'   # 只有打 tag 才触发
 
+permissions:
+  contents: write
+
 jobs:
   build-and-release:
     runs-on: [windows-latest]
