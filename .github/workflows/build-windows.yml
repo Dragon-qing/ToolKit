@@ -49,7 +49,6 @@ jobs:
         run: |
           mkdir deploy\bin
           copy bin\DQToolKits.exe deploy\bin
-          copy bin\style.qss deploy\bin
           Copy-Item -Path bin\tools -Destination deploy\bin\tools -Recurse -Force
 
           windeployqt deploy\bin\DQToolKits.exe

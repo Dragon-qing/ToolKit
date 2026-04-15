@@ -6,5 +6,6 @@
         <file>img/more.png</file>
         <file>img/close.png</file>
         <file>img/minimize.png</file>
+        <file>style/style.qss</file>
     </qresource>
 </RCC>
