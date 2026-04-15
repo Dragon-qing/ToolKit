@@ -12,32 +12,28 @@ class DlgAboutPrivate;
 
 class DlgAbout : public QDialog
 {
-    Q_DECLARE_PRIVATE(DlgAbout)
     Q_OBJECT
-
+    
 public:
     explicit DlgAbout(QWidget *parent = nullptr);
     ~DlgAbout();
-
+    
 private:
     Ui::DlgAbout *ui;
-    QScopedPointer<DlgAboutPrivate> d_ptr; // d指针，使用智能指针，自动释放；
-
+    QScopedPointer<DlgAboutPrivate> d_ptr; // d指针 QScopedPointer类似cpp的智能指针unique_ptr
+    Q_DECLARE_PRIVATE(DlgAbout)
+    
+    /**
+     * @brief: 初始化
+     * @return {*}
+     */
     void Init();
+
+    /**
+     * @brief: 刷新
+     * @return {*}
+     */
     void Refresh();
-};
-
-class DlgAboutPrivate
-{
-public:
-    DlgAboutPrivate();
-    void AddContent(const QString &title, const QString &detail);
-    QString GetContent();
-
-private:
-    QString m_sContent;
-
-    void InitContent();
 };
 
 #endif // DLGABOUT_H
