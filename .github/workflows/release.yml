@@ -8,6 +8,8 @@ on:
 jobs:
   build-and-release:
     runs-on: [windows-latest]
+    env:
+      VERSION: "0.0.0"
 
     steps:
         # 拉取代码
