@@ -5,8 +5,9 @@
 #include <QTimer>
 #include <QThread>
 
-#include "basewidget.h"
 #include "datadef.h"
+#include "basewidget.h"
+#include "exeexternaltool.h"
 
 #include "dlgbtfmakeinfo.h"
 #include "dlgbtfprocess.h"
@@ -44,13 +45,19 @@ private:
     QList<QLabel*> m_labelList;
     QStringList m_nameList;
     QStringList m_pathList;
-    QTimer *m_pTimer;
+    QTimer *m_pTimer; // 计时器，用于定时清除提示信息
     DlgBTFMakeInfo *m_pDlgInfo;
-    QLabel *m_pMoreLabel;
+    QLabel *m_pMoreLabel; // 用于显示“更多”提示的标签
     bool m_bHasMoreLabel;
     DlgBtfProcess *m_pDlgProcess;
     BTFProcessThread *m_pThread;
+    std::unique_ptr<ExternalToolBase> m_p7zTool; // 7z工具实例指针
 
+    /**
+     * @brief: 根据内容创建一个图像标签
+     * @param {QString} &path: 文件路径或文件夹路径，特殊值"more"表示创建一个“更多”标签
+     * @return {QLabel *}
+     */
     QLabel *CreateImgLabel(const QString &path);
     void ClearList();
     void RemoveItem(QLabel *label);
@@ -61,7 +68,6 @@ private:
 private slots:
     void TimeoutHandler();
 };
-
 class BTFProcessThread : public QThread
 {
     Q_OBJECT

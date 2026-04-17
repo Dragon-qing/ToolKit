@@ -14,7 +14,8 @@ DlgBTFMakeInfo::DlgBTFMakeInfo(QWidget *parent)
 
     m_pTab = new InfoTable(this);
     ui->verticalLayout->addWidget(m_pTab);
-    resize(720, 320);
+    setMinimumSize(DLG_WIDTH, DLG_HEIGHT);
+    adjustSize();
 }
 
 DlgBTFMakeInfo::~DlgBTFMakeInfo()

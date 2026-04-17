@@ -17,13 +17,15 @@
 #include "common.h"
 #include "dataconfig.h"
 #include "tklogger.h"
+#include "toolfactory.h"
 
 #include "wgbtfmake.h"
 #include "ui_wgbtfmake.h"
 
 WgBTFMake::WgBTFMake(QWidget *parent) :
     BaseWidget(parent),
-    ui(new Ui::WgBTFMake)
+    ui(new Ui::WgBTFMake),
+    m_p7zTool(ToolFactory::Instance().CreateTool("7zip"))
 {
     ui->setupUi(this);
     ui->label_tip->setText("");
@@ -262,15 +264,27 @@ void WgBTFMake::on_startBtn_clicked()
         }
     }
 
-    BTFProcessThread *thread = new BTFProcessThread(this);
-    m_pThread = thread;
-    thread->SetConfig(m_pathList, nameStr);
-    connect(thread, &BTFProcessThread::finished, thread, &BTFProcessThread::deleteLater);
-    connect(thread, &BTFProcessThread::MakeDone, m_pDlgProcess, &DlgBtfProcess::Done);
-    connect(thread, &BTFProcessThread::MakeFaild, m_pDlgProcess, &DlgBtfProcess::Faild);
-    thread->start();
-    m_pDlgProcess->Start();
-    m_pDlgProcess->show();
+    SevenZipExternalTool *sevenZipTool = dynamic_cast<SevenZipExternalTool *>(m_p7zTool.get());
+    if (sevenZipTool)
+    {
+        sevenZipTool->SetConfiguration(m_pathList, nameStr, "7z");
+        sevenZipTool->Run();
+    }
+    else
+    {
+        QMessageBox::warning(this, TR("注意"), TR("创建7zip工具失败"),QMessageBox::NoButton);
+        TKLogger::Instance().AddLog(ERROR_LOG, TR("创建7zip工具失败"));
+    }
+
+    // BTFProcessThread *thread = new BTFProcessThread(this);
+    // m_pThread = thread;
+    // thread->SetConfig(m_pathList, nameStr);
+    // connect(thread, &BTFProcessThread::finished, thread, &BTFProcessThread::deleteLater);
+    // connect(thread, &BTFProcessThread::MakeDone, m_pDlgProcess, &DlgBtfProcess::Done);
+    // connect(thread, &BTFProcessThread::MakeFaild, m_pDlgProcess, &DlgBtfProcess::Faild);
+    // thread->start();
+    // m_pDlgProcess->Start();
+    // m_pDlgProcess->show();
 }
 
 void WgBTFMake::ClearList()
@@ -429,8 +443,8 @@ void BTFProcessThread::run()
     QProcess runLogProcess;
     runLogProcess.start("cmd");
     runLogProcess.waitForStarted(-1);
-    QString _7zPath = QString("\"%1/7z.exe\"").arg(TOOLS_PATH);
-    QString _md5ProgPath = QString("\"%1/md5ForBTF.exe\"").arg(TOOLS_PATH);
+    QString _7zPath = QString("\"%1/7z.exe\"").arg("./tools");
+    QString _md5ProgPath = QString("\"%1/md5ForBTF.exe\"").arg("./tools");
     QStringList fileStrList;
     fileStrList.clear();
     foreach (QString file, m_fileList)

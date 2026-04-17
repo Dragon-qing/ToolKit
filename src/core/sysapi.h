@@ -13,6 +13,7 @@ typedef enum _Path_Type{
     LOG_PATH,       // log目录
     SCRIPT_PATH,    // script目录
     PLUGINS_PATH,   // plugins目录
+    TOOLS_PATH,     // tools目录
 
     PATH_NUM
 }PATH_TYPE;

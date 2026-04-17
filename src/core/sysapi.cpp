@@ -33,6 +33,8 @@ QString GetSysPath(_Path_Type type)
     case PLUGINS_PATH:
         path = "../plugins";
         break;
+    case TOOLS_PATH:
+        path = "../tools";
     default:
         break;
     }

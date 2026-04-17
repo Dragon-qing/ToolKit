@@ -24,6 +24,8 @@ DlgBtfProcess::DlgBtfProcess(QWidget *parent)
     setAttribute(Qt::WA_TranslucentBackground); // 允许透明背景
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, &DlgBtfProcess::TimeOutHandle);
+    setMinimumSize(DLG_WIDTH, DLG_HEIGHT);
+    adjustSize();
 }
 
 DlgBtfProcess::~DlgBtfProcess()

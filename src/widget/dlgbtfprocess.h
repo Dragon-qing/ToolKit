@@ -24,7 +24,7 @@ private:
     Ui::DlgBtfProcess *ui;
     QTimer *m_timer;
 private slots:
-    void TimeOutHandle();
+    void TimeOutHandle(); // 处理界面...动画
     void on_okBtn_clicked();
 };
 

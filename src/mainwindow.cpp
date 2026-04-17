@@ -30,6 +30,7 @@ MainWindow::~MainWindow()
 {
     TKLogger::Instance().AddLog(INFO_LOG, TR("主程序关闭"));
     delete ui;
+    DestoryStatusBar();
 }
 
 void MainWindow::timerEvent(QTimerEvent *event)
