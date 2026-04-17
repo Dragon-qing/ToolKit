@@ -13,6 +13,8 @@ DlgArchiveMakeInfo::DlgArchiveMakeInfo(QWidget *parent)
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
 
     m_pTab = new InfoTable(this);
+    m_pTab->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_pTab->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->verticalLayout->addWidget(m_pTab);
     setMinimumSize(DLG_WIDTH, DLG_HEIGHT);
     adjustSize();
