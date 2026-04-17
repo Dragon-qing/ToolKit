@@ -58,7 +58,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path release/bin
           Copy-Item bin/DQToolKits.exe release/bin
-          Copy-Item -Path bin/tools -Destination release/bin/tools -Recurse -Force
+          Copy-Item -Path tools -Destination release/tools -Recurse -Force
 
           windeployqt release/bin/DQToolKits.exe
 
