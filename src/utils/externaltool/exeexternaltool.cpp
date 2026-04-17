@@ -14,8 +14,6 @@
 #include "tklogger.h"
 #include "sysapi.h"
 
-#include "spdlog/fmt/fmt.h"
-
 #include "ExeExternalTool.h"
 
 ExeExternalTool::ExeExternalTool(QObject *parent)
@@ -203,7 +201,7 @@ void SevenZipExternalTool::OnReadyReadStandardOutputSlot()
         emit ProgressValueChangedSignal(100);
         emit MakeDoneSignal();
         QString savePath = GetArgument(2);
-        TKLogger::Instance().AddLog(INFO_LOG, TR("%1 打包完成").arg(savePath));
+        TKLogger::Instance().AddLog(INFO_LOG, TR("%1 - 打包完成").arg(savePath));
     }
 }
 
@@ -223,15 +221,35 @@ void SevenZipExternalTool::OnErrorOccurredSlot(QProcess::ProcessError error)
 MD5ForBTFTool::MD5ForBTFTool(QObject *parent)
     : ExeExternalTool(parent)
 {
+    QString toolDirPath = GetSysPath(TOOLS_PATH); // 获取工具目录路径
+    SetExecutablePath(QDir(toolDirPath).filePath("md5ForBTF.exe"));
 }
 
 void MD5ForBTFTool::OnReadyReadStandardOutputSlot()
 {
+    QByteArray data = GetProcess()->readAllStandardOutput();
+    QTextCodec* codec = QTextCodec::codecForName("GBK");
+    PromptOut(codec->toUnicode(data).append(TR("- 已生成")), 3000);
 }
 
 void MD5ForBTFTool::OnReadyReadStandardErrorSlot()
 {
+    TKLogger::Instance().AddLog(ERROR_LOG, "md5ForBTF.exe - 未正常执行");
+}
+
+void MD5ForBTFTool::SetConfiguration(const QString &filePath)
+{
+    QStringList args;
+    args << filePath;
+    SetArguments(args);
+}
+void MD5ForBTFTool::OnReadyRunSlot(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    Q_UNUSED(exitStatus)
+    if (exitCode != 0) return;
+
+    Run();
 }
 
 REGISTER_TOOL("7zip", SevenZipExternalTool)
-REGISTER_TOOL("md5forbtf", MD5ForBTFTool)
+REGISTER_TOOL("md5ForBTF", MD5ForBTFTool)

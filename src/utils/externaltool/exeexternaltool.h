@@ -93,7 +93,15 @@ class MD5ForBTFTool : public ExeExternalTool
 public:
     explicit MD5ForBTFTool(QObject *parent = nullptr);
     ~MD5ForBTFTool() = default;
-
+    /**
+     * @brief: 配置工具的参数
+     * @param {QString&} filePath: 目标文件路径
+     * @return {}
+     */
+    void SetConfiguration(const QString& filePath);
+public slots:
+    void OnReadyRunSlot(int exitCode, QProcess::ExitStatus exitStatus);
+                           
 private slots:
     void OnReadyReadStandardOutputSlot() override; // 读取标准输出的槽函数
     void OnReadyReadStandardErrorSlot() override; // 读取标准错误的槽函数

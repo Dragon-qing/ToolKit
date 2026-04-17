@@ -24,16 +24,15 @@
 WgArchiveMaker::WgArchiveMaker(QWidget *parent) :
     BaseWidget(parent),
     ui(new Ui::WgArchiveMaker),
-    m_p7zTool(ToolFactory::Instance().CreateTool("7zip"))
+    m_p7zTool(ToolFactory::Instance().CreateTool("7zip")),
+    m_pMD5Tool(ToolFactory::Instance().CreateTool("md5ForBTF"))
 {
     ui->setupUi(this);
-    ui->label_tip->setText("");
     ui->label_top->setText("");
 
     m_labelList.clear();
     m_nameList.clear();
     m_pathList.clear();
-    m_pTimer = new QTimer(this);
 
     ui->lineEdit->setText(DataConfig::Instance().GetConfig("archive_cfg", "archive_savepath"));
     ui->lineEdit_2->setText(DataConfig::Instance().GetConfig("archive_cfg", "archive_savefilename"));
@@ -49,7 +48,6 @@ WgArchiveMaker::WgArchiveMaker(QWidget *parent) :
     m_pDlgProcess = new DlgArchiveProcess(this);
     m_pDlgProcess->SetExternalTool(m_p7zTool.get());
 
-    connect(m_pTimer, SIGNAL(timeout()), this, SLOT(OnTimeoutSlot()));
     connect(ui->comboBox_format, &QComboBox::currentTextChanged, this, &WgArchiveMaker::OnFormatChangedSlot);
     setAcceptDrops(true);
 }
@@ -279,21 +277,43 @@ void WgArchiveMaker::on_startBtn_clicked()
     }
 
     SevenZipExternalTool *sevenZipTool = dynamic_cast<SevenZipExternalTool *>(m_p7zTool.get());
+    MD5ForBTFTool *md5Tool = dynamic_cast<MD5ForBTFTool *>(m_pMD5Tool.get());
     bool md5Required = false;
     if (sevenZipTool)
     {
         if (formatStr == "BTF")
         {
             formatStr = "tar";
-            md5Required = true; // TODO: 处理BTF加MD5的特殊需求
+            md5Required = true;
         }
         sevenZipTool->SetConfiguration(m_pathList, nameStr, formatStr);
-        sevenZipTool->Run();
         connect(sevenZipTool, &SevenZipExternalTool::ProgressValueChangedSignal, m_pDlgProcess, &DlgArchiveProcess::OnValueChanged);
         connect(sevenZipTool, &SevenZipExternalTool::MakeDoneSignal, m_pDlgProcess, &DlgArchiveProcess::Done);
         connect(sevenZipTool, &SevenZipExternalTool::MakeFaildSignal, m_pDlgProcess, &DlgArchiveProcess::Faild);
+        if (md5Required)
+        {
+            if (md5Tool)
+            {
+                md5Tool->SetConfiguration(nameStr);
+                connect(sevenZipTool->GetProcess(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                     md5Tool, &MD5ForBTFTool::OnReadyRunSlot, Qt::UniqueConnection);
+            }
+            else
+            {
+                QMessageBox::warning(this, TR("注意"), TR("创建md5工具失败"), QMessageBox::NoButton);
+                TKLogger::Instance().AddLog(ERROR_LOG, TR("创建md5工具失败"));
+            }
+        }
+        else
+        {
+            // 防止执行不必要的链接
+            disconnect(sevenZipTool->GetProcess(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                     md5Tool, &MD5ForBTFTool::OnReadyRunSlot);
+        }
+        sevenZipTool->Run();
         m_pDlgProcess->ReSet();
         m_pDlgProcess->show();
+
     }
     else
     {
@@ -393,15 +413,6 @@ void WgArchiveMaker::Refresh()
     }
 }
 
-void WgArchiveMaker::SetTip(const QString &tipStr, bool isAutoClear, Bit32 mes)
-{
-    ui->label_tip->setText(tipStr);
-    if (isAutoClear)
-    {
-        m_pTimer->start(mes);
-    }
-}
-
 bool WgArchiveMaker::ContainsWidget(QLabel *label)
 {
     if (label == nullptr)
@@ -419,13 +430,4 @@ bool WgArchiveMaker::ContainsWidget(QLabel *label)
     }
 
     return false;
-}
-
-void WgArchiveMaker::OnTimeoutSlot()
-{
-    if (m_pTimer->isActive())
-    {
-        m_pTimer->stop();
-    }
-    ui->label_tip->setText("");
 }
