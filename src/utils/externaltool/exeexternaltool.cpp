@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QFileInfo>
 #include <QDir>
+#include <QRegularExpression>
 
 #include "common.h"
 #include "tklogger.h"
@@ -122,8 +123,19 @@ void ExeExternalTool::Initialize()
     connect(m_process.data(), &QProcess::readyReadStandardOutput, this, &ExeExternalTool::OnReadyReadStandardOutput);
     connect(m_process.data(), &QProcess::readyReadStandardError, this, &ExeExternalTool::OnReadyReadStandardError);
     connect(m_process.data(), &QProcess::errorOccurred, this, &ExeExternalTool::OnErrorOccurred);
-    connect(m_process.data(), static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished), // 第二个参数是为了区分重载的finished信号,否则编译失败
+    connect(m_process.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), // 第二个参数是为了区分重载的finished信号,否则编译失败
          this, &ExeExternalTool::OnFinished);
+}
+
+QString ExeExternalTool::GetArgument(int index) const
+{
+    if (index < 0 || index >= m_arguments.size())
+    {
+        TKLogger::Instance().AddLog(DEBUG_LOG, TR("参数索引%1超出范围").arg(index));
+        return QString();
+    }
+
+    return m_arguments.at(index);
 }
 
 void ExeExternalTool::OnErrorOccurred(QProcess::ProcessError error)
@@ -165,6 +177,7 @@ void ExeExternalTool::OnFinished(int exitCode, QProcess::ExitStatus status)
 
 // ------------------- SevenZipExternalTool ------------------
 SevenZipExternalTool::SevenZipExternalTool(QObject *parent)
+    : ExeExternalTool(parent)
 {
     QString toolDirPath = GetSysPath(TOOLS_PATH); // 获取工具目录路径
     SetExecutablePath(QDir(toolDirPath).filePath("7z.exe"));
@@ -179,17 +192,36 @@ void SevenZipExternalTool::SetConfiguration(const QStringList &fileList, const Q
 
 void SevenZipExternalTool::OnReadyReadStandardOutput()
 {
-    // [ ] test: 7zip的输出可能包含非UTF-8编码的内容，直接转换可能会导致乱码，可以考虑使用toLocal8Bit()或者根据实际情况选择合适的编码方式
-    fmt::print("7zip output: {}\n", QString(GetProcess()->readAllStandardOutput()).toStdString());
+    QString output = QString::fromLocal8Bit(GetProcess()->readAllStandardOutput());
+    QRegularExpression re(R"((\d{1,3})%)");
+    auto match = re.match(output);
+    if (match.hasMatch()) {
+        int percent = match.captured(1).toInt();
+        emit ProgressValueChanged(percent);
+    }
+    if (output.contains("Everything is Ok")) {
+        emit ProgressValueChanged(100);
+        emit MakeDone();
+        QString savePath = GetArgument(2);
+        TKLogger::Instance().AddLog(INFO_LOG, TR("%1 打包完成").arg(savePath));
+    }
 }
 
 void SevenZipExternalTool::OnReadyReadStandardError()
 {
-    // [ ] test: 7zip的错误输出可能包含非UTF-8编码的内容，直接转换可能会导致乱码，可以考虑使用toLocal8Bit()或者根据实际情况选择合适的编码方式
-    fmt::print("7zip error: {}\n", QString(GetProcess()->readAllStandardError()).toStdString());
+    TKLogger::Instance().AddLog(ERROR_LOG, TR("7zip error: %1").arg(QString::fromLocal8Bit(GetProcess()->readAllStandardError())));
+    emit MakeFaild();
 }
+
+void SevenZipExternalTool::OnErrorOccurred(QProcess::ProcessError error)
+{
+    ExeExternalTool::OnErrorOccurred(error);
+    emit MakeFaild();
+}
+
 // ------------------- MD5ForBTFTool ------------------
 MD5ForBTFTool::MD5ForBTFTool(QObject *parent)
+    : ExeExternalTool(parent)
 {
 }
 

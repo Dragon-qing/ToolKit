@@ -8,7 +8,7 @@
 
 #include "common.h"
 #include "wgtyproaimgcleaner.h"
-#include "wgbtfmake.h"
+#include "wgarchivemaker.h"
 #include "wgxmleditor.h"
 #include "wglog.h"
 #include "wgcomrpt.h"
@@ -69,7 +69,7 @@ void WidgetManger::InitWidgetContainer()
 {
     Menu_Type type = TOOLS_TYPE;
     // 工具菜单组
-    AddWidget(GENERATE_ITEM(WgBTFMake, this), type, TR("BTF包制作"));
+    AddWidget(GENERATE_ITEM(WgArchiveMaker, this), type, TR("压缩包制作"));
     AddWidget(GENERATE_ITEM(WgXmlEditor, this), type, TR("XML编辑器"));
     // AddWidget(new WgTyproaImgCleaner(this), TR("Typroa图片清理"));
     AddWidget(GENERATE_ITEM(WgComRpt, this), type, TR("调机数据分析"));

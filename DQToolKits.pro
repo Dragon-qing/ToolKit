@@ -62,13 +62,13 @@ SOURCES += \
     src/widget/components/unionplot.cpp \
     # 界面
     src/widget/dlgabout.cpp \
-    src/widget/dlgbtfmakeinfo.cpp \
-    src/widget/dlgbtfprocess.cpp \
+    src/widget/dlgarchivemakeinfo.cpp \
+    src/widget/dlgarchiveprocess.cpp \
     src/widget/dlgcomres.cpp \
     src/widget/dlghelp.cpp \
     src/widget/dlgprompt.cpp \
     src/widget/dlgunionplotsubline.cpp \
-    src/widget/wgbtfmake.cpp \
+    src/widget/wgarchivemaker.cpp \
     src/widget/wgcomrpt.cpp \
     src/widget/wglog.cpp \
     src/widget/wgrenametool.cpp \
@@ -106,13 +106,13 @@ HEADERS += \
     src/widget/components/unionplot.h \
     # 界面
     src/widget/dlgabout.h \
-    src/widget/dlgbtfmakeinfo.h \
-    src/widget/dlgbtfprocess.h \
+    src/widget/dlgarchivemakeinfo.h \
+    src/widget/dlgarchiveprocess.h \
     src/widget/dlgcomres.h \
     src/widget/dlghelp.h \
     src/widget/dlgprompt.h \
     src/widget/dlgunionplotsubline.h \
-    src/widget/wgbtfmake.h \
+    src/widget/wgarchivemaker.h \
     src/widget/wgcomrpt.h \
     src/widget/wglog.h \
     src/widget/wgrenametool.h \
@@ -142,13 +142,13 @@ FORMS += \
     src/widget/components/unionplot.ui \
     # 界面层
     src/widget/dlgabout.ui \
-    src/widget/dlgbtfmakeinfo.ui \
-    src/widget/dlgbtfprocess.ui \
+    src/widget/dlgarchivemakeinfo.ui \
+    src/widget/dlgarchiveprocess.ui \
     src/widget/dlgcomres.ui \
     src/widget/dlghelp.ui \
     src/widget/dlgprompt.ui \
     src/widget/dlgunionplotsubline.ui \
-    src/widget/wgbtfmake.ui \
+    src/widget/wgarchivemaker.ui \
     src/widget/wgcomrpt.ui \
     src/widget/wglog.ui \
     src/widget/wgrenametool.ui \

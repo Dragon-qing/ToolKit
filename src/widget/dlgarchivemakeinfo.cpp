@@ -2,12 +2,12 @@
 
 #include "common.h"
 
-#include "dlgbtfmakeinfo.h"
-#include "ui_dlgbtfmakeinfo.h"
+#include "dlgarchivemakeinfo.h"
+#include "ui_dlgarchivemakeinfo.h"
 
-DlgBTFMakeInfo::DlgBTFMakeInfo(QWidget *parent)
+DlgArchiveMakeInfo::DlgArchiveMakeInfo(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::DlgBTFMakeInfo)
+    , ui(new Ui::DlgArchiveMakeInfo)
 {
     ui->setupUi(this);
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
@@ -18,17 +18,17 @@ DlgBTFMakeInfo::DlgBTFMakeInfo(QWidget *parent)
     adjustSize();
 }
 
-DlgBTFMakeInfo::~DlgBTFMakeInfo()
+DlgArchiveMakeInfo::~DlgArchiveMakeInfo()
 {
     delete ui;
 }
 
-void DlgBTFMakeInfo::SetFiles(QStringList list)
+void DlgArchiveMakeInfo::SetFiles(QStringList list)
 {
     m_pTab->SetFilePath(list);
 }
 
-QStringList DlgBTFMakeInfo::Exec()
+QStringList DlgArchiveMakeInfo::Exec()
 {
     m_pTab->ReDraw();
     exec();

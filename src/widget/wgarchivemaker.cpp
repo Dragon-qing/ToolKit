@@ -1,6 +1,6 @@
 ﻿/*!
- * @brief BTF包制作页面
- * @file wgbtfmake.cpp
+ * @brief 压缩包制作页面
+ * @file wgarchivemaker.cpp
  * @author Dragon_qing
  * @date 2024/10/20
  */
@@ -19,12 +19,12 @@
 #include "tklogger.h"
 #include "toolfactory.h"
 
-#include "wgbtfmake.h"
-#include "ui_wgbtfmake.h"
+#include "wgarchivemaker.h"
+#include "ui_wgarchivemaker.h"
 
-WgBTFMake::WgBTFMake(QWidget *parent) :
+WgArchiveMaker::WgArchiveMaker(QWidget *parent) :
     BaseWidget(parent),
-    ui(new Ui::WgBTFMake),
+    ui(new Ui::WgArchiveMaker),
     m_p7zTool(ToolFactory::Instance().CreateTool("7zip"))
 {
     ui->setupUi(this);
@@ -37,21 +37,22 @@ WgBTFMake::WgBTFMake(QWidget *parent) :
     m_pTimer = new QTimer(this);
     ui->lineEdit->setText(DataConfig::Instance().GetConfig("btf_cfg", "btf_savepath"));
     ui->lineEdit_2->setText(DataConfig::Instance().GetConfig("btf_cfg", "btf_savefilename"));
-    m_pDlgInfo = new DlgBTFMakeInfo(this);
+    m_pDlgInfo = new DlgArchiveMakeInfo(this);
     m_bHasMoreLabel = false;
     m_pMoreLabel = NULL;
-    m_pDlgProcess = new DlgBtfProcess(this);
+    m_pDlgProcess = new DlgArchiveProcess(this);
+    m_pDlgProcess->SetExternalTool(m_p7zTool.get());
 
     connect(m_pTimer, SIGNAL(timeout()), this, SLOT(TimeoutHandler()));
     setAcceptDrops(true);
 }
 
-WgBTFMake::~WgBTFMake()
+WgArchiveMaker::~WgArchiveMaker()
 {
     delete ui;
 }
 
-bool WgBTFMake::eventFilter(QObject *obj, QEvent *event)
+bool WgArchiveMaker::eventFilter(QObject *obj, QEvent *event)
 {
     QLabel *label = dynamic_cast<QLabel *>(obj);
     if (event->type() == QEvent::MouseButtonDblClick)
@@ -91,7 +92,7 @@ bool WgBTFMake::eventFilter(QObject *obj, QEvent *event)
     return QObject::eventFilter(obj, event);
 }
 
-void WgBTFMake::dragEnterEvent(QDragEnterEvent *event)
+void WgArchiveMaker::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event == NULL)
     {
@@ -104,7 +105,7 @@ void WgBTFMake::dragEnterEvent(QDragEnterEvent *event)
     }
 }
 
-void WgBTFMake::dropEvent(QDropEvent *event)
+void WgArchiveMaker::dropEvent(QDropEvent *event)
 {
     const QMimeData *mime = event->mimeData();
     QList<QUrl>urls = mime->urls();
@@ -153,7 +154,7 @@ void WgBTFMake::dropEvent(QDropEvent *event)
     Refresh();
 }
 
-void WgBTFMake::paintEvent(QPaintEvent *event)
+void WgArchiveMaker::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
 
@@ -172,11 +173,11 @@ void WgBTFMake::paintEvent(QPaintEvent *event)
 }
 
 /**
- * @brief WgBTFMake::CreateImgLabel 创建图片组件
+ * @brief WgArchiveMaker::CreateImgLabel 创建图片组件
  * @param [in] path 文件或文件夹路径
  * @return 图像label指针
  */
-QLabel *WgBTFMake::CreateImgLabel(const QString &path)
+QLabel *WgArchiveMaker::CreateImgLabel(const QString &path)
 {
     if (path.isEmpty())
     {
@@ -214,20 +215,25 @@ QLabel *WgBTFMake::CreateImgLabel(const QString &path)
     return label;
 }
 
-void WgBTFMake::on_selectDirBtn_clicked()
+void WgArchiveMaker::on_selectDirBtn_clicked()
 {
     QString path = QFileDialog::getExistingDirectory(this, "Select Folder", QCoreApplication::applicationDirPath());
     ui->lineEdit->setText(path);
     DataConfig::Instance().SetConfig("btf_cfg", "btf_savepath", path);
 }
 
-void WgBTFMake::on_clsBtn_clicked()
+void WgArchiveMaker::on_clsBtn_clicked()
 {
     ClearList();
     ui->label->setVisible(true);
+    if (m_pMoreLabel != nullptr)
+    {
+        m_pMoreLabel->setVisible(false);
+    }
+    ui->label_top->setText("");
 }
 
-void WgBTFMake::on_startBtn_clicked()
+void WgArchiveMaker::on_startBtn_clicked()
 {
     if (m_pathList.isEmpty())
     {
@@ -267,48 +273,42 @@ void WgBTFMake::on_startBtn_clicked()
     SevenZipExternalTool *sevenZipTool = dynamic_cast<SevenZipExternalTool *>(m_p7zTool.get());
     if (sevenZipTool)
     {
-        sevenZipTool->SetConfiguration(m_pathList, nameStr, "7z");
+        sevenZipTool->SetConfiguration(m_pathList, nameStr, "tar");
         sevenZipTool->Run();
+        connect(sevenZipTool, &SevenZipExternalTool::ProgressValueChanged, m_pDlgProcess, &DlgArchiveProcess::OnValueChanged);
+        connect(sevenZipTool, &SevenZipExternalTool::MakeDone, m_pDlgProcess, &DlgArchiveProcess::Done);
+        connect(sevenZipTool, &SevenZipExternalTool::MakeFaild, m_pDlgProcess, &DlgArchiveProcess::Faild);
+        m_pDlgProcess->ReSet();
+        m_pDlgProcess->show();
     }
     else
     {
         QMessageBox::warning(this, TR("注意"), TR("创建7zip工具失败"),QMessageBox::NoButton);
         TKLogger::Instance().AddLog(ERROR_LOG, TR("创建7zip工具失败"));
     }
-
-    // BTFProcessThread *thread = new BTFProcessThread(this);
-    // m_pThread = thread;
-    // thread->SetConfig(m_pathList, nameStr);
-    // connect(thread, &BTFProcessThread::finished, thread, &BTFProcessThread::deleteLater);
-    // connect(thread, &BTFProcessThread::MakeDone, m_pDlgProcess, &DlgBtfProcess::Done);
-    // connect(thread, &BTFProcessThread::MakeFaild, m_pDlgProcess, &DlgBtfProcess::Faild);
-    // thread->start();
-    // m_pDlgProcess->Start();
-    // m_pDlgProcess->show();
 }
 
-void WgBTFMake::ClearList()
+void WgArchiveMaker::ClearList()
 {
     foreach (QLabel *label, m_labelList)
     {
-        if (label != NULL)
+        if (label != nullptr)
         {
             ui->horizontalLayout->removeWidget(label);
-            label->setParent(NULL);
+            label->setParent(nullptr);
             delete label;
-            label = NULL;
+            label = nullptr;
         }
     }
     ui->horizontalLayout->removeWidget(m_pMoreLabel);
-    m_pMoreLabel->setVisible(false);
     m_labelList.clear();
     m_nameList.clear();
     m_pathList.clear();
 }
 
-void WgBTFMake::RemoveItem(QLabel *label)
+void WgArchiveMaker::RemoveItem(QLabel *label)
 {
-    if (label == NULL)
+    if (label == nullptr)
     {
         return;
     }
@@ -337,7 +337,7 @@ void WgBTFMake::RemoveItem(QLabel *label)
 
 }
 
-void WgBTFMake::Refresh()
+void WgArchiveMaker::Refresh()
 {
     if (m_bHasMoreLabel)
     {
@@ -352,7 +352,7 @@ void WgBTFMake::Refresh()
         }
         else if (ui->horizontalLayout->count() == MAX_DISITEM_NUM)
         {
-            if (m_pMoreLabel == NULL)
+            if (m_pMoreLabel == nullptr)
             {
                 m_pMoreLabel = CreateImgLabel("more");
                 m_pMoreLabel->installEventFilter(this);
@@ -362,7 +362,7 @@ void WgBTFMake::Refresh()
             m_bHasMoreLabel = true;
             break;
         }
-        else if (label != NULL)
+        else if (label != nullptr)
         {
             ui->horizontalLayout->addWidget(label);
         }
@@ -374,7 +374,7 @@ void WgBTFMake::Refresh()
     }
 }
 
-void WgBTFMake::SetTip(const QString &tipStr, bool isAutoClear, Bit32 mes)
+void WgArchiveMaker::SetTip(const QString &tipStr, bool isAutoClear, Bit32 mes)
 {
     ui->label_tip->setText(tipStr);
     if (isAutoClear)
@@ -383,9 +383,9 @@ void WgBTFMake::SetTip(const QString &tipStr, bool isAutoClear, Bit32 mes)
     }
 }
 
-bool WgBTFMake::ContainsWidget(QLabel *label)
+bool WgArchiveMaker::ContainsWidget(QLabel *label)
 {
-    if (label == NULL)
+    if (label == nullptr)
     {
         return false;
     }
@@ -402,76 +402,11 @@ bool WgBTFMake::ContainsWidget(QLabel *label)
     return false;
 }
 
-void WgBTFMake::TimeoutHandler()
+void WgArchiveMaker::TimeoutHandler()
 {
     if (m_pTimer->isActive())
     {
         m_pTimer->stop();
     }
     ui->label_tip->setText("");
-}
-
-BTFProcessThread::BTFProcessThread(QWidget *parent)
-    :QThread(parent)
-{
-
-}
-
-BTFProcessThread::~BTFProcessThread()
-{
-
-}
-
-/**
- * @brief BTFProcessThread::SetConfig 设置配置
- * @param fileList 文件列表
- * @param saveName 保存名称
- */
-void BTFProcessThread::SetConfig(const QStringList &fileList, const QString &saveName)
-{
-    m_fileList = fileList;
-    m_sSaveName = saveName;
-}
-
-void BTFProcessThread::run()
-{
-    if (m_sSaveName.isEmpty() || m_fileList.isEmpty())
-    {
-        TKLogger::Instance().AddLog(CRITICAL_LOG, TR("打包失败，文件列表为空或保存名字为空"));
-        return;
-    }
-    QProcess runLogProcess;
-    runLogProcess.start("cmd");
-    runLogProcess.waitForStarted(-1);
-    QString _7zPath = QString("\"%1/7z.exe\"").arg("./tools");
-    QString _md5ProgPath = QString("\"%1/md5ForBTF.exe\"").arg("./tools");
-    QStringList fileStrList;
-    fileStrList.clear();
-    foreach (QString file, m_fileList)
-    {
-        fileStrList.append(QString("\"%1\"").arg(file));
-    }
-    m_sSaveName = "\"" + m_sSaveName + "\"";
-    QString cmdStr = QString("%1 a -ttar %2 %3\n").arg(_7zPath).arg(m_sSaveName).arg(fileStrList.join(" "));
-    runLogProcess.write(cmdStr.toLocal8Bit().data());
-    runLogProcess.write("exit\n");
-    runLogProcess.waitForFinished(-1);
-    QString res = runLogProcess.readAll();
-    if (res.contains("Everything is Ok"))
-    {
-        runLogProcess.start("cmd");
-        runLogProcess.waitForStarted(-1);
-        cmdStr = QString("%1 %2\n").arg(_md5ProgPath, m_sSaveName);
-        runLogProcess.write(cmdStr.toLocal8Bit().data());
-        runLogProcess.write("exit\n");
-        runLogProcess.waitForFinished(-1);
-        TKLogger::Instance().AddLog(INFO_LOG, TR("%1已完成BTF打包").arg(m_sSaveName));
-        emit MakeDone();
-    }
-    else
-    {
-        TKLogger::Instance().AddLog(CRITICAL_LOG, res);
-        emit MakeFaild();
-    }
-    runLogProcess.close();
 }

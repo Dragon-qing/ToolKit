@@ -36,11 +36,23 @@ protected:
      * @return {}
      */
     void SetExecutablePath(const QString &path, bool checkValid = true);
+    /**
+     * @brief: 设置运行参数
+     * @param {QStringList} &args: 参数列表
+     * @return {*}
+     */
     void SetArguments(const QStringList &args) override;
+    /**
+     * @brief: 获取指定索引的参数
+     * @param {int} index: 
+     * @return {QString}
+     */
+    QString GetArgument(int index) const;
 
 protected slots:
     virtual void OnReadyReadStandardOutput() = 0; // 读取标准输出的槽函数
     virtual void OnReadyReadStandardError() = 0; // 读取标准错误的槽函数
+    virtual void OnErrorOccurred(QProcess::ProcessError error);
     
 private:
     QStringList m_arguments; // 存储工具的参数
@@ -50,10 +62,10 @@ private:
     void Initialize();
 
 private slots:
-    void OnErrorOccurred(QProcess::ProcessError error);
     void OnFinished(int exitCode, QProcess::ExitStatus status);
 };
 
+// ------------------- SevenZipExternalTool ------------------
 class SevenZipExternalTool : public ExeExternalTool
 {
     Q_OBJECT
@@ -62,12 +74,19 @@ public:
     ~SevenZipExternalTool() = default;
     void SetConfiguration(const QStringList &fileList, const QString &saveName, const QString &format = "tar");
 
+signals:
+    void MakeDone();
+    void MakeFaild();
+    void ProgressValueChanged(int value);
+
 private slots:
 
     void OnReadyReadStandardOutput() override; // 读取标准输出的槽函数
     void OnReadyReadStandardError() override; // 读取标准错误的槽函数
+    void OnErrorOccurred(QProcess::ProcessError error) override;
 };
 
+// ------------------- MD5ForBTFTool ------------------
 class MD5ForBTFTool : public ExeExternalTool
 {
     Q_OBJECT    
