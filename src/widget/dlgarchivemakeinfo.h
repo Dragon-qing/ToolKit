@@ -1,5 +1,5 @@
-﻿#ifndef DLGBTFMAKEINFO_H
-#define DLGBTFMAKEINFO_H
+﻿#ifndef DLGARCHIVEMAKEINFO_H
+#define DLGARCHIVEMAKEINFO_H
 
 #include <QDialog>
 
@@ -10,21 +10,21 @@ class InfoTable;
 QT_END_NAMESPACE
 
 namespace Ui {
-class DlgBTFMakeInfo;
+class DlgArchiveMakeInfo;
 }
 
-class DlgBTFMakeInfo : public QDialog
+class DlgArchiveMakeInfo : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DlgBTFMakeInfo(QWidget *parent = nullptr);
-    ~DlgBTFMakeInfo();
+    explicit DlgArchiveMakeInfo(QWidget *parent = nullptr);
+    ~DlgArchiveMakeInfo();
     void SetFiles(QStringList list);
     QStringList Exec();
 
 private:
-    Ui::DlgBTFMakeInfo *ui;
+    Ui::DlgArchiveMakeInfo *ui;
     InfoTable *m_pTab;
 };
 
@@ -51,4 +51,4 @@ private:
     QStringList m_filePathList;
 
 };
-#endif // DLGBTFMAKEINFO_H
+#endif // DLGARCHIVEMAKEINFO_H

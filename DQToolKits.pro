@@ -25,22 +25,20 @@ msvc {
 }
 RC_ICONS = img/toolbox.ico
 INCLUDEPATH += \
-    src src/core\
-    src/widget\
-    src/model src/service\
-    src/thirdparty src/thirdparty/easyqtsql\
-    src/widget/components\
-    src/utils\
+    src src/core \
+    src/widget \
+    src/model src/service \
+    src/thirdparty src/thirdparty/easyqtsql \
+    src/widget/components \
+    src/utils src/utils/externaltool \
 INCLUDEPATH += $$PWD/include
 LIBS += -luser32
 CONFIG(debug, debug|release) {
     LIBS += -L$$PWD/lib/debug -lqhotkey
     LIBS += -L$$PWD/lib/debug -lspdlogd
-    LIBS += -L$$PWD/lib/debug -lfmtd
 } else {
     LIBS += -L$$PWD/lib -lqhotkey
     LIBS += -L$$PWD/lib -lspdlog
-    LIBS += -L$$PWD/lib -lfmt
 }
 
 SOURCES += \
@@ -64,13 +62,13 @@ SOURCES += \
     src/widget/components/unionplot.cpp \
     # 界面
     src/widget/dlgabout.cpp \
-    src/widget/dlgbtfmakeinfo.cpp \
-    src/widget/dlgbtfprocess.cpp \
+    src/widget/dlgarchivemakeinfo.cpp \
+    src/widget/dlgarchiveprocess.cpp \
     src/widget/dlgcomres.cpp \
     src/widget/dlghelp.cpp \
     src/widget/dlgprompt.cpp \
     src/widget/dlgunionplotsubline.cpp \
-    src/widget/wgbtfmake.cpp \
+    src/widget/wgarchivemaker.cpp \
     src/widget/wgcomrpt.cpp \
     src/widget/wglog.cpp \
     src/widget/wgrenametool.cpp \
@@ -79,6 +77,11 @@ SOURCES += \
     # 工具类
     src/utils/tklogger.cpp \
     src/utils/common.cpp \
+    src/utils/externaltool/externaltoolbase.cpp \
+    src/utils/externaltool/exeexternaltool.cpp \
+    src/utils/externaltool/shellexternaltool.cpp \
+    src/utils/externaltool/apiexternaltool.cpp \
+    src/utils/externaltool/toolfactory.cpp \
     # QCP第三方绘图模块引入
     src/thirdparty/qcustomplot.cpp
 
@@ -103,13 +106,13 @@ HEADERS += \
     src/widget/components/unionplot.h \
     # 界面
     src/widget/dlgabout.h \
-    src/widget/dlgbtfmakeinfo.h \
-    src/widget/dlgbtfprocess.h \
+    src/widget/dlgarchivemakeinfo.h \
+    src/widget/dlgarchiveprocess.h \
     src/widget/dlgcomres.h \
     src/widget/dlghelp.h \
     src/widget/dlgprompt.h \
     src/widget/dlgunionplotsubline.h \
-    src/widget/wgbtfmake.h \
+    src/widget/wgarchivemaker.h \
     src/widget/wgcomrpt.h \
     src/widget/wglog.h \
     src/widget/wgrenametool.h \
@@ -118,6 +121,12 @@ HEADERS += \
     # 工具类
     src/utils/tklogger.h \
     src/utils/common.h \
+    src/utils/externaltool/externaltoolbase.h \
+    src/utils/externaltool/exeexternaltool.h \
+    src/utils/externaltool/shellexternaltool.h \
+    src/utils/externaltool/apiexternaltool.h \
+    src/utils/externaltool/toolfactory.h \
+    src/utils/externaltool/factoryregister.h \
     # QCP第三方绘图模块引入
     src/thirdparty/qcustomplot.h \
 
@@ -133,13 +142,13 @@ FORMS += \
     src/widget/components/unionplot.ui \
     # 界面层
     src/widget/dlgabout.ui \
-    src/widget/dlgbtfmakeinfo.ui \
-    src/widget/dlgbtfprocess.ui \
+    src/widget/dlgarchivemakeinfo.ui \
+    src/widget/dlgarchiveprocess.ui \
     src/widget/dlgcomres.ui \
     src/widget/dlghelp.ui \
     src/widget/dlgprompt.ui \
     src/widget/dlgunionplotsubline.ui \
-    src/widget/wgbtfmake.ui \
+    src/widget/wgarchivemaker.ui \
     src/widget/wgcomrpt.ui \
     src/widget/wglog.ui \
     src/widget/wgrenametool.ui \

@@ -9,6 +9,7 @@
 
 QStatusBar *GLOBAL_STATUSBAR = NULL;
 
+# ifdef QT_DEBUG
 void ComDebug(const QString &content, const QString &title)
 {
     qDebug() << QString("<------------%1------------>").arg(title);
@@ -37,6 +38,7 @@ void ComDebug(const QStringList content, const QString &title)
     }
     qDebug() << QString(">------------------------<");
 }
+# endif
 
 /**
  * @brief GetXmlDoc 获取xml对象
@@ -131,6 +133,11 @@ QByteArray StrToQByte(QString str, const Bit8 *unicode)
 void InitStatusBar(QStatusBar *statusBar)
 {
     GLOBAL_STATUSBAR = statusBar;
+}
+
+void DestoryStatusBar()
+{
+    GLOBAL_STATUSBAR = nullptr;
 }
 
 /**

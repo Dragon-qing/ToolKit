@@ -21,7 +21,7 @@ void DlgPrompt::InitUi()
     m_pButtonGroup = new QButtonGroup(this);
     m_pButtonGroup->addButton(ui->ok_Btn, OK_BUTTON);
     m_pButtonGroup->addButton(ui->cancel_Btn, CANCEL_BUTTON);
-    connect(m_pButtonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &DlgPrompt::HandleClicked);
+    connect(m_pButtonGroup, &QButtonGroup::idClicked, this, &DlgPrompt::HandleClicked);
     ui->ok_Btn->setVisible(false);
     ui->cancel_Btn->setVisible(false);
     ui->label->setTextInteractionFlags(Qt::TextSelectableByMouse);
