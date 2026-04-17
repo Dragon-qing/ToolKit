@@ -50,9 +50,9 @@ protected:
     QString GetArgument(int index) const;
 
 protected slots:
-    virtual void OnReadyReadStandardOutput() = 0; // 读取标准输出的槽函数
-    virtual void OnReadyReadStandardError() = 0; // 读取标准错误的槽函数
-    virtual void OnErrorOccurred(QProcess::ProcessError error);
+    virtual void OnReadyReadStandardOutputSlot() = 0; // 读取标准输出的槽函数
+    virtual void OnReadyReadStandardErrorSlot() = 0; // 读取标准错误的槽函数
+    virtual void OnErrorOccurredSlot(QProcess::ProcessError error);
     
 private:
     QStringList m_arguments; // 存储工具的参数
@@ -62,7 +62,7 @@ private:
     void Initialize();
 
 private slots:
-    void OnFinished(int exitCode, QProcess::ExitStatus status);
+    void OnFinishedSlot(int exitCode, QProcess::ExitStatus status);
 };
 
 // ------------------- SevenZipExternalTool ------------------
@@ -75,15 +75,15 @@ public:
     void SetConfiguration(const QStringList &fileList, const QString &saveName, const QString &format = "tar");
 
 signals:
-    void MakeDone();
-    void MakeFaild();
-    void ProgressValueChanged(int value);
+    void MakeDoneSignal();
+    void MakeFaildSignal();
+    void ProgressValueChangedSignal(int value);
 
 private slots:
 
-    void OnReadyReadStandardOutput() override; // 读取标准输出的槽函数
-    void OnReadyReadStandardError() override; // 读取标准错误的槽函数
-    void OnErrorOccurred(QProcess::ProcessError error) override;
+    void OnReadyReadStandardOutputSlot() override; // 读取标准输出的槽函数
+    void OnReadyReadStandardErrorSlot() override; // 读取标准错误的槽函数
+    void OnErrorOccurredSlot(QProcess::ProcessError error) override;
 };
 
 // ------------------- MD5ForBTFTool ------------------
@@ -95,7 +95,7 @@ public:
     ~MD5ForBTFTool() = default;
 
 private slots:
-    void OnReadyReadStandardOutput() override; // 读取标准输出的槽函数
-    void OnReadyReadStandardError() override; // 读取标准错误的槽函数
+    void OnReadyReadStandardOutputSlot() override; // 读取标准输出的槽函数
+    void OnReadyReadStandardErrorSlot() override; // 读取标准错误的槽函数
 };
 #endif

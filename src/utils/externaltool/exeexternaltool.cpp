@@ -120,11 +120,11 @@ void ExeExternalTool::Initialize()
     m_arguments.clear();
     m_process.reset(new QProcess());
     m_sExePath = "";
-    connect(m_process.data(), &QProcess::readyReadStandardOutput, this, &ExeExternalTool::OnReadyReadStandardOutput);
-    connect(m_process.data(), &QProcess::readyReadStandardError, this, &ExeExternalTool::OnReadyReadStandardError);
-    connect(m_process.data(), &QProcess::errorOccurred, this, &ExeExternalTool::OnErrorOccurred);
+    connect(m_process.data(), &QProcess::readyReadStandardOutput, this, &ExeExternalTool::OnReadyReadStandardOutputSlot);
+    connect(m_process.data(), &QProcess::readyReadStandardError, this, &ExeExternalTool::OnReadyReadStandardErrorSlot);
+    connect(m_process.data(), &QProcess::errorOccurred, this, &ExeExternalTool::OnErrorOccurredSlot);
     connect(m_process.data(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), // 第二个参数是为了区分重载的finished信号,否则编译失败
-         this, &ExeExternalTool::OnFinished);
+         this, &ExeExternalTool::OnFinishedSlot);
 }
 
 QString ExeExternalTool::GetArgument(int index) const
@@ -138,7 +138,7 @@ QString ExeExternalTool::GetArgument(int index) const
     return m_arguments.at(index);
 }
 
-void ExeExternalTool::OnErrorOccurred(QProcess::ProcessError error)
+void ExeExternalTool::OnErrorOccurredSlot(QProcess::ProcessError error)
 {
     QString exeFileName = QFileInfo(m_sExePath).fileName();
     switch (error)
@@ -165,7 +165,7 @@ void ExeExternalTool::OnErrorOccurred(QProcess::ProcessError error)
     }
 }
 
-void ExeExternalTool::OnFinished(int exitCode, QProcess::ExitStatus status)
+void ExeExternalTool::OnFinishedSlot(int exitCode, QProcess::ExitStatus status)
 {
     QString exeFileName = QFileInfo(m_sExePath).fileName();
     if (status == QProcess::NormalExit && exitCode == 0) {
@@ -190,33 +190,33 @@ void SevenZipExternalTool::SetConfiguration(const QStringList &fileList, const Q
     SetArguments(args);
 }
 
-void SevenZipExternalTool::OnReadyReadStandardOutput()
+void SevenZipExternalTool::OnReadyReadStandardOutputSlot()
 {
     QString output = QString::fromLocal8Bit(GetProcess()->readAllStandardOutput());
     QRegularExpression re(R"((\d{1,3})%)");
     auto match = re.match(output);
     if (match.hasMatch()) {
         int percent = match.captured(1).toInt();
-        emit ProgressValueChanged(percent);
+        emit ProgressValueChangedSignal(percent);
     }
     if (output.contains("Everything is Ok")) {
-        emit ProgressValueChanged(100);
-        emit MakeDone();
+        emit ProgressValueChangedSignal(100);
+        emit MakeDoneSignal();
         QString savePath = GetArgument(2);
         TKLogger::Instance().AddLog(INFO_LOG, TR("%1 打包完成").arg(savePath));
     }
 }
 
-void SevenZipExternalTool::OnReadyReadStandardError()
+void SevenZipExternalTool::OnReadyReadStandardErrorSlot()
 {
     TKLogger::Instance().AddLog(ERROR_LOG, TR("7zip error: %1").arg(QString::fromLocal8Bit(GetProcess()->readAllStandardError())));
-    emit MakeFaild();
+    emit MakeFaildSignal();
 }
 
-void SevenZipExternalTool::OnErrorOccurred(QProcess::ProcessError error)
+void SevenZipExternalTool::OnErrorOccurredSlot(QProcess::ProcessError error)
 {
-    ExeExternalTool::OnErrorOccurred(error);
-    emit MakeFaild();
+    ExeExternalTool::OnErrorOccurredSlot(error);
+    emit MakeFaildSignal();
 }
 
 // ------------------- MD5ForBTFTool ------------------
@@ -225,11 +225,11 @@ MD5ForBTFTool::MD5ForBTFTool(QObject *parent)
 {
 }
 
-void MD5ForBTFTool::OnReadyReadStandardOutput()
+void MD5ForBTFTool::OnReadyReadStandardOutputSlot()
 {
 }
 
-void MD5ForBTFTool::OnReadyReadStandardError()
+void MD5ForBTFTool::OnReadyReadStandardErrorSlot()
 {
 }
 

@@ -49,8 +49,8 @@ WgArchiveMaker::WgArchiveMaker(QWidget *parent) :
     m_pDlgProcess = new DlgArchiveProcess(this);
     m_pDlgProcess->SetExternalTool(m_p7zTool.get());
 
-    connect(m_pTimer, SIGNAL(timeout()), this, SLOT(TimeoutHandler()));
-    connect(ui->comboBox_format, &QComboBox::currentTextChanged, this, &WgArchiveMaker::OnFormatChanged);
+    connect(m_pTimer, SIGNAL(timeout()), this, SLOT(OnTimeoutSlot()));
+    connect(ui->comboBox_format, &QComboBox::currentTextChanged, this, &WgArchiveMaker::OnFormatChangedSlot);
     setAcceptDrops(true);
 }
 
@@ -302,7 +302,7 @@ void WgArchiveMaker::on_startBtn_clicked()
     }
 }
 
-void WgArchiveMaker::OnFormatChanged(const QString &arg1)
+void WgArchiveMaker::OnFormatChangedSlot(const QString &arg1)
 {
     DataConfig::Instance().SetConfig("archive_cfg", "archive_format", arg1);
 }
@@ -421,7 +421,7 @@ bool WgArchiveMaker::ContainsWidget(QLabel *label)
     return false;
 }
 
-void WgArchiveMaker::TimeoutHandler()
+void WgArchiveMaker::OnTimeoutSlot()
 {
     if (m_pTimer->isActive())
     {

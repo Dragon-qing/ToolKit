@@ -28,11 +28,6 @@ public:
     ~WgArchiveMaker();
     bool eventFilter(QObject *obj, QEvent *event) override;
 
-public slots:
-    void on_selectDirBtn_clicked();
-    void on_clsBtn_clicked();
-    void on_startBtn_clicked();
-
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
@@ -63,7 +58,11 @@ private:
     bool ContainsWidget(QLabel *label);
 
 private slots:
-    void TimeoutHandler();
+    void on_selectDirBtn_clicked();
+    void on_clsBtn_clicked();
+    void on_startBtn_clicked();
+    void OnTimeoutSlot();
+    void OnFormatChangedSlot(const QString &arg1);
 };
 
 #endif // WGARCHIVEMAKER_H
