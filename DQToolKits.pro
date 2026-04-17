@@ -25,22 +25,20 @@ msvc {
 }
 RC_ICONS = img/toolbox.ico
 INCLUDEPATH += \
-    src src/core\
-    src/widget\
-    src/model src/service\
-    src/thirdparty src/thirdparty/easyqtsql\
-    src/widget/components\
-    src/utils\
+    src src/core \
+    src/widget \
+    src/model src/service \
+    src/thirdparty src/thirdparty/easyqtsql \
+    src/widget/components \
+    src/utils src/utils/externaltool \
 INCLUDEPATH += $$PWD/include
 LIBS += -luser32
 CONFIG(debug, debug|release) {
     LIBS += -L$$PWD/lib/debug -lqhotkey
     LIBS += -L$$PWD/lib/debug -lspdlogd
-    LIBS += -L$$PWD/lib/debug -lfmtd
 } else {
     LIBS += -L$$PWD/lib -lqhotkey
     LIBS += -L$$PWD/lib -lspdlog
-    LIBS += -L$$PWD/lib -lfmt
 }
 
 SOURCES += \
@@ -79,6 +77,11 @@ SOURCES += \
     # 工具类
     src/utils/tklogger.cpp \
     src/utils/common.cpp \
+    src/utils/externaltool/externaltoolbase.cpp \
+    src/utils/externaltool/exeexternaltool.cpp \
+    src/utils/externaltool/shellexternaltool.cpp \
+    src/utils/externaltool/apiexternaltool.cpp \
+    src/utils/externaltool/toolfactory.cpp \
     # QCP第三方绘图模块引入
     src/thirdparty/qcustomplot.cpp
 
@@ -118,6 +121,12 @@ HEADERS += \
     # 工具类
     src/utils/tklogger.h \
     src/utils/common.h \
+    src/utils/externaltool/externaltoolbase.h \
+    src/utils/externaltool/exeexternaltool.h \
+    src/utils/externaltool/shellexternaltool.h \
+    src/utils/externaltool/apiexternaltool.h \
+    src/utils/externaltool/toolfactory.h \
+    src/utils/externaltool/factoryregister.h \
     # QCP第三方绘图模块引入
     src/thirdparty/qcustomplot.h \
 

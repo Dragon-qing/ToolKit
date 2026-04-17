@@ -65,6 +65,12 @@ set(PROJECT_SOURCES
     # 工具类
     ./src/utils/tklogger.cpp
     ./src/utils/common.cpp
+    ./src/utils/externaltool/externaltoolbase.cpp
+    ./src/utils/externaltool/exeexternaltool.cpp
+    ./src/utils/externaltool/shellexternaltool.cpp
+    ./src/utils/externaltool/apiexternaltool.cpp
+    ./src/utils/externaltool/toolfactory.cpp
+
     # 第三方
     ./src/thirdparty/qcustomplot.cpp
 )
@@ -105,6 +111,13 @@ set(PROJECT_HEADERS
     # 工具类
     ./src/utils/tklogger.h
     ./src/utils/common.h
+    ./src/utils/externaltool/externaltoolbase.h
+    ./src/utils/externaltool/exeexternaltool.h
+    ./src/utils/externaltool/shellexternaltool.h
+    ./src/utils/externaltool/apiexternaltool.h
+    ./src/utils/externaltool/toolfactory.h
+    ./src/utils/externaltool/factoryregister.h
+
     # 第三方
     ./src/thirdparty/qcustomplot.h
     )
@@ -157,8 +170,8 @@ target_include_directories(DQToolKits PRIVATE
     ./src/model
     ./src/service
     ./src/thirdparty
-    ./src/thirdparty/easyqtsql
     ./src/utils
+    ./src/utils/externaltool
     ./include
 )
 
@@ -181,12 +194,6 @@ set_target_properties(spdlog PROPERTIES
     IMPORTED_LOCATION_DEBUG   "${LIBS_DIR}/debug/spdlogd.lib"
 )
 
-add_library(fmt STATIC IMPORTED)
-set_target_properties(fmt PROPERTIES
-    IMPORTED_LOCATION_RELEASE "${LIBS_DIR}/fmt.lib"
-    IMPORTED_LOCATION_DEBUG   "${LIBS_DIR}/debug/fmtd.lib"
-)
-
 target_link_libraries(DQToolKits PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Gui
@@ -198,7 +205,6 @@ target_link_libraries(DQToolKits PRIVATE
     qhotkey
     EasyQtSql
     spdlog
-    fmt
 )
 
 if (MSVC)
