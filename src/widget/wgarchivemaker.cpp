@@ -7,7 +7,6 @@
 
 #include <QDragEnterEvent>
 #include <QMimeData>
-#include <QDebug>
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -35,8 +34,15 @@ WgArchiveMaker::WgArchiveMaker(QWidget *parent) :
     m_nameList.clear();
     m_pathList.clear();
     m_pTimer = new QTimer(this);
-    ui->lineEdit->setText(DataConfig::Instance().GetConfig("btf_cfg", "btf_savepath"));
-    ui->lineEdit_2->setText(DataConfig::Instance().GetConfig("btf_cfg", "btf_savefilename"));
+
+    ui->lineEdit->setText(DataConfig::Instance().GetConfig("archive_cfg", "archive_savepath"));
+    ui->lineEdit_2->setText(DataConfig::Instance().GetConfig("archive_cfg", "archive_savefilename"));
+    int index = ui->comboBox_format->findText(DataConfig::Instance().GetConfig("archive_cfg", "archive_format"));
+    if (index != -1)
+    {
+        ui->comboBox_format->setCurrentIndex(index);
+    }
+
     m_pDlgInfo = new DlgArchiveMakeInfo(this);
     m_bHasMoreLabel = false;
     m_pMoreLabel = NULL;
@@ -44,6 +50,7 @@ WgArchiveMaker::WgArchiveMaker(QWidget *parent) :
     m_pDlgProcess->SetExternalTool(m_p7zTool.get());
 
     connect(m_pTimer, SIGNAL(timeout()), this, SLOT(TimeoutHandler()));
+    connect(ui->comboBox_format, &QComboBox::currentTextChanged, this, &WgArchiveMaker::OnFormatChanged);
     setAcceptDrops(true);
 }
 
@@ -219,7 +226,7 @@ void WgArchiveMaker::on_selectDirBtn_clicked()
 {
     QString path = QFileDialog::getExistingDirectory(this, "Select Folder", QCoreApplication::applicationDirPath());
     ui->lineEdit->setText(path);
-    DataConfig::Instance().SetConfig("btf_cfg", "btf_savepath", path);
+    DataConfig::Instance().SetConfig("archive_cfg", "archive_savepath", path);
 }
 
 void WgArchiveMaker::on_clsBtn_clicked()
@@ -248,14 +255,15 @@ void WgArchiveMaker::on_startBtn_clicked()
         return;
     }
     QString dirPath = ui->lineEdit->text();
-    DataConfig::Instance().SetConfig("btf_cfg", "btf_savefilename", nameStr);
+    DataConfig::Instance().SetConfig("archive_cfg", "archive_savefilename", nameStr);
+    QString formatStr = ui->comboBox_format->currentText();
     if (dirPath.trimmed() != "")
     {
-        nameStr = QString("%1/%2.BTF").arg(dirPath, nameStr);
+        nameStr = QString("%1/%2.%3").arg(dirPath, nameStr, formatStr);
     }
     else
     {
-        nameStr = QString("%1/%2.BTF").arg(QCoreApplication::applicationDirPath(), nameStr);
+        nameStr = QString("%1/%2.%3").arg(QCoreApplication::applicationDirPath(), nameStr, formatStr); // 放到可执行文件目录下
     }
     if (QFile::exists(nameStr))
     {
@@ -271,13 +279,19 @@ void WgArchiveMaker::on_startBtn_clicked()
     }
 
     SevenZipExternalTool *sevenZipTool = dynamic_cast<SevenZipExternalTool *>(m_p7zTool.get());
+    bool md5Required = false;
     if (sevenZipTool)
     {
-        sevenZipTool->SetConfiguration(m_pathList, nameStr, "tar");
+        if (formatStr == "BTF")
+        {
+            formatStr = "tar";
+            md5Required = true; // TODO: 处理BTF加MD5的特殊需求
+        }
+        sevenZipTool->SetConfiguration(m_pathList, nameStr, formatStr);
         sevenZipTool->Run();
-        connect(sevenZipTool, &SevenZipExternalTool::ProgressValueChanged, m_pDlgProcess, &DlgArchiveProcess::OnValueChanged);
-        connect(sevenZipTool, &SevenZipExternalTool::MakeDone, m_pDlgProcess, &DlgArchiveProcess::Done);
-        connect(sevenZipTool, &SevenZipExternalTool::MakeFaild, m_pDlgProcess, &DlgArchiveProcess::Faild);
+        connect(sevenZipTool, &SevenZipExternalTool::ProgressValueChangedSignal, m_pDlgProcess, &DlgArchiveProcess::OnValueChanged);
+        connect(sevenZipTool, &SevenZipExternalTool::MakeDoneSignal, m_pDlgProcess, &DlgArchiveProcess::Done);
+        connect(sevenZipTool, &SevenZipExternalTool::MakeFaildSignal, m_pDlgProcess, &DlgArchiveProcess::Faild);
         m_pDlgProcess->ReSet();
         m_pDlgProcess->show();
     }
@@ -286,6 +300,11 @@ void WgArchiveMaker::on_startBtn_clicked()
         QMessageBox::warning(this, TR("注意"), TR("创建7zip工具失败"),QMessageBox::NoButton);
         TKLogger::Instance().AddLog(ERROR_LOG, TR("创建7zip工具失败"));
     }
+}
+
+void WgArchiveMaker::OnFormatChanged(const QString &arg1)
+{
+    DataConfig::Instance().SetConfig("archive_cfg", "archive_format", arg1);
 }
 
 void WgArchiveMaker::ClearList()
