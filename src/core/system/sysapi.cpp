@@ -10,7 +10,7 @@
 #include "common.h"
 
 
-QString GetSysPath(_Path_Type type)
+QString GetSysPath(PATH_TYPE type)
 {
     QString path = "";
     switch (type)
@@ -40,4 +40,9 @@ QString GetSysPath(_Path_Type type)
     }
     path = QDir::cleanPath(QDir(QCoreApplication::applicationDirPath()).filePath(path));
     return QDir::toNativeSeparators(path);
+}
+
+QString GetExePath()
+{
+    return QCoreApplication::applicationDirPath();
 }

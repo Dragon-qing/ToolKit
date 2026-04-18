@@ -2,7 +2,6 @@
 #define COMMON_H
 #include <QTextCodec>
 #include <QString>
-#include <QDomDocument>
 #include <QStatusBar>
 #include <QLayout>
 #include <QCoreApplication>
@@ -32,24 +31,13 @@ void ComDebug(const fBit64 &content, const QString &title = "");
 void ComDebug(const QStringList content, const QString &title = "");
 #endif
 
-Bit32 GetXmlDoc(QString path, QDomDocument &doc);
-Bit32 SaveXmlDoc(QString path, const QDomDocument &doc);
-
-QByteArray StrToQByte(QString str, const Bit8 *unicode); // QString按指定编码转换为QByte
-
+// 状态栏提示
 void InitStatusBar(QStatusBar *statusBar); // 初始化状态栏
 void DestoryStatusBar(); // 销毁状态栏
-
 void PromptOut(const QString &content, Bit32 outtime = 0);
+
 // 获取数据的范围
 QPair<fBit64, fBit64> GetRange(const QVector<fBit64> &in);
 
 bool LayoutContainsWidget(QLayout *layout, QWidget* widget);
-
-
-/**
- * @brief: 获取可执行文件路径
- * @return {QString} 路径字符串
- */
-QString GetExePath();
 #endif // COMMON_H
