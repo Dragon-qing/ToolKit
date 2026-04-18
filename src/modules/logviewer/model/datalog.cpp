@@ -45,8 +45,10 @@ void DataLog::LoadLog(QStandardItemModel *model)
         return;
     }
     QTextStream in(&file);
+    in.setCodec("UTF-8");
     while (!in.atEnd())
     {
+        // 解决中文乱码
         QString line = in.readLine();
         // 使用正则表达式解析日志行
         QRegularExpression re(R"(\[(.*?)\]\s\[(.*?)\]\s(.*))");

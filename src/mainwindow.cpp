@@ -15,8 +15,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setStyleSheet(DataPainter::GetInstance().GetStyleSheetStr()); // 设置样式表
 
-    m_pWidgetManger = new WidgetManger(this);
-    ui->verticalLayout_2->addWidget(m_pWidgetManger);
+    m_pWidgetManager = new WidgetManager(this);
+    ui->verticalLayout_2->addWidget(m_pWidgetManager);
     // 重置窗口大小
     resize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -37,7 +37,7 @@ void MainWindow::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() == m_nTimer1)
     {
-        BaseWidget *baseWidget = dynamic_cast<BaseWidget *>(m_pWidgetManger->GetCurrentWidget());
+        BaseWidget *baseWidget = dynamic_cast<BaseWidget *>(m_pWidgetManager->GetCurrentWidget());
         if (baseWidget != NULL)
         {
             baseWidget->MessageFlows(MsgData::REFRESH, "");

@@ -1,5 +1,5 @@
-﻿#ifndef WIDGETMANGER_H
-#define WIDGETMANGER_H
+﻿#ifndef WIDGETMANAGER_H
+#define WIDGETMANAGER_H
 
 #include <QWidget>
 #include <QMenu>
@@ -9,16 +9,16 @@
 #include "dlghelp.h"
 
 namespace Ui {
-class WidgetManger;
+class WidgetManager;
 }
 
-class WidgetManger : public QWidget
+class WidgetManager : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit WidgetManger(QWidget *parent = nullptr);
-    ~WidgetManger();
+    explicit WidgetManager(QWidget *parent = nullptr);
+    ~WidgetManager();
     QWidget *GetCurrentWidget();
 
 private:
@@ -31,7 +31,7 @@ private:
         TEST_TYPE,          // 测试
         TOTAL_NUM
     };
-    Ui::WidgetManger *ui;
+    Ui::WidgetManager *ui;
 
     QList<QWidget *> m_widgetContainer; // 窗口容器
     QList<QDialog *> m_dialogContainer; // 对话框容器
@@ -53,4 +53,4 @@ private slots:
 
 };
 
-#endif // WIDGETMANGER_H
+#endif // WIDGETMANAGER_H

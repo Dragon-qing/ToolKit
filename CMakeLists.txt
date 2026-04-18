@@ -35,119 +35,140 @@ set(PROJECT_SOURCES
     ./src/main.cpp
     ./src/mainwindow.cpp
     # core
-    ./src/core/basewidget.cpp
-    ./src/core/sysapi.cpp
-    ./src/core/widgetmanger.cpp
-    # 数据层
-    ./src/model/datacomrpt.cpp
-    ./src/model/dataconfig.cpp
-    ./src/model/datalog.cpp
-    ./src/model/datapainter.cpp
-    ./src/model/dataxmleditor.cpp
-    ./src/model/msgdata.cpp
-    # 服务层
-    ./src/service/dataservice.cpp
-    # 界面层
-    ./src/widget/components/basetable.cpp
-    ./src/widget/components/unionplot.cpp
-
-    ./src/widget/dlgabout.cpp
-    ./src/widget/dlgarchivemakeinfo.cpp
-    ./src/widget/dlgarchiveprocess.cpp
-    ./src/widget/dlgcomres.cpp
-    ./src/widget/dlghelp.cpp
-    ./src/widget/dlgprompt.cpp
-    ./src/widget/dlgunionplotsubline.cpp
-    ./src/widget/wgarchivemaker.cpp
-    ./src/widget/wgcomrpt.cpp
-    ./src/widget/wglog.cpp
-    ./src/widget/wgrenametool.cpp
-    ./src/widget/wgtyproaimgcleaner.cpp
-    ./src/widget/wgxmleditor.cpp
-    # 工具类
-    ./src/utils/tklogger.cpp
+    ./src/core/system/sysapi.cpp
+    ./src/core/model/msgdata.cpp
+    ./src/core/logging/tklogger.cpp
+    ./src/core/config/configsetting.cpp
+    ./src/core/externaltool/externaltoolbase.cpp
+    ./src/core/externaltool/exeexternaltool.cpp
+    ./src/core/externaltool/shellexternaltool.cpp
+    ./src/core/externaltool/apiexternaltool.cpp
+    ./src/core/externaltool/toolfactory.cpp
+    # ui
+    ./src/ui/base/basewidget.cpp
+    ./src/ui/components/basetable.cpp
+    ./src/ui/components/unionplot.cpp
+    ./src/ui/widgetmanager.cpp
+    # 工具
     ./src/utils/common.cpp
-    ./src/utils/externaltool/externaltoolbase.cpp
-    ./src/utils/externaltool/exeexternaltool.cpp
-    ./src/utils/externaltool/shellexternaltool.cpp
-    ./src/utils/externaltool/apiexternaltool.cpp
-    ./src/utils/externaltool/toolfactory.cpp
-
     # 第三方
     ./src/thirdparty/qcustomplot.cpp
+    # modules
+    # about模块
+    ./src/modules/about/widget/dlgabout.cpp
+    # archive模块
+    ./src/modules/archive/widget/dlgarchivemakeinfo.cpp
+    ./src/modules/archive/widget/dlgarchiveprocess.cpp
+    ./src/modules/archive/widget/wgarchivemaker.cpp
+    # comrpt模块
+    ./src/modules/comrpt/model/datacomrpt.cpp
+    ./src/modules/comrpt/widget/dlgcomres.cpp
+    ./src/modules/comrpt/widget/dlgunionplotsubline.cpp
+    ./src/modules/comrpt/widget/wgcomrpt.cpp
+    # help模块
+    ./src/modules/help/widget/dlghelp.cpp
+    # logviewer模块
+    ./src/modules/logviewer/model/datalog.cpp
+    ./src/modules/logviewer/widget/wglog.cpp
+    # prompt模块
+    ./src/modules/prompt/widget/dlgprompt.cpp
+    # renametool模块
+    ./src/modules/renametool/widget/wgrenametool.cpp
+    # typroacleaner模块
+    ./src/modules/typroacleaner/widget/wgtyproaimgcleaner.cpp
+    # xmleditor模块
+    ./src/modules/xmleditor/model/dataxmleditor.cpp
+    ./src/modules/xmleditor/widget/wgxmleditor.cpp
+    # thememanager模块
+    ./src/modules/thememanager/model/datapainter.cpp
 )
 
 set(PROJECT_HEADERS
     ./src/mainwindow.h
     # core
-    ./src/core/basewidget.h
-    ./src/core/datadef.h
-    ./src/core/sysapi.h
-    ./src/core/widgetmanger.h
-    # 数据层
-    ./src/model/datacomrpt.h
-    ./src/model/dataconfig.h
-    ./src/model/datalog.h
-    ./src/model/datapainter.h
-    ./src/model/dataxmleditor.h
-    ./src/model/msgdata.h
-    # 服务层
-    ./src/service/dataservice.h
-    # 界面层
-    ./src/widget/components/basetable.h
-    ./src/widget/components/unionplot.h
-
-    ./src/widget/dlgabout.h
-    ./src/widget/dlgarchivemakeinfo.h
-    ./src/widget/dlgarchiveprocess.h
-    ./src/widget/dlgcomres.h
-    ./src/widget/dlghelp.h
-    ./src/widget/dlgprompt.h
-    ./src/widget/dlgunionplotsubline.h
-    ./src/widget/wgarchivemaker.h
-    ./src/widget/wgcomrpt.h
-    ./src/widget/wglog.h
-    ./src/widget/wgrenametool.h
-    ./src/widget/wgtyproaimgcleaner.h
-    ./src/widget/wgxmleditor.h
-    # 工具类
-    ./src/utils/tklogger.h
+    ./src/core/system/sysapi.h
+    ./src/core/model/msgdata.h
+    ./src/core/model/datadef.h
+    ./src/core/config/configsetting.h
+    ./src/core/logging/tklogger.h
+    ./src/core/externaltool/externaltoolbase.h
+    ./src/core/externaltool/exeexternaltool.h
+    ./src/core/externaltool/shellexternaltool.h
+    ./src/core/externaltool/apiexternaltool.h
+    ./src/core/externaltool/toolfactory.h
+    ./src/core/externaltool/factoryregister.h
+    # ui
+    ./src/ui/base/basewidget.h
+    ./src/ui/components/basetable.h
+    ./src/ui/components/unionplot.h
+    ./src/ui/widgetmanager.h
+    # 工具
     ./src/utils/common.h
-    ./src/utils/externaltool/externaltoolbase.h
-    ./src/utils/externaltool/exeexternaltool.h
-    ./src/utils/externaltool/shellexternaltool.h
-    ./src/utils/externaltool/apiexternaltool.h
-    ./src/utils/externaltool/toolfactory.h
-    ./src/utils/externaltool/factoryregister.h
-
     # 第三方
     ./src/thirdparty/qcustomplot.h
-    )
+    # modules
+    # about模块
+    ./src/modules/about/widget/dlgabout.h
+    # archive模块
+    ./src/modules/archive/widget/dlgarchivemakeinfo.h
+    ./src/modules/archive/widget/dlgarchiveprocess.h
+    ./src/modules/archive/widget/wgarchivemaker.h
+    # comrpt模块
+    ./src/modules/comrpt/model/datacomrpt.h
+    ./src/modules/comrpt/widget/dlgcomres.h
+    ./src/modules/comrpt/widget/dlgunionplotsubline.h
+    ./src/modules/comrpt/widget/wgcomrpt.h
+    # help模块
+    ./src/modules/help/widget/dlghelp.h
+    # logviewer模块
+    ./src/modules/logviewer/model/datalog.h
+    ./src/modules/logviewer/widget/wglog.h
+    # prompt模块
+    ./src/modules/prompt/widget/dlgprompt.h
+    # renametool模块
+    ./src/modules/renametool/widget/wgrenametool.h
+    # typroacleaner模块
+    ./src/modules/typroacleaner/widget/wgtyproaimgcleaner.h
+    # xmleditor模块
+    ./src/modules/xmleditor/model/dataxmleditor.h
+    ./src/modules/xmleditor/widget/wgxmleditor.h
+    # thememanager模块
+    ./src/modules/thememanager/model/datapainter.h
+)
 
 set(PROJECT_UI
-    ./src/mainwindow.ui
-    # core
-    ./src/core/basewidget.ui
-    ./src/core/widgetmanger.ui
-    # 数据层
-    ./src/model/datapainter.ui
-    # 界面层
-    ./src/widget/components/basetable.ui
-    ./src/widget/components/unionplot.ui
 
-    ./src/widget/dlgabout.ui
-    ./src/widget/dlgarchivemakeinfo.ui
-    ./src/widget/dlgarchiveprocess.ui
-    ./src/widget/dlgcomres.ui
-    ./src/widget/dlghelp.ui
-    ./src/widget/dlgprompt.ui
-    ./src/widget/dlgunionplotsubline.ui
-    ./src/widget/wgarchivemaker.ui
-    ./src/widget/wgcomrpt.ui
-    ./src/widget/wglog.ui
-    ./src/widget/wgrenametool.ui
-    ./src/widget/wgtyproaimgcleaner.ui
-    ./src/widget/wgxmleditor.ui
+    ./src/mainwindow.ui
+    # ui
+    ./src/ui/base/basewidget.ui
+    ./src/ui/components/basetable.ui
+    ./src/ui/components/unionplot.ui
+    ./src/ui/widgetmanager.ui
+    # modules
+    # about模块
+    ./src/modules/about/widget/dlgabout.ui
+    # archive模块
+    ./src/modules/archive/widget/dlgarchivemakeinfo.ui
+    ./src/modules/archive/widget/dlgarchiveprocess.ui
+    ./src/modules/archive/widget/wgarchivemaker.ui
+    # comrpt模块
+    ./src/modules/comrpt/widget/dlgcomres.ui
+    ./src/modules/comrpt/widget/dlgunionplotsubline.ui
+    ./src/modules/comrpt/widget/wgcomrpt.ui
+    # help模块
+    ./src/modules/help/widget/dlghelp.ui
+    # logviewer模块
+    ./src/modules/logviewer/widget/wglog.ui
+    # prompt模块
+    ./src/modules/prompt/widget/dlgprompt.ui
+    # renametool模块
+    ./src/modules/renametool/widget/wgrenametool.ui
+    # thememanager模块
+    ./src/modules/thememanager/model/datapainter.ui
+    # typroacleaner模块
+    ./src/modules/typroacleaner/widget/wgtyproaimgcleaner.ui
+    # xmleditor模块
+    ./src/modules/xmleditor/widget/wgxmleditor.ui
 )
 
 
@@ -167,14 +188,41 @@ set_target_properties(DQToolKits PROPERTIES
 target_include_directories(DQToolKits PRIVATE
     ./src
     ./src/core
-    ./src/widget
-    ./src/widget/components
-    ./src/model
-    ./src/service
-    ./src/thirdparty
+    ./src/core/model
+    ./src/core/logging
+    ./src/core/config
+    ./src/core/externaltool
+    ./src/core/system
+    ./src/ui
+    ./src/ui/base
+    ./src/ui/components
     ./src/utils
-    ./src/utils/externaltool
+    ./src/thirdparty
+    ./src/thirdparty/EasyQtSql
     ./include
+    # about模块
+    ./src/modules/about/widget
+    # archive模块
+    ./src/modules/archive/widget
+    # comrpt模块
+    ./src/modules/comrpt/widget
+    ./src/modules/comrpt/model
+    # help模块
+    ./src/modules/help/widget
+    # logviewer模块
+    ./src/modules/logviewer/widget
+    ./src/modules/logviewer/model
+    # prompt模块
+    ./src/modules/prompt/widget
+    # renametool模块
+    ./src/modules/renametool/widget
+    # thememanager模块
+    ./src/modules/thememanager/model
+    # typroacleaner模块
+    ./src/modules/typroacleaner/widget
+    # xmleditor模块
+    ./src/modules/xmleditor/model
+    ./src/modules/xmleditor/widget
 )
 
 # 添加第三方库

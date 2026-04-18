@@ -19,5 +19,4 @@ typedef enum _Path_Type{
 }PATH_TYPE;
 
 QString GetSysPath(PATH_TYPE type);
-
 #endif // SYSAPI_H
