@@ -19,3 +19,12 @@ WgRenameTool::~WgRenameTool()
 {
     delete ui;
 }
+
+
+void WgRenameTool::MessageFlows(QVariant messageid, QVariant messageValue)
+{
+}
+
+QStringList WgRenameTool::GetHelpText()
+{
+}

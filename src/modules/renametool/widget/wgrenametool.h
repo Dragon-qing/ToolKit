@@ -15,6 +15,11 @@ public:
     explicit WgRenameTool(QWidget *parent = nullptr);
     ~WgRenameTool();
 
+    // BaseWidget interface
+public:
+    void MessageFlows(QVariant messageid, QVariant messageValue) override;
+    QStringList GetHelpText() override;
+
 private:
     Ui::WgRenameTool *ui;
 };
