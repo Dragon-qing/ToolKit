@@ -5,7 +5,7 @@
 
 #include "datadef.h"
 
-#include "widgetmanger.h"
+#include "widgetmanager.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,7 +25,7 @@ protected:
 
 private:
     Ui::MainWindow *ui;
-    WidgetManger *m_pWidgetManger;
+    WidgetManager *m_pWidgetManager;
     Bit32 m_nTimer1;    // 200ms定时器
     Bit32 m_nTimer2;    // 20ms定时器
 

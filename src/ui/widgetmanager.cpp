@@ -1,6 +1,6 @@
 /*!
  * @brief 界面管理类
- * @file widgetmanger.cpp
+ * @file widgetmanager.cpp
  * @date 2024/08/11
  * @author Dragonqing
  */
@@ -16,14 +16,14 @@
 
 #include "dlgabout.h"
 
-#include "widgetmanger.h"
-#include "ui_widgetmanger.h"
+#include "widgetmanager.h"
+#include "ui_widgetmanager.h"
 
 #define GENERATE_ITEM(classname, parent) new classname(parent)
 
-WidgetManger::WidgetManger(QWidget *parent) :
+WidgetManager::WidgetManager(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::WidgetManger)
+    ui(new Ui::WidgetManager)
 {
     ui->setupUi(this);
     m_widgetContainer.clear();
@@ -42,18 +42,18 @@ WidgetManger::WidgetManger(QWidget *parent) :
         ui->stackedWidget->addWidget(tmpWidget);
     }
 
-    connect(ui->stackedWidget, &QStackedWidget::currentChanged, this, &WidgetManger::WidgetChangeSlot);
+    connect(ui->stackedWidget, &QStackedWidget::currentChanged, this, &WidgetManager::WidgetChangeSlot);
     // 注册帮助页面全局快捷键
     QHotkey *helpHotKey = new QHotkey(QKeySequence("Ctrl+H"), true, qApp);
-    connect(helpHotKey, &QHotkey::activated, this, &WidgetManger::CallHelpDlgSlot);
+    connect(helpHotKey, &QHotkey::activated, this, &WidgetManager::CallHelpDlgSlot);
 }
 
-WidgetManger::~WidgetManger()
+WidgetManager::~WidgetManager()
 {
     delete ui;
 }
 
-QWidget *WidgetManger::GetCurrentWidget()
+QWidget *WidgetManager::GetCurrentWidget()
 {
     Bit32 idx = ui->stackedWidget->currentIndex();
 
@@ -65,7 +65,7 @@ QWidget *WidgetManger::GetCurrentWidget()
     return m_widgetContainer.at(idx);
 }
 
-void WidgetManger::InitWidgetContainer()
+void WidgetManager::InitWidgetContainer()
 {
     Menu_Type type = TOOLS_TYPE;
     // 工具菜单组
@@ -80,7 +80,7 @@ void WidgetManger::InitWidgetContainer()
     AddDialog(GENERATE_ITEM(DlgAbout, this), type, TR("关于"));
 }
 
-void WidgetManger::AddWidget(QWidget *widget, Menu_Type menuType, const QString &name)
+void WidgetManager::AddWidget(QWidget *widget, Menu_Type menuType, const QString &name)
 {
     if (widget == NULL)
     {
@@ -96,10 +96,10 @@ void WidgetManger::AddWidget(QWidget *widget, Menu_Type menuType, const QString 
     m_widgetContainer.append(widget);
     m_wgIdxMap.insert(action, m_widgetContainer.count() - 1);
     action->setProperty("item_type", "wg");
-    connect(action, &QAction::triggered, this, &WidgetManger::HandleActionTriggeredSlot);
+    connect(action, &QAction::triggered, this, &WidgetManager::HandleActionTriggeredSlot);
 }
 
-void WidgetManger::AddDialog(QDialog *dlg, Menu_Type type, const QString &name)
+void WidgetManager::AddDialog(QDialog *dlg, Menu_Type type, const QString &name)
 {
     if (dlg == nullptr)
     {
@@ -116,10 +116,10 @@ void WidgetManger::AddDialog(QDialog *dlg, Menu_Type type, const QString &name)
     m_dialogContainer.append(dlg);
     m_dlgIdxMap.insert(action, m_dialogContainer.count() - 1);
     action->setProperty("item_type", "dlg");
-    connect(action, &QAction::triggered, this, &WidgetManger::HandleActionTriggeredSlot);
+    connect(action, &QAction::triggered, this, &WidgetManager::HandleActionTriggeredSlot);
 }
 
-QMenu *WidgetManger::CreateMenuItem(Menu_Type type)
+QMenu *WidgetManager::CreateMenuItem(Menu_Type type)
 {
     QMenu *menu = new QMenu(this);
     QString str = "";
@@ -146,13 +146,13 @@ QMenu *WidgetManger::CreateMenuItem(Menu_Type type)
 }
 
 /**
- * @brief WidgetManger::AddItemToMenu 向菜单中添加选项
+ * @brief WidgetManager::AddItemToMenu 向菜单中添加选项
  * @param type 菜单类型
  * @param menu 待添加的menu对象
  * @param actionName 为空则是分隔符
  * @return
  */
-QAction* WidgetManger::AddItemToMenu(Menu_Type type, QMenu *menu, const QString &actionName)
+QAction* WidgetManager::AddItemToMenu(Menu_Type type, QMenu *menu, const QString &actionName)
 {
     if ((type < 0 || type >= TOTAL_NUM)
         || menu == nullptr)
@@ -172,7 +172,7 @@ QAction* WidgetManger::AddItemToMenu(Menu_Type type, QMenu *menu, const QString 
     return action;
 }
 
-void WidgetManger::InitTopMenu()
+void WidgetManager::InitTopMenu()
 {
     QMenuBar *menuBar = new QMenuBar(this);
     for (Bit32 i = 0 ; i < TOTAL_NUM; i++)
@@ -184,7 +184,7 @@ void WidgetManger::InitTopMenu()
     ui->verticalLayout->setMenuBar(menuBar);
 }
 
-void WidgetManger::WidgetChangeSlot(int index)
+void WidgetManager::WidgetChangeSlot(int index)
 {
     BaseWidget *wg = dynamic_cast<BaseWidget *>(m_widgetContainer.at(index));
     if (wg != NULL)
@@ -194,7 +194,7 @@ void WidgetManger::WidgetChangeSlot(int index)
     }
 }
 
-void WidgetManger::CallHelpDlgSlot()
+void WidgetManager::CallHelpDlgSlot()
 {
     BaseWidget *wg = dynamic_cast<BaseWidget *>(GetCurrentWidget());
     if (wg != NULL)
@@ -205,7 +205,7 @@ void WidgetManger::CallHelpDlgSlot()
     m_pDlgHelp->show();
 }
 
-void WidgetManger::HandleActionTriggeredSlot()
+void WidgetManager::HandleActionTriggeredSlot()
 {
     QObject *origin = sender();
     QAction *action = static_cast<QAction*>(origin);

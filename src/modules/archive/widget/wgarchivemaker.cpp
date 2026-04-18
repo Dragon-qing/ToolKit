@@ -14,7 +14,7 @@
 #include <QPainter>
 
 #include "common.h"
-#include "dataconfig.h"
+#include "configsetting.h"
 #include "tklogger.h"
 #include "toolfactory.h"
 
@@ -34,9 +34,9 @@ WgArchiveMaker::WgArchiveMaker(QWidget *parent) :
     m_nameList.clear();
     m_pathList.clear();
 
-    ui->lineEdit->setText(DataConfig::Instance().GetConfig("archive_cfg", "archive_savepath"));
-    ui->lineEdit_2->setText(DataConfig::Instance().GetConfig("archive_cfg", "archive_savefilename"));
-    int index = ui->comboBox_format->findText(DataConfig::Instance().GetConfig("archive_cfg", "archive_format"));
+    ui->lineEdit->setText(ConfigSetting::Instance().GetConfig("archive_cfg", "archive_savepath"));
+    ui->lineEdit_2->setText(ConfigSetting::Instance().GetConfig("archive_cfg", "archive_savefilename"));
+    int index = ui->comboBox_format->findText(ConfigSetting::Instance().GetConfig("archive_cfg", "archive_format"));
     if (index != -1)
     {
         ui->comboBox_format->setCurrentIndex(index);
@@ -224,7 +224,7 @@ void WgArchiveMaker::on_selectDirBtn_clicked()
 {
     QString path = QFileDialog::getExistingDirectory(this, "Select Folder", QCoreApplication::applicationDirPath());
     ui->lineEdit->setText(path);
-    DataConfig::Instance().SetConfig("archive_cfg", "archive_savepath", path);
+    ConfigSetting::Instance().SetConfig("archive_cfg", "archive_savepath", path);
 }
 
 void WgArchiveMaker::on_clsBtn_clicked()
@@ -253,7 +253,7 @@ void WgArchiveMaker::on_startBtn_clicked()
         return;
     }
     QString dirPath = ui->lineEdit->text();
-    DataConfig::Instance().SetConfig("archive_cfg", "archive_savefilename", nameStr);
+    ConfigSetting::Instance().SetConfig("archive_cfg", "archive_savefilename", nameStr);
     QString formatStr = ui->comboBox_format->currentText();
     if (dirPath.trimmed() != "")
     {
@@ -324,7 +324,7 @@ void WgArchiveMaker::on_startBtn_clicked()
 
 void WgArchiveMaker::OnFormatChangedSlot(const QString &arg1)
 {
-    DataConfig::Instance().SetConfig("archive_cfg", "archive_format", arg1);
+    ConfigSetting::Instance().SetConfig("archive_cfg", "archive_format", arg1);
 }
 
 void WgArchiveMaker::ClearList()
