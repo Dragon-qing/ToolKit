@@ -2,6 +2,7 @@
 #include <QTextStream>
 #include <QRegularExpression>
 
+#include "xmlopt.h"
 #include "common.h"
 
 #include "dataxmleditor.h"

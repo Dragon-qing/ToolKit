@@ -18,5 +18,16 @@ typedef enum _Path_Type{
     PATH_NUM
 }PATH_TYPE;
 
+/**
+ * @brief: 获取系统路径
+ * @param {PATH_TYPE} type: 路径类型
+ * @return {QString} 路径字符串
+ */
 QString GetSysPath(PATH_TYPE type);
+
+/**
+ * @brief: 获取可执行文件路径
+ * @return {QString} 路径字符串
+ */
+QString GetExePath();
 #endif // SYSAPI_H

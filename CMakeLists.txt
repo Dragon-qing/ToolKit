@@ -51,6 +51,8 @@ set(PROJECT_SOURCES
     ./src/ui/widgetmanager.cpp
     # 工具
     ./src/utils/common.cpp
+    ./src/utils/stringopt.cpp
+    ./src/utils/xmlopt.cpp
     # 第三方
     ./src/thirdparty/qcustomplot.cpp
     # modules
@@ -104,6 +106,8 @@ set(PROJECT_HEADERS
     ./src/ui/widgetmanager.h
     # 工具
     ./src/utils/common.h
+    ./src/utils/stringopt.h
+    ./src/utils/xmlopt.h
     # 第三方
     ./src/thirdparty/qcustomplot.h
     # modules

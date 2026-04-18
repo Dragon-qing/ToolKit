@@ -77,6 +77,8 @@ SOURCES += \
     ./src/ui/widgetmanager.cpp \
     # 工具
     ./src/utils/common.cpp \
+    ./src/utils/xmlopt.cpp \
+    ./src/utils/stringopt.cpp \
     # 第三方
     ./src/thirdparty/qcustomplot.cpp \
     # modules
@@ -129,6 +131,8 @@ HEADERS += \
     ./src/ui/widgetmanager.h \
     # 工具
     ./src/utils/common.h \
+    ./src/utils/xmlopt.h \
+    ./src/utils/stringopt.h \
     # 第三方
     ./src/thirdparty/qcustomplot.h \
     # modules
