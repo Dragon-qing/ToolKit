@@ -43,6 +43,8 @@ INCLUDEPATH += \
     src/modules/logviewer/model \
     src/modules/prompt/widget \
     src/modules/renametool/widget \
+    src/modules/renametool/model \
+    src/modules/renametool/service \
     src/modules/thememanager/model \
     src/modules/typroacleaner/widget \
     src/modules/xmleditor/model \
@@ -102,6 +104,7 @@ SOURCES += \
     ./src/modules/prompt/widget/dlgprompt.cpp \
     # renametool模块
     ./src/modules/renametool/widget/wgrenametool.cpp \
+    ./src/modules/renametool/service/renametoolservice.cpp \
     # typroacleaner模块
     ./src/modules/typroacleaner/widget/wgtyproaimgcleaner.cpp \
     # xmleditor模块
@@ -156,6 +159,8 @@ HEADERS += \
     ./src/modules/prompt/widget/dlgprompt.h \
     # renametool模块
     ./src/modules/renametool/widget/wgrenametool.h \
+    ./src/modules/renametool/model/renametooldata.h \
+    ./src/modules/renametool/service/renametoolservice.h \
     # typroacleaner模块
     ./src/modules/typroacleaner/widget/wgtyproaimgcleaner.h \
     # xmleditor模块

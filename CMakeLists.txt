@@ -44,6 +44,7 @@ set(PROJECT_SOURCES
     ./src/core/externaltool/shellexternaltool.cpp
     ./src/core/externaltool/apiexternaltool.cpp
     ./src/core/externaltool/toolfactory.cpp
+    ./src/core/threadmanager/threadmanager.cpp
     # ui
     ./src/ui/base/basewidget.cpp
     ./src/ui/components/basetable.cpp
@@ -76,6 +77,7 @@ set(PROJECT_SOURCES
     ./src/modules/prompt/widget/dlgprompt.cpp
     # renametool模块
     ./src/modules/renametool/widget/wgrenametool.cpp
+    ./src/modules/renametool/service/renametoolservice.cpp
     # typroacleaner模块
     ./src/modules/typroacleaner/widget/wgtyproaimgcleaner.cpp
     # xmleditor模块
@@ -99,6 +101,7 @@ set(PROJECT_HEADERS
     ./src/core/externaltool/apiexternaltool.h
     ./src/core/externaltool/toolfactory.h
     ./src/core/externaltool/factoryregister.h
+    ./src/core/threadmanager/threadmanager.h
     # ui
     ./src/ui/base/basewidget.h
     ./src/ui/components/basetable.h
@@ -131,6 +134,8 @@ set(PROJECT_HEADERS
     ./src/modules/prompt/widget/dlgprompt.h
     # renametool模块
     ./src/modules/renametool/widget/wgrenametool.h
+    ./src/modules/renametool/model/renametooldata.h
+    ./src/modules/renametool/service/renametoolservice.h
     # typroacleaner模块
     ./src/modules/typroacleaner/widget/wgtyproaimgcleaner.h
     # xmleditor模块
@@ -197,6 +202,7 @@ target_include_directories(DQToolKits PRIVATE
     ./src/core/config
     ./src/core/externaltool
     ./src/core/system
+    ./src/core/threadmanager
     ./src/ui
     ./src/ui/base
     ./src/ui/components
@@ -220,6 +226,8 @@ target_include_directories(DQToolKits PRIVATE
     ./src/modules/prompt/widget
     # renametool模块
     ./src/modules/renametool/widget
+    ./src/modules/renametool/model
+    ./src/modules/renametool/service
     # thememanager模块
     ./src/modules/thememanager/model
     # typroacleaner模块
