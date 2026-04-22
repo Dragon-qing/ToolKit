@@ -19,7 +19,7 @@ class WgLog : public BaseWidget
 public:
     explicit WgLog(QWidget *parent = nullptr);
     ~WgLog();
-    void MessageFlows(QVariant messageid, QVariant messageValue);
+    void MessageFlows(QVariant messageid, QVariant messageValue) override;
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
