@@ -2,7 +2,7 @@
  * @Author: Dragon-qing
  * @Date: 2026-04-16
  * @LastEditors: Dragon-qing
- * @FilePath: \ToolKit\src\utils\externaltool\exeexternaltool.cpp
+ * @FilePath: \ToolKit\src\core\externaltool\exeexternaltool.cpp
  * @Description: 可执行文件外部工具类，继承自ExternalToolBase，使用QProcess来管理外部工具的进程
  */
 #include <QTimer>
@@ -13,8 +13,9 @@
 #include "common.h"
 #include "tklogger.h"
 #include "sysapi.h"
+#include "factoryregister.h"
 
-#include "ExeExternalTool.h"
+#include "exeexternaltool.h"
 
 ExeExternalTool::ExeExternalTool(QObject *parent)
     : ExternalToolBase(parent)  

@@ -2,7 +2,7 @@
  * @Author: Dragon-qing
  * @Date: 2026-04-16
  * @LastEditors: Dragon-qing
- * @FilePath: \ToolKit\src\utils\externaltool\externaltoolbase.h
+ * @FilePath: \ToolKit\src\core\externaltool\externaltoolbase.h
  * @Description: 外部工具基类，定义了外部工具的基本接口和功能
  */
 #ifndef EXTERNALTOOLBASE_H
@@ -16,13 +16,6 @@ class ExternalToolBase : public QObject
 public:
     explicit ExternalToolBase(QObject *parent = nullptr);
     ~ExternalToolBase() = default;
-
-    /**
-     * @brief: 设置参数
-     * @param {QStringList} &args: 参数列表
-     * @return {}
-     */
-    virtual void SetArguments(const QStringList &args) = 0;
 
     /**
      * @brief: 运行工具
@@ -47,6 +40,14 @@ public:
      * @return {QString} 工具的输出结果
      */
     virtual QString GetOutput() = 0;
+
+protected:
+        /**
+     * @brief: 设置参数
+     * @param {QStringList} &args: 参数列表
+     * @return {}
+     */
+    virtual void SetArguments(const QStringList &args) = 0;
 };
 
 #endif // EXTERNALTOOLBASE_H
