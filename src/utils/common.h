@@ -14,8 +14,8 @@
 #define UTF_8 "UTF-8"
 #define FONT_STYLE "Microsoft YaHei"
 
-constexpr Bit32 WINDOW_WIDTH =  1280;
-constexpr Bit32 WINDOW_HEIGHT = 800;
+constexpr Bit32 WINDOW_WIDTH =  1600;
+constexpr Bit32 WINDOW_HEIGHT = 900;
 
 constexpr Bit32 DLG_WIDTH =  400;   // 对话框宽度
 constexpr Bit32 DLG_HEIGHT = 300;   // 对话框高度
