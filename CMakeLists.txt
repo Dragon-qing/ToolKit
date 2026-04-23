@@ -49,6 +49,7 @@ set(PROJECT_SOURCES
     ./src/ui/base/basewidget.cpp
     ./src/ui/components/basetable.cpp
     ./src/ui/components/unionplot.cpp
+    ./src/ui/components/dlgprompt.cpp
     ./src/ui/widgetmanager.cpp
     # 工具
     ./src/utils/common.cpp
@@ -73,8 +74,6 @@ set(PROJECT_SOURCES
     # logviewer模块
     ./src/modules/logviewer/model/datalog.cpp
     ./src/modules/logviewer/widget/wglog.cpp
-    # prompt模块
-    ./src/modules/prompt/widget/dlgprompt.cpp
     # renametool模块
     ./src/modules/renametool/widget/wgrenametool.cpp
     ./src/modules/renametool/service/renametoolservice.cpp
@@ -106,6 +105,7 @@ set(PROJECT_HEADERS
     ./src/ui/base/basewidget.h
     ./src/ui/components/basetable.h
     ./src/ui/components/unionplot.h
+    ./src/ui/components/dlgprompt.h
     ./src/ui/widgetmanager.h
     # 工具
     ./src/utils/common.h
@@ -128,10 +128,8 @@ set(PROJECT_HEADERS
     # help模块
     ./src/modules/help/widget/dlghelp.h
     # logviewer模块
-    ./src/modules/logviewer/model/datalog.h
     ./src/modules/logviewer/widget/wglog.h
-    # prompt模块
-    ./src/modules/prompt/widget/dlgprompt.h
+    ./src/modules/logviewer/model/datalog.h
     # renametool模块
     ./src/modules/renametool/widget/wgrenametool.h
     ./src/modules/renametool/model/renametooldata.h
@@ -152,6 +150,7 @@ set(PROJECT_UI
     ./src/ui/base/basewidget.ui
     ./src/ui/components/basetable.ui
     ./src/ui/components/unionplot.ui
+    ./src/ui/components/dlgprompt.ui
     ./src/ui/widgetmanager.ui
     # modules
     # about模块
@@ -168,8 +167,6 @@ set(PROJECT_UI
     ./src/modules/help/widget/dlghelp.ui
     # logviewer模块
     ./src/modules/logviewer/widget/wglog.ui
-    # prompt模块
-    ./src/modules/prompt/widget/dlgprompt.ui
     # renametool模块
     ./src/modules/renametool/widget/wgrenametool.ui
     # thememanager模块
@@ -222,8 +219,6 @@ target_include_directories(DQToolKits PRIVATE
     # logviewer模块
     ./src/modules/logviewer/widget
     ./src/modules/logviewer/model
-    # prompt模块
-    ./src/modules/prompt/widget
     # renametool模块
     ./src/modules/renametool/widget
     ./src/modules/renametool/model
