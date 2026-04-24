@@ -29,12 +29,7 @@ public:
     void SetTask(const RenameTaskDTO &task);
     RenameTaskDTO GetTask() const; // 获取当前任务数据
 
-    /**
-     * @brief: 异步预览重命名结果
-     * @return {void}
-     */
-    void PreviewAsync(); // 异步预览重命名结果
-    void ExecuteAsync(); // 异步执行重命名任务
+    void Run(); // 执行重命名任务
 
     bool IsRunning() const; // 是否正在执行重命名任务
     QString GetLastError() const; // 获取最近一次错误信息
@@ -60,6 +55,11 @@ private:
     RenameTaskDTO m_task; // 当前任务数据
     QString m_lastError; // 最近一次错误信息
     bool m_running; // 是否正在执行重命名任务
+
+    // 异步预览重命名结果
+    void PreviewAsync(); 
+    // 异步执行重命名任务
+    void ExecuteAsync(); 
 
     /**
      * @brief: 构建预览项列表
@@ -89,6 +89,16 @@ private:
      * @return {QString} 序号文本
      */
     QString BuildSequenceText(const RenameRuleDTO &rule, Bit32 sequenceValue) const;
+    /**
+     * @brief: 解析规则字符串中的预留字段
+     * @note: 预留字段包括但不限于 {name}（原文件名不含扩展名），{ext}（扩展名），{seq}（序号）等
+     * @param {QString} &text: 规则文本
+     * @param {FileItemDTO} &file: 文件项数据
+     * @param {bool} forRegexPattern: 是否用于正则表达式模式
+     * @return {QString} 解析后的文本
+     */
+    QString ResolveReservedFields(const QString &text, const FileItemDTO &file,
+                                  bool forRegexPattern) const;
     /**
      * @brief: 设置错误信息
      * @param {QString} &errorMessage: 错误信息

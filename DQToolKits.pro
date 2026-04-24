@@ -30,6 +30,7 @@ INCLUDEPATH += \
     src/core/model src/core/logging \
     src/core/externaltool \
     src/core/config \
+    src/core/threadmanager \
     src/ui src/ui/base src/ui/components \
     src/utils \
     src/thirdparty src/thirdparty/EasyQtSql \
@@ -71,6 +72,7 @@ SOURCES += \
     ./src/core/externaltool/shellexternaltool.cpp \
     ./src/core/externaltool/apiexternaltool.cpp \
     ./src/core/externaltool/toolfactory.cpp \
+    ./src/core/threadmanager/threadmanager.cpp \
     # ui
     ./src/ui/base/basewidget.cpp \
     ./src/ui/components/basetable.cpp \
@@ -126,11 +128,12 @@ HEADERS += \
     ./src/core/externaltool/apiexternaltool.h \
     ./src/core/externaltool/toolfactory.h \
     ./src/core/externaltool/factoryregister.h \
+    ./src/core/threadmanager/threadmanager.cpp \
     # ui
     ./src/ui/base/basewidget.h \
     ./src/ui/components/basetable.h \
     ./src/ui/components/unionplot.h \
-    ./src/ui/components/widget/dlgprompt.h \
+    ./src/ui/components/dlgprompt.h \
     ./src/ui/components/flowlayout.h \
     ./src/ui/widgetmanager.h \
     # 工具

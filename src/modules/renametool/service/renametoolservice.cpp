@@ -1,15 +1,12 @@
 #include "renametoolservice.h"
 
-#include <qmetaobject.h>
-#include <qobjectdefs.h>
-
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QHash>
 #include <QPointer>
 #include <QRegularExpression>
-#include <QTimer>
+#include <QDateTime>
 
 #include "common.h"
 #include "datadef.h"
@@ -27,6 +24,26 @@ void RenameToolService::SetTask(const RenameTaskDTO& task) {
 
 RenameTaskDTO RenameToolService::GetTask() const {
     return m_task;
+}
+
+void RenameToolService::Run()
+{
+    if (m_task.files.isEmpty()) {
+        SetError(TR("没有文件需要重命名"));
+        emit ErrorSignal(m_lastError);
+        return;
+    }
+    else if (m_task.rules.isEmpty()) {
+        SetError(TR("没有定义重命名规则"));
+        emit ErrorSignal(m_lastError);
+        return;
+    }
+    
+    if (m_task.previewMode) {
+        PreviewAsync();
+    } else {
+        ExecuteAsync();
+    }
 }
 
 void RenameToolService::PreviewAsync() {
@@ -275,21 +292,34 @@ QString RenameToolService::ApplyRulesToFileName(const FileItemDTO& file, Bit32 s
 
         switch (rule.type) {
             case RenameRuleType::Replace: {
+                const QString resolvedFindText =
+                    ResolveReservedFields(rule.findText, file, rule.useRegex);
+                QString tmp = "";
+                if (m_task.applyRulesToFullName) { // 去除多余的扩展名
+                    tmp = ResolveReservedFields(rule.replaceText, file, false);
+                    Bit32 dotIndex = tmp.lastIndexOf(".");
+                    if (dotIndex != -1) {
+                        tmp = tmp.left(dotIndex);
+                    }
+                } else {
+                    tmp = ResolveReservedFields(rule.replaceText, file, false);
+                }
+                const QString resolvedReplaceText = tmp;
                 if (rule.useRegex) {
                     QRegularExpression::PatternOptions options = QRegularExpression::NoPatternOption;
                     if (!rule.caseSensitive) {
                         options |= QRegularExpression::CaseInsensitiveOption;
                     }
 
-                    QRegularExpression reg(rule.findText, options);
+                    QRegularExpression reg(resolvedFindText, options);
                     if (!reg.isValid()) {
                         errorMessage = TR("正则表达式无效: %1").arg(reg.errorString());
                         return currentName;
                     }
-                    currentName.replace(reg, rule.replaceText);
+                    currentName.replace(reg, resolvedReplaceText);
                 } else {
                     const Qt::CaseSensitivity sensitivity = rule.caseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
-                    currentName.replace(rule.findText, rule.replaceText, sensitivity);
+                    currentName.replace(resolvedFindText, resolvedReplaceText, sensitivity);
                 }
                 break;
             }
@@ -305,7 +335,7 @@ QString RenameToolService::ApplyRulesToFileName(const FileItemDTO& file, Bit32 s
         }
     };
 
-    return m_task.applyRulesToFullName ? currentName : currentName + extension;
+    return m_task.applyRulesToFullName ? currentName : currentName + "." + extension;
 }
 
 bool RenameToolService::ValidateFileName(const QString& fileName, QString& errorMessage) const {
@@ -354,6 +384,40 @@ QString RenameToolService::BuildSequenceText(const RenameRuleDTO& rule, Bit32 se
     }
 
     return defaultSequence;
+}
+
+QString RenameToolService::ResolveReservedFields(const QString& text, const FileItemDTO& file, bool forRegexPattern) const                                                  
+{
+    QString resolved = text;
+    const QString nameToken = QStringLiteral("{name}");
+    QFileInfo fileInfo(file.originalPath);
+    QHash<QString, QString> tokenMap = {
+        {"name", file.baseName},
+        {"ext", file.extension},
+        {"date", fileInfo.birthTime().toString("yyyy-MM-dd")},
+        {"time", fileInfo.birthTime().toString("hh-mm-ss")},
+    };
+
+    QRegularExpression re(R"(\{(\w+)\})");
+    QRegularExpressionMatchIterator it = re.globalMatch(resolved);
+
+    while (it.hasNext())
+    {
+        auto match = it.next();
+        QString key = match.captured(1);
+
+        if (tokenMap.contains(key))
+        {
+            QString value = tokenMap[key];
+
+            if (forRegexPattern)
+                value = QRegularExpression::escape(value);
+
+            resolved.replace(match.captured(0), value);
+        }
+    }
+
+    return m_task.applyRulesToFullName ? resolved + "." + file.extension : resolved;
 }
 
 void RenameToolService::SetError(const QString& errorMessage) {

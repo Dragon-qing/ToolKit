@@ -41,9 +41,9 @@ struct RenameRuleDTO {
     bool caseSensitive = false;
 
     // Sequence
-    int startIndex = 1;
-    int step = 1;
-    int padding = 2;   // 01, 02
+    int startIndex = 1; // 开始序号
+    int step = 1;       // 步长
+    int padding = 2;    // 序号填充位数
     QString format;    // e.g. "%03d"
 
     // Custom
@@ -52,8 +52,8 @@ struct RenameRuleDTO {
 
 // 重命名任务数据结构
 struct RenameTaskDTO {
-QVector<FileItemDTO> files;             // 文件列表
-QVector<RenameRuleDTO> rules;           // 规则
+    QVector<FileItemDTO> files;             // 文件列表
+    QVector<RenameRuleDTO> rules;           // 规则
 
     QString targetDirectory;   // 目标目录（可选，默认为原目录）
     bool previewMode = true;   // 是否只是预览
