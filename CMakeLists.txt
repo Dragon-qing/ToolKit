@@ -50,6 +50,7 @@ set(PROJECT_SOURCES
     ./src/ui/components/basetable.cpp
     ./src/ui/components/unionplot.cpp
     ./src/ui/components/dlgprompt.cpp
+    ./src/ui/components/flowlayout.cpp
     ./src/ui/widgetmanager.cpp
     # 工具
     ./src/utils/common.cpp
@@ -106,6 +107,7 @@ set(PROJECT_HEADERS
     ./src/ui/components/basetable.h
     ./src/ui/components/unionplot.h
     ./src/ui/components/dlgprompt.h
+    ./src/ui/components/flowlayout.h
     ./src/ui/widgetmanager.h
     # 工具
     ./src/utils/common.h
