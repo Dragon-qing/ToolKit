@@ -84,7 +84,7 @@ void InfoTable::SetFilePath(QStringList list)
 
 void InfoTable::keyPressEvent(QKeyEvent *event)
 {
-    if (event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_D || event->key() == Qt::Key_Delete)
+    if ((event->modifiers() & Qt::ControlModifier && event->key() == Qt::Key_D) || event->key() == Qt::Key_Delete)
     {
         QModelIndexList indexList = selectedIndexes();
         // 排序
