@@ -197,6 +197,9 @@ void WgRenameTool::on_pushButton_adddir_clicked()
         "",
         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
     );
+    if (dir.isEmpty()) {
+        return;
+    }
     QDir dirObj(dir);
     QVector<FileItemDTO> fileItems;
     for (QFileInfo &fileInfo : dirObj.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
