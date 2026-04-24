@@ -2,7 +2,7 @@
  * @Author: Dragon-qing
  * @Date: 2026-04-13
  * @LastEditors: Dragon-qing
- * @FilePath: \ToolKit\src\utils\tklogger.h
+ * @FilePath: \ToolKit\src\core\logging\tklogger.h
  * @Description: 日志工具类
  */
 #ifndef TKLOGGER_H

@@ -2,7 +2,7 @@
  * @Author: Dragon-qing
  * @Date: 2026-04-16
  * @LastEditors: Dragon-qing
- * @FilePath: \ToolKit\src\utils\externaltool\exeexternaltool.h
+ * @FilePath: \ToolKit\src\core\externaltool\exeexternaltool.h
  * @Description: 可执行文件外部工具类，继承自ExternalToolBase，使用QProcess来管理外部工具的进程(异步)
  */
 #ifndef EXEEXTERNALTOOL_H
@@ -10,7 +10,6 @@
 #include <QScopedPointer>
 #include <QProcess>
 
-#include "factoryregister.h"
 
 #include "externaltoolbase.h"
 
@@ -25,7 +24,6 @@ public:
     void Stop() override;
     bool IsRunning() const override;
     QString GetOutput() override;
-    
     QProcess *GetProcess() const { return m_process.data(); } // 获取QProcess对象指针，供外部使用
     
 protected:
@@ -44,8 +42,8 @@ protected:
     void SetArguments(const QStringList &args) override;
     /**
      * @brief: 获取指定索引的参数
-     * @param {int} index: 
-     * @return {QString}
+     * @param {int} index: 索引
+     * @return {QString} : 参数值，如果索引无效则返回空字符串
      */
     QString GetArgument(int index) const;
 
@@ -106,4 +104,5 @@ private slots:
     void OnReadyReadStandardOutputSlot() override; // 读取标准输出的槽函数
     void OnReadyReadStandardErrorSlot() override; // 读取标准错误的槽函数
 };
+
 #endif

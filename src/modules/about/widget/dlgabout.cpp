@@ -52,8 +52,9 @@ private:
 };
 
 DlgAbout::DlgAbout(QWidget *parent)
-    : QDialog(parent), d_ptr(new DlgAboutPrivate)
-    , ui(new Ui::DlgAbout)
+    : QDialog(parent),
+     ui(new Ui::DlgAbout),
+     d_ptr(new DlgAboutPrivate)
 {
     ui->setupUi(this);
     setWindowTitle(QObject::TR("关于"));

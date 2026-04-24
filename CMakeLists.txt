@@ -44,10 +44,13 @@ set(PROJECT_SOURCES
     ./src/core/externaltool/shellexternaltool.cpp
     ./src/core/externaltool/apiexternaltool.cpp
     ./src/core/externaltool/toolfactory.cpp
+    ./src/core/threadmanager/threadmanager.cpp
     # ui
     ./src/ui/base/basewidget.cpp
     ./src/ui/components/basetable.cpp
     ./src/ui/components/unionplot.cpp
+    ./src/ui/components/dlgprompt.cpp
+    ./src/ui/components/flowlayout.cpp
     ./src/ui/widgetmanager.cpp
     # 工具
     ./src/utils/common.cpp
@@ -72,10 +75,9 @@ set(PROJECT_SOURCES
     # logviewer模块
     ./src/modules/logviewer/model/datalog.cpp
     ./src/modules/logviewer/widget/wglog.cpp
-    # prompt模块
-    ./src/modules/prompt/widget/dlgprompt.cpp
     # renametool模块
     ./src/modules/renametool/widget/wgrenametool.cpp
+    ./src/modules/renametool/service/renametoolservice.cpp
     # typroacleaner模块
     ./src/modules/typroacleaner/widget/wgtyproaimgcleaner.cpp
     # xmleditor模块
@@ -99,10 +101,13 @@ set(PROJECT_HEADERS
     ./src/core/externaltool/apiexternaltool.h
     ./src/core/externaltool/toolfactory.h
     ./src/core/externaltool/factoryregister.h
+    ./src/core/threadmanager/threadmanager.h
     # ui
     ./src/ui/base/basewidget.h
     ./src/ui/components/basetable.h
     ./src/ui/components/unionplot.h
+    ./src/ui/components/dlgprompt.h
+    ./src/ui/components/flowlayout.h
     ./src/ui/widgetmanager.h
     # 工具
     ./src/utils/common.h
@@ -125,12 +130,12 @@ set(PROJECT_HEADERS
     # help模块
     ./src/modules/help/widget/dlghelp.h
     # logviewer模块
-    ./src/modules/logviewer/model/datalog.h
     ./src/modules/logviewer/widget/wglog.h
-    # prompt模块
-    ./src/modules/prompt/widget/dlgprompt.h
+    ./src/modules/logviewer/model/datalog.h
     # renametool模块
     ./src/modules/renametool/widget/wgrenametool.h
+    ./src/modules/renametool/model/renametooldata.h
+    ./src/modules/renametool/service/renametoolservice.h
     # typroacleaner模块
     ./src/modules/typroacleaner/widget/wgtyproaimgcleaner.h
     # xmleditor模块
@@ -147,6 +152,7 @@ set(PROJECT_UI
     ./src/ui/base/basewidget.ui
     ./src/ui/components/basetable.ui
     ./src/ui/components/unionplot.ui
+    ./src/ui/components/dlgprompt.ui
     ./src/ui/widgetmanager.ui
     # modules
     # about模块
@@ -163,8 +169,6 @@ set(PROJECT_UI
     ./src/modules/help/widget/dlghelp.ui
     # logviewer模块
     ./src/modules/logviewer/widget/wglog.ui
-    # prompt模块
-    ./src/modules/prompt/widget/dlgprompt.ui
     # renametool模块
     ./src/modules/renametool/widget/wgrenametool.ui
     # thememanager模块
@@ -197,6 +201,7 @@ target_include_directories(DQToolKits PRIVATE
     ./src/core/config
     ./src/core/externaltool
     ./src/core/system
+    ./src/core/threadmanager
     ./src/ui
     ./src/ui/base
     ./src/ui/components
@@ -216,10 +221,10 @@ target_include_directories(DQToolKits PRIVATE
     # logviewer模块
     ./src/modules/logviewer/widget
     ./src/modules/logviewer/model
-    # prompt模块
-    ./src/modules/prompt/widget
     # renametool模块
     ./src/modules/renametool/widget
+    ./src/modules/renametool/model
+    ./src/modules/renametool/service
     # thememanager模块
     ./src/modules/thememanager/model
     # typroacleaner模块

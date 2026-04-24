@@ -5,6 +5,9 @@
  * @author Dragon_qing
  */
 #include <QHeaderView>
+#include <QToolTip>
+#include <QHelpEvent>
+#include <QMimeData>
 
 #include "tklogger.h"
 #include "common.h"
@@ -93,7 +96,7 @@ Bit32 BaseTable::InitTable(QStringList headList, QVector<Bit32> scale)
     m_scaleVec.prepend(scaleSum);
 
     setModel(m_pModel);
-
+    setItemDelegate(new TooltipDelegate(this)); // 设置委托以支持工具提示
     return 0;
 }
 
@@ -138,12 +141,15 @@ int TKTableModel::columnCount(const QModelIndex &parent) const
 
 QVariant TKTableModel::data(const QModelIndex &index, int role) const
 {
-    if (role != Qt::DisplayRole || !index.isValid())
+    if (!index.isValid())
     {
         return QVariant();
     }
 
-    return m_dataVec.value(index.row()).value(index.column());
+    if (role == Qt::ToolTipRole || role == Qt::DisplayRole) {
+        return m_dataVec.value(index.row()).value(index.column()); // 鼠标悬停显示完整内容
+    }
+    return QVariant();
 }
 
 QVariant TKTableModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -203,4 +209,95 @@ bool TKTableModel::removeRows(int row, int count, const QModelIndex &parent)
 
     endRemoveRows();
     return true;
+}
+
+Qt::ItemFlags TKTableModel::flags(const QModelIndex &index) const
+{
+    Qt::ItemFlags defaultFlags = QAbstractTableModel::flags(index);
+
+    if (index.isValid())
+        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+    else
+        return Qt::ItemIsDropEnabled | defaultFlags;
+}
+
+QStringList TKTableModel::mimeTypes() const
+{
+    return { "application/x-row" };
+}
+
+bool TKTableModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+{
+    Q_UNUSED(column);
+
+    if (action == Qt::IgnoreAction)
+        return true;
+
+    if (!data || !data->hasFormat("application/x-row"))
+        return false;
+
+    const int sourceRow = data->data("application/x-row").toInt();
+
+    int targetRow = row; 
+    if (parent.isValid()) {
+        targetRow = parent.row(); 
+    } else {
+        targetRow = rowCount();
+    }
+
+    if (targetRow < 0) {
+        targetRow = m_dataVec.size();   // 放到空白区 = 放到最后
+    }
+
+    if (sourceRow == targetRow || sourceRow + 1 == targetRow)
+        return false;
+
+    beginResetModel();
+
+    QStringList item = m_dataVec.takeAt(sourceRow);
+
+    targetRow = qBound(0, targetRow, m_dataVec.size());
+    m_dataVec.insert(targetRow, item);
+
+    endResetModel();
+
+    emit RowMoved(sourceRow, targetRow);
+    return true;
+}
+
+Qt::DropActions TKTableModel::supportedDropActions() const
+{
+    return Qt::MoveAction;
+}
+
+QMimeData *TKTableModel::mimeData(const QModelIndexList &indexes) const
+{
+    QMimeData *mimeData = new QMimeData();
+
+    if (indexes.isEmpty())
+        return mimeData;
+
+    int row = indexes.first().row();
+    mimeData->setData("application/x-row", QByteArray::number(row));
+
+    return mimeData;
+}
+
+bool TooltipDelegate::helpEvent(QHelpEvent *event, QAbstractItemView *view,
+                   const QStyleOptionViewItem &option, const QModelIndex &index)
+{
+    if (!event || !view)
+        return false;
+
+    if (event->type() == QEvent::ToolTip) {
+        QString text = index.data(Qt::ToolTipRole).toString();
+
+        if (!text.isEmpty()) {
+            QToolTip::hideText(); // 隐藏之前的提示
+            QToolTip::showText(event->globalPos(), text, view);
+            return true;
+        }
+    }
+
+    return QStyledItemDelegate::helpEvent(event, view, option, index);
 }

@@ -7,5 +7,7 @@
         <file>img/close.png</file>
         <file>img/minimize.png</file>
         <file>style/style.qss</file>
+        <file>img/combox-arrow.svg</file>
+        <file>img/renametool.svg</file>
     </qresource>
 </RCC>

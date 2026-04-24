@@ -1,9 +1,11 @@
 ﻿#include <QSize>
 
 #include "basewidget.h"
+#include "common.h"
 #include "datapainter.h"
 #include "sysapi.h"
 #include "datacomrpt.h"
+#include "threadmanager.h"
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -24,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_nTimer2 = startTimer(20);
     InitStatusBar(ui->statusbar);
     RegistStruct();
+
+    // 初始化线程池
+    ThreadManager::Instance();
 }
 
 MainWindow::~MainWindow()
