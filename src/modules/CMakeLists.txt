@@ -1,4 +1,4 @@
-add_library(modules_lib)
+add_library(modules_lib INTERFACE)
 
 add_subdirectory(about)
 add_subdirectory(archive)
@@ -10,7 +10,7 @@ add_subdirectory(typroacleaner)
 add_subdirectory(xmleditor)
 add_subdirectory(thememanager)
 
-target_link_libraries(modules_lib PUBLIC
+target_link_libraries(modules_lib INTERFACE
     about_lib
     archive_lib
     comrpt_lib

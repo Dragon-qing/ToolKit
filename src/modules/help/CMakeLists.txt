@@ -12,5 +12,5 @@ target_include_directories(help_lib
 
 target_link_libraries(help_lib PUBLIC 
     Qt${QT_VERSION_MAJOR}::Widgets
-    ui_lib
+    components_lib
 )

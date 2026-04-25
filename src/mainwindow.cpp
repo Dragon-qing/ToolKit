@@ -6,6 +6,7 @@
 #include "sysapi.h"
 #include "datacomrpt.h"
 #include "threadmanager.h"
+#include "tklogger.h"
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"

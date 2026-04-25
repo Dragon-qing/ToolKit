@@ -14,5 +14,5 @@ target_link_libraries(typroacleaner_lib PUBLIC
     Qt${QT_VERSION_MAJOR}::Widgets
     core_lib
     utils_lib
-    ui_lib
+    components_lib
 )

@@ -1,7 +1,6 @@
 add_library(core_lib)
 
 target_sources(core_lib PRIVATE
-    system/sysapi.cpp
     model/msgdata.cpp
     logging/tklogger.cpp
     config/configsetting.cpp
@@ -20,7 +19,6 @@ target_include_directories(core_lib PUBLIC
     config
     externaltool
     threadmanager
-    system
 )
 
 target_link_libraries(core_lib PUBLIC 
@@ -29,7 +27,11 @@ target_link_libraries(core_lib PUBLIC
     Qt${QT_VERSION_MAJOR}::Gui 
     Qt${QT_VERSION_MAJOR}::Xml
 
-    utils_lib
+    common_lib
     
     spdlog
 )
+
+target_link_libraries(core_lib PRIVATE
+    utils_lib
+)   

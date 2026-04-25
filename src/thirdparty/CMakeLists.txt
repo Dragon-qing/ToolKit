@@ -20,5 +20,4 @@ target_include_directories(thirdparty_lib PUBLIC
 target_link_libraries(thirdparty_lib PUBLIC
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Sql
-    Qt${QT_VERSION_MAJOR}::Core
 )

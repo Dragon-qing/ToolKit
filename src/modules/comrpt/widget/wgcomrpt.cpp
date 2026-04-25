@@ -12,6 +12,7 @@
 #include <QRegularExpression>
 
 #include "datacomrpt.h"
+#include "TKLogger.h"
 
 #include "wgcomrpt.h"
 #include "ui_wgcomrpt.h"
