@@ -295,7 +295,7 @@ QString RenameToolService::ApplyRulesToFileName(const FileItemDTO& file, Bit32 s
                 const QString resolvedFindText =
                     ResolveReservedFields(rule.findText, file, rule.useRegex);
                 QString tmp = "";
-                if (m_task.applyRulesToFullName) { // 去除多余的扩展名
+                if (m_task.applyRulesToFullName && !file.extension.isEmpty()) { // 去除多余的扩展名
                     tmp = ResolveReservedFields(rule.replaceText, file, false);
                     Bit32 dotIndex = tmp.lastIndexOf(".");
                     if (dotIndex != -1) {
@@ -335,7 +335,10 @@ QString RenameToolService::ApplyRulesToFileName(const FileItemDTO& file, Bit32 s
         }
     };
 
-    return m_task.applyRulesToFullName ? currentName : currentName + "." + extension;
+    if (m_task.applyRulesToFullName) {
+        return currentName;
+    }
+    return extension.isEmpty() ? currentName : (currentName + "." + extension);
 }
 
 bool RenameToolService::ValidateFileName(const QString& fileName, QString& errorMessage) const {
@@ -417,7 +420,10 @@ QString RenameToolService::ResolveReservedFields(const QString& text, const File
         }
     }
 
-    return m_task.applyRulesToFullName ? resolved + "." + file.extension : resolved;
+    if (!m_task.applyRulesToFullName) {
+        return resolved;
+    }
+    return file.extension.isEmpty() ? resolved : (resolved + "." + file.extension);
 }
 
 void RenameToolService::SetError(const QString& errorMessage) {
