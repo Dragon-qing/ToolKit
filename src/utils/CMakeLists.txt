@@ -9,9 +9,9 @@ target_sources(utils_lib PRIVATE
 target_include_directories(utils_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(utils_lib PUBLIC 
-    Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Xml
 
-    core_lib
+    common_lib
+    platform_lib
 )

@@ -8,6 +8,8 @@ target_sources(comrpt_lib PRIVATE
     widget/dlgunionplotsubline.ui
     widget/wgcomrpt.cpp
     widget/wgcomrpt.ui
+    widget/unionplot.cpp
+    widget/unionplot.ui
 )
 
 target_include_directories(comrpt_lib
@@ -20,5 +22,6 @@ target_link_libraries(comrpt_lib PUBLIC
     Qt${QT_VERSION_MAJOR}::Widgets
     utils_lib
     core_lib
-    ui_lib
+    components_lib
+    thirdparty_lib
 )

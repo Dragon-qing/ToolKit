@@ -1,7 +1,6 @@
 ﻿#ifndef BASETABLE_H
 #define BASETABLE_H
 
-#include <qobjectdefs.h>
 #include <QWidget>
 #include <QTableView>
 #include <QStyledItemDelegate>

@@ -15,6 +15,9 @@ add_subdirectory(ui)
 add_subdirectory(utils)
 add_subdirectory(modules)
 add_subdirectory(thirdparty)
+add_subdirectory(common)
+add_subdirectory(components)
+add_subdirectory(platform)
 
 add_executable(DQToolKits
     main.cpp
@@ -36,7 +39,10 @@ target_link_libraries(DQToolKits PRIVATE
     ui_lib
     utils_lib
     modules_lib
+    components_lib
     thirdparty_lib
+    common_lib
+    platform_lib
 
     user32
     qhotkey

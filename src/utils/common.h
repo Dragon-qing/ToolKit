@@ -7,18 +7,17 @@
 #include <QCoreApplication>
 
 #include "datadef.h"
-#include "tklogger.h"
 
 #define UTF8 QTextCodec::codecForName("UTF-8")
 #define TR(str) tr((UTF8->fromUnicode(str).data()))
 #define UTF_8 "UTF-8"
 #define FONT_STYLE "Microsoft YaHei"
 
-constexpr Bit32 WINDOW_WIDTH =  1600;
-constexpr Bit32 WINDOW_HEIGHT = 900;
-
-constexpr Bit32 DLG_WIDTH =  400;   // 对话框宽度
-constexpr Bit32 DLG_HEIGHT = 300;   // 对话框高度
+inline constexpr Bit32 WINDOW_WIDTH =  1600;
+inline constexpr Bit32 WINDOW_HEIGHT = 900;
+    
+inline constexpr Bit32 DLG_WIDTH =  400;   // 对话框宽度
+inline constexpr Bit32 DLG_HEIGHT = 300;   // 对话框高度
 
 #ifdef QT_DEBUG // 测试环境
 // 输出到控制台

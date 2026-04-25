@@ -15,5 +15,5 @@ target_include_directories(xmleditor_lib
 target_link_libraries(xmleditor_lib PUBLIC 
     Qt${QT_VERSION_MAJOR}::Widgets
     core_lib
-    ui_lib
+    components_lib
 )

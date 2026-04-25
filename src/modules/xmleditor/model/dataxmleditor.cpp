@@ -4,6 +4,7 @@
 
 #include "xmlopt.h"
 #include "common.h"
+#include "tklogger.h"
 
 #include "dataxmleditor.h"
 
@@ -35,9 +36,11 @@ void DataXmlEditor::SetXmlFile(QString path, QStandardItemModel *model)
     {
         TKLogger::Instance().AddLog(WARNING_LOG, QObject::TR("xmlEditor: %1文件不存在！").arg(path));
     }
-    Bit32 ret = GetXmlDoc(path, m_docXml);
+    QString errorMsg("");
+    Bit32 ret = GetXmlDoc(path, m_docXml, errorMsg);
     if (ret < 0)
     {
+        TKLogger::Instance().AddLog(WARNING_LOG, errorMsg);
         return;
     }
     m_sPath = path;

@@ -5,9 +5,9 @@
  * @date 2025/04/27
  */
 #include <QDir>
+#include <QCoreApplication>
 
 #include "sysapi.h"
-#include "common.h"
 
 
 QString GetSysPath(PATH_TYPE type)

@@ -7,6 +7,7 @@
 #include <QKeyEvent>
 
 #include "datalog.h"
+#include "tklogger.h"
 
 #include "wglog.h"
 #include "ui_wglog.h"
