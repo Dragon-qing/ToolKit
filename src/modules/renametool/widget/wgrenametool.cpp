@@ -259,7 +259,7 @@ PreviewTable::PreviewTable(QWidget *parent)
 {
     QStringList headList;
     headList << TR("原文件名") << TR("") << TR("新文件名");
-    QVector<Bit32> scale = {4, 1, 4};
+    QVector<Bit32> scale = {3, 1, 3};
     InitTable(headList, scale);
     setShowGrid(false); // 隐藏表格线
     horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter); // 表头左对齐
