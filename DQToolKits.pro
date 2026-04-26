@@ -22,6 +22,7 @@ include(src/thirdparty/easyqtsql/EasyQtSql.pri)
 msvc {
     QMAKE_CFLAGS += /utf-8
     QMAKE_CXXFLAGS += /utf-8
+    QMAKE_CXXFLAGS += /std:c++20
 }
 RC_ICONS = img/toolbox.ico
 INCLUDEPATH += \
