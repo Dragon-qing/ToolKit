@@ -10,6 +10,7 @@
 #include "dlgarchivemakeinfo.h"
 #include "dlgarchiveprocess.h"
 #include "archiveservice.h"
+#include "overlay.h"
 
 #define MAX_DISITEM_NUM (6)
 
@@ -28,8 +29,11 @@ public:
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
+
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     Ui::WgArchiveMaker *ui;
@@ -40,6 +44,7 @@ private:
     bool m_bHasMoreLabel;
     DlgArchiveProcess *m_pDlgProcess;
     ArchiveService m_archiveService; // 用于管理压缩相关的服务和工具
+    Overlay *m_pOverlay; // 用于显示操作提示的遮罩组件
     
     /**
      * @brief: 根据内容创建一个图像标签

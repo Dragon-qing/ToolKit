@@ -26,17 +26,21 @@ msvc {
 RC_ICONS = img/toolbox.ico
 INCLUDEPATH += \
     src \
-    src/core src/core/system \
+    src/core \
     src/core/model src/core/logging \
     src/core/externaltool \
     src/core/config \
     src/core/threadmanager \
-    src/ui src/ui/base src/ui/components \
+    src/components \
+    src/ui \
     src/utils \
+    src/platform \
+    src/common \
     src/thirdparty src/thirdparty/EasyQtSql \
     include \
     src/modules/about/widget \
     src/modules/archive/widget \
+    src/modules/archive/service \
     src/modules/comrpt/widget \
     src/modules/comrpt/model \
     src/modules/help/widget \
@@ -63,7 +67,6 @@ SOURCES += \
     ./src/main.cpp  \
     ./src/mainwindow.cpp \
     # core
-    ./src/core/system/sysapi.cpp \
     ./src/core/model/msgdata.cpp \
     ./src/core/logging/tklogger.cpp \
     ./src/core/config/configsetting.cpp \
@@ -73,12 +76,15 @@ SOURCES += \
     ./src/core/externaltool/apiexternaltool.cpp \
     ./src/core/externaltool/toolfactory.cpp \
     ./src/core/threadmanager/threadmanager.cpp \
+    # platform
+    ./src/platform/sysapi.cpp \
+    # components
+    ./src/components/basewidget.cpp \
+    ./src/components/basetable.cpp \
+    ./src/components/dlgprompt.cpp \
+    ./src/components/flowlayout.cpp \
+    ./src/components/overlay.cpp \
     # ui
-    ./src/ui/base/basewidget.cpp \
-    ./src/ui/components/basetable.cpp \
-    ./src/ui/components/unionplot.cpp \
-    ./src/ui/components/dlgprompt.cpp \
-    ./src/ui/components/flowlayout.cpp \
     ./src/ui/widgetmanager.cpp \
     # 工具
     ./src/utils/common.cpp \
@@ -93,11 +99,13 @@ SOURCES += \
     ./src/modules/archive/widget/dlgarchivemakeinfo.cpp \
     ./src/modules/archive/widget/dlgarchiveprocess.cpp \
     ./src/modules/archive/widget/wgarchivemaker.cpp \
+    ./src/modules/archive/service/archiveservice.cpp \
     # comrpt模块
     ./src/modules/comrpt/model/datacomrpt.cpp \
     ./src/modules/comrpt/widget/dlgcomres.cpp \
     ./src/modules/comrpt/widget/dlgunionplotsubline.cpp \
     ./src/modules/comrpt/widget/wgcomrpt.cpp \
+    ./src/modules/comrpt/widget/unionplot.cpp \
     # help模块
     ./src/modules/help/widget/dlghelp.cpp \
     # logviewer模块
@@ -116,10 +124,10 @@ SOURCES += \
 
 HEADERS += \
     ./src/mainwindow.h \
+    #common
+    ./src/common/datadef.h \
     # core
-    ./src/core/system/sysapi.h \
     ./src/core/model/msgdata.h \
-    ./src/core/model/datadef.h \
     ./src/core/logging/tklogger.h \
     ./src/core/config/configsetting.h \
     ./src/core/externaltool/externaltoolbase.h \
@@ -129,12 +137,15 @@ HEADERS += \
     ./src/core/externaltool/toolfactory.h \
     ./src/core/externaltool/factoryregister.h \
     ./src/core/threadmanager/threadmanager.cpp \
+    # platform
+    ./src/platform/sysapi.h \
+    # components
+    ./src/components/basewidget.h \
+    ./src/components/basetable.h \
+    ./src/components/dlgprompt.h \
+    ./src/components/flowlayout.h \
+    ./src/components/overlay.h \
     # ui
-    ./src/ui/base/basewidget.h \
-    ./src/ui/components/basetable.h \
-    ./src/ui/components/unionplot.h \
-    ./src/ui/components/dlgprompt.h \
-    ./src/ui/components/flowlayout.h \
     ./src/ui/widgetmanager.h \
     # 工具
     ./src/utils/common.h \
@@ -149,11 +160,13 @@ HEADERS += \
     ./src/modules/archive/widget/dlgarchivemakeinfo.h \
     ./src/modules/archive/widget/dlgarchiveprocess.h \
     ./src/modules/archive/widget/wgarchivemaker.h \
+    ./src/modules/archive/service/archiveservice.h \
     # comrpt模块
     ./src/modules/comrpt/model/datacomrpt.h \
     ./src/modules/comrpt/widget/dlgcomres.h \
     ./src/modules/comrpt/widget/dlgunionplotsubline.h \
     ./src/modules/comrpt/widget/wgcomrpt.h \
+    ./src/modules/comrpt/widget/unionplot.h \
     # help模块
     ./src/modules/help/widget/dlghelp.h \
     # logviewer模块
@@ -174,11 +187,11 @@ HEADERS += \
 FORMS += \
     ./src/mainwindow.ui \
     # ui
-    ./src/ui/base/basewidget.ui \
-    ./src/ui/components/basetable.ui \
-    ./src/ui/components/unionplot.ui \
-    ./src/ui/components/dlgprompt.ui \
     ./src/ui/widgetmanager.ui \
+    # components
+    ./src/components/basewidget.ui \
+    ./src/components/basetable.ui \
+    ./src/components/dlgprompt.ui \
     # modules
     # about模块
     ./src/modules/about/widget/dlgabout.ui \
@@ -190,6 +203,7 @@ FORMS += \
     ./src/modules/comrpt/widget/dlgcomres.ui \
     ./src/modules/comrpt/widget/dlgunionplotsubline.ui \
     ./src/modules/comrpt/widget/wgcomrpt.ui \
+    ./src/modules/comrpt/widget/unionplot.ui \
     # help模块
     ./src/modules/help/widget/dlghelp.ui \
     # logviewer模块
