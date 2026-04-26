@@ -1,4 +1,11 @@
-﻿#ifndef DLGARCHIVEMAKEINFO_H
+﻿/*
+ * @Author: Dragon-qing
+ * @Date: 2026-04-18
+ * @LastEditors: Dragon-qing
+ * @FilePath: \ToolKit\src\modules\archive\widget\dlgarchivemakeinfo.h
+ * @Description: 详情文件弹窗
+ */
+#ifndef DLGARCHIVEMAKEINFO_H
 #define DLGARCHIVEMAKEINFO_H
 
 #include <QDialog>
@@ -20,7 +27,7 @@ class DlgArchiveMakeInfo : public QDialog
 public:
     explicit DlgArchiveMakeInfo(QWidget *parent = nullptr);
     ~DlgArchiveMakeInfo();
-    void SetFiles(QStringList list);
+    void SetFiles(QStringList& list);
     QStringList Exec();
 
 private:

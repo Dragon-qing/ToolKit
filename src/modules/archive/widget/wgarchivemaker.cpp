@@ -19,20 +19,18 @@
 #include "toolfactory.h"
 
 #include "wgarchivemaker.h"
+#include <qfont.h>
+#include <qpalette.h>
 #include "ui_wgarchivemaker.h"
 
 WgArchiveMaker::WgArchiveMaker(QWidget *parent) :
     BaseWidget(parent),
-    ui(new Ui::WgArchiveMaker),
-    m_p7zTool(ToolFactory::Instance().CreateTool("7zip")),
-    m_pMD5Tool(ToolFactory::Instance().CreateTool("md5ForBTF"))
+    ui(new Ui::WgArchiveMaker)
 {
     ui->setupUi(this);
     ui->label_top->setText("");
 
     m_labelList.clear();
-    m_nameList.clear();
-    m_pathList.clear();
 
     ui->lineEdit->setText(ConfigSetting::Instance().GetConfig("archive_cfg", "archive_savepath"));
     ui->lineEdit_2->setText(ConfigSetting::Instance().GetConfig("archive_cfg", "archive_savefilename"));
@@ -46,7 +44,11 @@ WgArchiveMaker::WgArchiveMaker(QWidget *parent) :
     m_bHasMoreLabel = false;
     m_pMoreLabel = NULL;
     m_pDlgProcess = new DlgArchiveProcess(this);
-    m_pDlgProcess->SetExternalTool(m_p7zTool.get());
+    m_pDlgProcess->SetExternalTool(m_archiveService.Get7zTool()); // 将7z工具实例指针传递给进度弹窗
+
+    QPalette palette = ui->label->palette();
+    palette.setColor(QPalette::WindowText, Qt::gray);
+    ui->label->setPalette(palette);
 
     connect(ui->comboBox_format, &QComboBox::currentTextChanged, this, &WgArchiveMaker::OnFormatChangedSlot);
     setAcceptDrops(true);
@@ -86,7 +88,7 @@ bool WgArchiveMaker::eventFilter(QObject *obj, QEvent *event)
             {
                 if (label->property("isMore").toBool())
                 {
-                    m_pDlgInfo->SetFiles(m_pathList);
+                    m_pDlgInfo->SetFiles(m_archiveService.GetPathList());
                     QStringList filesPath = m_pDlgInfo->Exec();
                 }
                 return true;
@@ -127,7 +129,7 @@ void WgArchiveMaker::dropEvent(QDropEvent *event)
     {
         QString path = url.toLocalFile();
         QString name = QFileInfo(path).fileName();
-        if (!m_nameList.contains(name))
+        if (!m_archiveService.ContainsName(name))
         {
             QLabel *label = NULL;
             label = CreateImgLabel(path);
@@ -136,8 +138,7 @@ void WgArchiveMaker::dropEvent(QDropEvent *event)
                 continue;
             }
             m_labelList.append(label);
-            m_nameList.append(name);
-            m_pathList.append(path);
+            m_archiveService.AddFileOrDir(path);
         }
         else
         {
@@ -211,6 +212,7 @@ QLabel *WgArchiveMaker::CreateImgLabel(const QString &path)
         fileName = file.fileName();
     }
     QLabel *label = new QLabel(this);
+    label->setFont(QFont(FONT_STYLE, 10));
     QString html = QString("<html><body><p>%1</p><br><img src='%2'></body></html>")
                        .arg(fileName, imagePath);
     label->setAlignment(Qt::AlignCenter);
@@ -230,6 +232,7 @@ void WgArchiveMaker::on_selectDirBtn_clicked()
 void WgArchiveMaker::on_clsBtn_clicked()
 {
     ClearList();
+    m_archiveService.ClearCache();
     ui->label->setVisible(true);
     if (m_pMoreLabel != nullptr)
     {
@@ -240,7 +243,7 @@ void WgArchiveMaker::on_clsBtn_clicked()
 
 void WgArchiveMaker::on_startBtn_clicked()
 {
-    if (m_pathList.isEmpty())
+    if (m_archiveService.IsEmpty())
     {
         QMessageBox::information(this, TR("提示"), TR("文件列表为空"), QMessageBox::NoButton, QMessageBox::NoButton);
         return;
@@ -276,49 +279,28 @@ void WgArchiveMaker::on_startBtn_clicked()
         }
     }
 
-    SevenZipExternalTool *sevenZipTool = dynamic_cast<SevenZipExternalTool *>(m_p7zTool.get());
-    MD5ForBTFTool *md5Tool = dynamic_cast<MD5ForBTFTool *>(m_pMD5Tool.get());
+    
     bool md5Required = false;
-    if (sevenZipTool)
+    if (formatStr == "BTF")
     {
-        if (formatStr == "BTF")
-        {
-            formatStr = "tar";
-            md5Required = true;
-        }
-        sevenZipTool->SetConfiguration(m_pathList, nameStr, formatStr);
-        connect(sevenZipTool, &SevenZipExternalTool::ProgressValueChangedSignal, m_pDlgProcess, &DlgArchiveProcess::OnValueChanged);
-        connect(sevenZipTool, &SevenZipExternalTool::MakeDoneSignal, m_pDlgProcess, &DlgArchiveProcess::Done);
-        connect(sevenZipTool, &SevenZipExternalTool::MakeFaildSignal, m_pDlgProcess, &DlgArchiveProcess::Faild);
-        if (md5Required)
-        {
-            if (md5Tool)
-            {
-                md5Tool->SetConfiguration(nameStr);
-                connect(sevenZipTool->GetProcess(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-                     md5Tool, &MD5ForBTFTool::OnReadyRunSlot, Qt::UniqueConnection);
-            }
-            else
-            {
-                QMessageBox::warning(this, TR("注意"), TR("创建md5工具失败"), QMessageBox::NoButton);
-                TKLogger::Instance().AddLog(ERROR_LOG, TR("创建md5工具失败"));
-            }
-        }
-        else
-        {
-            // 防止执行不必要的链接
-            disconnect(sevenZipTool->GetProcess(), QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
-                     md5Tool, &MD5ForBTFTool::OnReadyRunSlot);
-        }
-        sevenZipTool->Run();
+        formatStr = "tar";
+        md5Required = true;
+    }
+    
+    m_archiveService.SetConfig(nameStr, formatStr, md5Required);
+    SevenZipExternalTool* _7ztool = dynamic_cast<SevenZipExternalTool*>(m_archiveService.Get7zTool());
+    connect(_7ztool, &SevenZipExternalTool::ProgressValueChangedSignal, m_pDlgProcess, &DlgArchiveProcess::OnValueChanged);
+    connect(_7ztool, &SevenZipExternalTool::MakeDoneSignal, m_pDlgProcess, &DlgArchiveProcess::Done);
+    connect(_7ztool, &SevenZipExternalTool::MakeFaildSignal, m_pDlgProcess, &DlgArchiveProcess::Faild);
+
+    Bit32 res = m_archiveService.Start();
+    if (res != 0) {
+        QMessageBox::warning(this, TR("注意"), TR("创建7zip工具失败"),QMessageBox::NoButton);
+        return;
+    }
+    else {
         m_pDlgProcess->ReSet();
         m_pDlgProcess->show();
-
-    }
-    else
-    {
-        QMessageBox::warning(this, TR("注意"), TR("创建7zip工具失败"),QMessageBox::NoButton);
-        TKLogger::Instance().AddLog(ERROR_LOG, TR("创建7zip工具失败"));
     }
 }
 
@@ -341,8 +323,6 @@ void WgArchiveMaker::ClearList()
     }
     ui->horizontalLayout->removeWidget(m_pMoreLabel);
     m_labelList.clear();
-    m_nameList.clear();
-    m_pathList.clear();
 }
 
 void WgArchiveMaker::RemoveItem(QLabel *label)
@@ -357,8 +337,7 @@ void WgArchiveMaker::RemoveItem(QLabel *label)
     {
         ui->horizontalLayout->removeWidget(label);
         m_labelList.removeAt(idx);
-        m_nameList.removeAt(idx);
-        m_pathList.removeAt(idx);
+        m_archiveService.RemoveByIndex(idx);
         label->removeEventFilter(this);
         label->setParent(NULL);
         delete label;
