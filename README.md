@@ -19,6 +19,7 @@
 ## :sparkles: Features
 - 压缩包制作
 - 数据文件分析
+- 批量重命名
 - xml编辑器
 
 ## :wrench: Build Environment
@@ -28,32 +29,6 @@
 > - Cmake >= 3.16 or qmake
 > - Ninja or jom
 
-## :triangular_ruler: Structure
-
-```mermaid
-graph TD
-  servicetools([服务类三方工具])
-  datatools([数据类三方工具])
-  widget([界面UI])
-  Service([后台服务])
-  Data([数   据   层])
-  Database[(数据库)]
-  logdt([日志])
-  settings(设置)
-  localfile@{ shape: docs, label: "数据文件" }
-
-  Data--界面数据-->widget
-  Data--服务数据-->Service
-  Data--日志数据-->logdt
-  Data--配置数据-->settings
-  Database --> Data
-  localfile --> Data
-  servicetools --> widget
-  servicetools --> Service
-  datatools --> Data
-
-  style Data font-size:32px
-```
 ## :link: Acknowledgements
 - <a href = "https://github.com/gabime/spdlog"><img src="https://img.shields.io/badge/spdlog-lib-green" style="vertical-align: middle; margin-right: 4px;"></a> : 轻量级日志库
 
