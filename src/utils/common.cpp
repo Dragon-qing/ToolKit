@@ -2,6 +2,8 @@
 
 #include <QDebug>
 #include <QDateTime>
+#include <QSvgRenderer>
+#include <QPainter>
 
 #include "sysapi.h"
 
@@ -107,4 +109,15 @@ bool LayoutContainsWidget(QLayout *layout, QWidget *widget)
     }
 
     return false;
+}
+
+QPixmap RenderSvg(const QString& path, int w, int h) 
+{
+    QSvgRenderer renderer(path);
+    QPixmap pix(w, h);
+    pix.fill(Qt::transparent);
+
+    QPainter p(&pix);
+    renderer.render(&p);
+    return pix;
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>1289</width>
+    <height>851</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,7 +27,376 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QTextBrowser" name="textBrowser"/>
+    <widget class="QFrame" name="backgrd">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,3">
+        <property name="leftMargin">
+         <number>15</number>
+        </property>
+        <property name="topMargin">
+         <number>15</number>
+        </property>
+        <property name="rightMargin">
+         <number>15</number>
+        </property>
+        <property name="bottomMargin">
+         <number>15</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="leftMargin">
+           <number>15</number>
+          </property>
+          <property name="topMargin">
+           <number>15</number>
+          </property>
+          <property name="rightMargin">
+           <number>15</number>
+          </property>
+          <property name="bottomMargin">
+           <number>15</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_wrench">
+            <property name="text">
+             <string>img</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="font">
+             <font>
+              <family>Microsoft YaHei UI</family>
+              <pointsize>20</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>DQToolKits</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="label_version_rect">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>60</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QFrame" name="frame_func">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <property name="type" stdset="0">
+             <string>card</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_10">
+               <property name="text">
+                <string>数据分析</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="label_11">
+               <property name="text">
+                <string>文件压缩</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_12">
+               <property name="text">
+                <string>批量重命名</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLabel" name="label_13">
+               <property name="text">
+                <string>配置文件编辑</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QFrame" name="frame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="type" stdset="0">
+           <string>card</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,2,0,0,0">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QFrame" name="frame_top">
+             <layout class="QVBoxLayout" name="verticalLayout_5" stretch="1,2,0">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="label_3">
+                <property name="font">
+                 <font>
+                  <family>Microsoft YaHei UI</family>
+                  <pointsize>16</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>DQToolKits 工具箱</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_4">
+                <property name="font">
+                 <font>
+                  <family>Microsoft YaHei UI</family>
+                  <pointsize>10</pointsize>
+                  <kerning>true</kerning>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>一款个人开发的高效易用桌面工具集合。
+ 致力于提供日常与开发中常用的便捷工具，提升效率</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="gridLayout" columnstretch="1,2,0">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>版本</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="label_version">
+               <property name="text">
+                <string>0.0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>Dragon-qing</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLabel" name="label_email">
+               <property name="text">
+                <string>1259337898@qq.com</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>作者</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>仓库</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>联系方式</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Expanding</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="2" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <item>
+                <widget class="QLabel" name="label_github">
+                 <property name="text">
+                  <string>TextLabel</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_link">
+                 <property name="font">
+                  <font>
+                   <family>Microsoft YaHei UI</family>
+                   <pointsize>10</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>TextLabel</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="Line" name="line">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="font">
+              <font>
+               <family>Microsoft YaHei UI Light</family>
+              </font>
+             </property>
+             <property name="text">
+              <string>©2026 Dragon-qing. All rights reserved.
+本软件仅供学习，研究和非商业用途使用。使用本软件所产生的任何后果，作者不承担任何责任</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_close">
+               <property name="font">
+                <font>
+                 <family>Microsoft YaHei UI</family>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>关闭</string>
+               </property>
+               <property name="type" stdset="0">
+                <string>secondary</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

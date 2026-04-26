@@ -11,6 +11,7 @@ target_include_directories(utils_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(utils_lib PUBLIC 
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Xml
+    Qt${QT_VERSION_MAJOR}::Svg
 
     common_lib
     platform_lib

@@ -9,5 +9,8 @@
         <file>style/style.qss</file>
         <file>img/combox-arrow.svg</file>
         <file>img/renametool.svg</file>
+        <file>img/about-wrench.jpg</file>
+        <file>img/about-background.png</file>
+        <file>img/github.svg</file>
     </qresource>
 </RCC>

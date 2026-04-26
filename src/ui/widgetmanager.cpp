@@ -175,7 +175,7 @@ QAction* WidgetManager::AddItemToMenu(Menu_Type type, QMenu *menu, const QString
 void WidgetManager::InitTopMenu()
 {
     QMenuBar *menuBar = new QMenuBar(this);
-    for (Bit32 i = 0 ; i < TOTAL_NUM; i++)
+    for (Bit32 i = 0 ; i < TOTAL_NUM - 1; i++)
     {
         QMenu *menu = CreateMenuItem(Menu_Type(i));
         menuBar->addMenu(menu);

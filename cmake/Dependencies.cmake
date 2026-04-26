@@ -1,4 +1,4 @@
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Sql Xml PrintSupport)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Gui Widgets Sql Xml PrintSupport Svg)
 
 add_library(EasyQtSql INTERFACE)
 target_include_directories(EasyQtSql INTERFACE
