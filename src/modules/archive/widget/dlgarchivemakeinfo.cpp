@@ -25,7 +25,7 @@ DlgArchiveMakeInfo::~DlgArchiveMakeInfo()
     delete ui;
 }
 
-void DlgArchiveMakeInfo::SetFiles(QStringList list)
+void DlgArchiveMakeInfo::SetFiles(QStringList& list)
 {
     m_pTab->SetFilePath(list);
 }

@@ -6,19 +6,31 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>1003</width>
+    <height>599</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Microsoft YaHei UI</family>
+    <pointsize>10</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="0,8,1,1">
+  <layout class="QGridLayout" name="gridLayout" rowstretch="0,6,1,1">
    <property name="rightMargin">
     <number>15</number>
    </property>
    <item row="3" column="0">
     <widget class="QLabel" name="label_3">
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="toolTip">
       <string>无需后缀，自动追加</string>
      </property>
@@ -29,40 +41,105 @@
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_2">
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>保存路径：</string>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QLineEdit" name="lineEdit"/>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+    </widget>
    </item>
    <item row="3" column="2">
     <widget class="QPushButton" name="startBtn">
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>开始打包</string>
+     </property>
+     <property name="type" stdset="0">
+      <string>primary</string>
      </property>
     </widget>
    </item>
    <item row="2" column="2">
     <widget class="QPushButton" name="selectDirBtn">
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>选择</string>
+     </property>
+     <property name="type" stdset="0">
+      <string>secondary</string>
      </property>
     </widget>
    </item>
    <item row="2" column="3">
     <widget class="QPushButton" name="clsBtn">
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>清空文件</string>
+     </property>
+     <property name="type" stdset="0">
+      <string>secondary</string>
      </property>
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QLineEdit" name="lineEdit_2"/>
+    <widget class="QLineEdit" name="lineEdit_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+    </widget>
    </item>
    <item row="0" column="0" colspan="4">
     <widget class="QLabel" name="label_top">
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>TextLabel</string>
      </property>
@@ -73,6 +150,12 @@
    </item>
    <item row="3" column="3">
     <widget class="QComboBox" name="comboBox_format">
+     <property name="font">
+      <font>
+       <family>Microsoft YaHei UI</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <item>
       <property name="text">
        <string>zip</string>
@@ -105,7 +188,8 @@
        <widget class="QLabel" name="label">
         <property name="font">
          <font>
-          <pointsize>12</pointsize>
+          <family>Microsoft YaHei UI</family>
+          <pointsize>20</pointsize>
          </font>
         </property>
         <property name="text">

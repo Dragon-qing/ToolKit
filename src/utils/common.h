@@ -11,7 +11,7 @@
 #define UTF8 QTextCodec::codecForName("UTF-8")
 #define TR(str) tr((UTF8->fromUnicode(str).data()))
 #define UTF_8 "UTF-8"
-#define FONT_STYLE "Microsoft YaHei"
+#define FONT_STYLE "Microsoft YaHei UI"
 
 inline constexpr Bit32 WINDOW_WIDTH =  1600;
 inline constexpr Bit32 WINDOW_HEIGHT = 900;
