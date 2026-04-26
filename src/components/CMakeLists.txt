@@ -11,6 +11,8 @@ target_sources(components_lib PRIVATE
     dlgprompt.ui
 
     flowlayout.cpp
+
+    overlay.cpp
 )
 
 target_include_directories(components_lib PUBLIC 

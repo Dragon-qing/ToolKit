@@ -29,6 +29,8 @@ WgArchiveMaker::WgArchiveMaker(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->label_top->setText("");
+    m_pOverlay = new Overlay(this);
+    m_pOverlay->resize(size());
 
     m_labelList.clear();
 
@@ -109,13 +111,21 @@ void WgArchiveMaker::dragEnterEvent(QDragEnterEvent *event)
     if (mime->hasUrls())
     {
         event->acceptProposedAction();
+        m_pOverlay->FadeIn();
     }
+}
+
+void WgArchiveMaker::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    Q_UNUSED(event);
+    m_pOverlay->FadeOut(150);
 }
 
 void WgArchiveMaker::dropEvent(QDropEvent *event)
 {
     const QMimeData *mime = event->mimeData();
     QList<QUrl>urls = mime->urls();
+    m_pOverlay->FadeOut(150);
     if (mime->hasImage())
     {
         QImage img = mime->imageData().value<QImage>();
@@ -176,6 +186,12 @@ void WgArchiveMaker::paintEvent(QPaintEvent *event)
     painter.drawRect(uiRect);
 
     BaseWidget::paintEvent(event);
+}
+
+void WgArchiveMaker::resizeEvent(QResizeEvent *event)
+{
+    m_pOverlay->resize(size());
+    BaseWidget::resizeEvent(event);
 }
 
 /**
