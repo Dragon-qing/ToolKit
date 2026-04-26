@@ -2,7 +2,6 @@
 #define DLGABOUT_H
 
 #include <QDialog>
-#include <QScopedPointer>
 
 namespace Ui {
 class DlgAbout;
@@ -20,20 +19,12 @@ public:
     
 private:
     Ui::DlgAbout *ui;
-    QScopedPointer<DlgAboutPrivate> d_ptr; // d指针 QScopedPointer类似cpp的智能指针unique_ptr
-    Q_DECLARE_PRIVATE(DlgAbout)
     
-    /**
-     * @brief: 初始化
-     * @return {*}
-     */
+    // 初始化界面
     void Init();
 
-    /**
-     * @brief: 刷新
-     * @return {*}
-     */
-    void Refresh();
+private slots:
+    void on_pushButton_close_clicked();
 };
 
 #endif // DLGABOUT_H

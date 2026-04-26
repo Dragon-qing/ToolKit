@@ -359,3 +359,22 @@ QWidget#widget_placehold > QLabel {
     border-radius: 6px;
     padding: 4px 8px;
 }
+/* ================== about页面 ================== */
+QDialog#DlgAbout QFrame#backgrd {
+    border-image: url(:/img/about-background.png) 0 0 0 0 stretch stretch;
+}
+
+QDialog#DlgAbout QLabel#label_version_rect {
+    color: #409EFF;
+    background-color: #EAF3FF;
+    border: 1px solid #C6E2FF;
+    border-radius: 12px;
+
+    padding: 2px 10px;
+}
+
+QDialog#DlgAbout QFrame#frame_func QLabel {
+    color: #1e2330;
+    font-family: "Microsoft YaHei UI";
+    font-size: 16px;
+}

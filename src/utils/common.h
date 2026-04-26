@@ -39,4 +39,13 @@ void PromptOut(const QString &content, Bit32 outtime = 3000);
 QPair<fBit64, fBit64> GetRange(const QVector<fBit64> &in);
 
 bool LayoutContainsWidget(QLayout *layout, QWidget* widget);
+
+/**
+ * @brief: 渲染SVG图片
+ * @param {QString&} path: SVG文件路径
+ * @param {int} w: 宽度
+ * @param {int} h: 高度
+ * @return {QPixmap} 渲染后的图片
+ */
+QPixmap RenderSvg(const QString& path, int w, int h);
 #endif // COMMON_H

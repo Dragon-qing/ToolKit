@@ -1,5 +1,9 @@
 ﻿#include <QPainter>
 #include <QStyleOption>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QPainter>
+
 
 #include "sysapi.h"
 
@@ -8,55 +12,12 @@
 #include "dlgabout.h"
 #include "ui_dlgabout.h"
 
-// 私有类
-class DlgAboutPrivate
-{
-public:
-    DlgAboutPrivate()
-    {
-        m_sContent = "";
-        InitContent();
-    }
-
-    /**
-     * @brief: 添加内容
-     * @param {QString} &title: 标题
-     * @param {QString} &detail: 详细内容
-     * @return {void}
-     */
-    void AddContent(const QString &title, const QString &detail)
-    {
-        m_sContent += QString("<p><b>%1</b>:%2</p>").arg(title, detail);
-    }
-
-    /**
-     * @brief: 获取文本数据
-     * @return {QString} 文本字符串
-     */
-    QString GetContent()
-    {
-        return m_sContent;
-    }
-
-private:
-    QString m_sContent; // 文本内容
-
-    /**
-     * @brief: 初始化文本
-     * @return {*}
-     */
-    void InitContent()
-    {
-        AddContent(QObject::TR("软件版本"), SYS_VERSION);
-    }
-};
-
 DlgAbout::DlgAbout(QWidget *parent)
     : QDialog(parent),
-     ui(new Ui::DlgAbout),
-     d_ptr(new DlgAboutPrivate)
+     ui(new Ui::DlgAbout)
 {
     ui->setupUi(this);
+    resize(800, 600);
     setWindowTitle(QObject::TR("关于"));
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     Init();
@@ -70,15 +31,37 @@ DlgAbout::~DlgAbout()
 void DlgAbout::Init()
 {
     QFont font(FONT_STYLE, 10);
+    ui->frame->setAttribute(Qt::WA_TranslucentBackground);
+    ui->frame_func->setAttribute(Qt::WA_TranslucentBackground);
+    ui->label_wrench->setPixmap(QPixmap(":/img/about-wrench.jpg").scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
-    ui->textBrowser->setFont(font);
-    Refresh();
+    ui->label_version_rect->setFont(QFont(FONT_STYLE, 9));
+    ui->label_version_rect->setAlignment(Qt::AlignCenter);
+    ui->label_version_rect->setText(SYS_VERSION);
+    ui->label_version->setText(SYS_VERSION);
+
+    QGridLayout* grid = ui->gridLayout;
+    for (int i = 0; i < grid->count(); ++i) {
+        QWidget* w = grid->itemAt(i)->widget();
+        if (auto label = qobject_cast<QLabel*>(w)) {
+            label->setFont(font);
+        }
+    }
+
+    ui->label_link->setOpenExternalLinks(false); // 禁止Qt内部自动打开链接
+    ui->label_github->setPixmap(RenderSvg(":/img/github.svg", 24, 24));
+    ui->label_link->setText(R"(
+        <a href="https://github.com/Dragon-qing/ToolKit">
+            github.com/Dragon-qing/ToolKit
+        </a>
+    )");
+    connect(ui->label_link, &QLabel::linkActivated, this, [](const QString& url){
+        QDesktopServices::openUrl(QUrl(url));
+    });
+
 }
 
-void DlgAbout::Refresh()
+void DlgAbout::on_pushButton_close_clicked()
 {
-    Q_D(DlgAbout);
-    QString str = d->GetContent();
-
-    ui->textBrowser->setHtml(str);
+    this->close();
 }
