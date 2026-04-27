@@ -29,6 +29,9 @@ void DlgPrompt::InitUi()
     ui->title_label->setAlignment(Qt::AlignCenter); // 标题居中
     ui->title_label->setFont(QFont(FONT_STYLE, 12, QFont::Bold)); // 设置标题字体和加粗
     ui->title_label->setVisible(false); // 默认隐藏标题，调用SetTitle后显示
+
+    ui->ok_Btn->setFont(QFont(FONT_STYLE, 10));
+    ui->cancel_Btn->setFont(QFont(FONT_STYLE, 10));
 }
 
 void DlgPrompt::HandleClicked(int id)

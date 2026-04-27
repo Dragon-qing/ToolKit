@@ -316,7 +316,7 @@ QTableWidget QLineEdit {
 
 /* ================== 对话框 ================== */
 QDialog{
-    background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop:0 #95e1d3, stop: 1 #ffffff);
+    background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop:0 #85daf2, stop: 1 #ffffff);
 }
 
 /* ================== TabWidget ================== */

@@ -34,6 +34,8 @@ protected:
     void MessageFlows(QVariant messageid, QVariant messageValue) override;
     QStringList GetHelpText() override;
 
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
 private:
     Ui::WgRenameTool *ui;
     RenameToolService m_renameService; // 工具服务实例
@@ -55,6 +57,7 @@ private slots:
     void OnPreviewReadySlot(const QVector<RenamePreviewDTO> &previewList);
     void OnRenameFinishedSlot(const QVector<RenameResultDTO> &resultList);
     void OnErrorSlot(const QString &errorMessage);
+
 };
 
 class PreviewTable : public BaseTable

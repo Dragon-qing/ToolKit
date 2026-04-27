@@ -15,6 +15,8 @@
 #include <QGraphicsDropShadowEffect>
 #include <QHeaderView>
 #include <QFileDialog>
+#include <QDragEnterEvent>
+#include <QMimeData>
 
 #include "common.h"
 #include "datadef.h"
@@ -35,6 +37,7 @@ WgRenameTool::WgRenameTool(QWidget *parent)
     ui->widget_preview->layout()->addWidget(m_previewTable);
     ui->widget_originview->layout()->addWidget(m_originFilesTable);
     m_pPrompt = new DlgPrompt(DlgPrompt::OK_BUTTON, this);
+    this->setAcceptDrops(true);
     
     InitRenderWidget();
     connect(&m_renameService, &RenameToolService::PreviewReadySignal, this, &WgRenameTool::OnPreviewReadySlot);
@@ -57,6 +60,56 @@ void WgRenameTool::MessageFlows(QVariant messageid, QVariant messageValue)
 QStringList WgRenameTool::GetHelpText()
 {
     return {};
+}
+
+void WgRenameTool::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event == NULL)
+    {
+        return;
+    }
+    const QMimeData *mime = event->mimeData();
+    if (mime->hasUrls())
+    {
+        event->acceptProposedAction();
+    }
+}
+
+void WgRenameTool::dropEvent(QDropEvent *event)
+{
+    const QMimeData *mime = event->mimeData();
+    QList<QUrl>urls = mime->urls();
+    QStringList files;
+    foreach (QUrl url, urls)
+    {
+        QString path = url.toLocalFile();
+        QFileInfo fileInfo(path);
+        if (fileInfo.isDir()) {
+            for (auto f : QDir(path).entryList(QDir::Files | QDir::NoDotAndDotDot)) {
+                files << QDir(path).absoluteFilePath(f);
+            }
+        } else {
+            files << fileInfo.absoluteFilePath();
+        }
+    }
+
+    QVector<FileItemDTO> fileItems;
+    for (auto& file: files) {
+        if (m_selectedFileSet.contains(file)) {
+            continue; // 已经添加过的文件跳过
+        }
+        QFileInfo fileInfo(file);
+        FileItemDTO item;
+        item.originalPath = file;
+        item.originalName = fileInfo.fileName();
+        item.baseName = fileInfo.baseName();
+        item.extension = fileInfo.suffix();
+        fileItems.append(item);
+        m_selectedFileSet.insert(file);
+    }
+    m_originFilesTable->AddOriginFiles(fileItems);
+    m_originFilesTable->ReDraw();
+    UpdateSelectedCount();
 }
 
 void WgRenameTool::InitRenderWidget()
