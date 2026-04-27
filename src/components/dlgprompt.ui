@@ -71,12 +71,18 @@
          <property name="text">
           <string>确认</string>
          </property>
+         <property name="type" stdset="0">
+          <string>secondary</string>
+         </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="cancel_Btn">
          <property name="text">
           <string>取消</string>
+         </property>
+         <property name="type" stdset="0">
+          <string>secondary</string>
          </property>
         </widget>
        </item>

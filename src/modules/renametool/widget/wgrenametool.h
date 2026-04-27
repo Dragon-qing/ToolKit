@@ -21,8 +21,8 @@ class WgRenameTool : public BaseWidget
     Q_OBJECT
 
 public:
-    enum class RulesPage{
-        COMMON = 0,     // 常用
+    enum RulesPage{
+        SEQUENCE = 0,     // 常用
         SEARCH_REPLACE, // 查找替换
 
         PAGE_NUM // 页数
@@ -34,6 +34,8 @@ protected:
     void MessageFlows(QVariant messageid, QVariant messageValue) override;
     QStringList GetHelpText() override;
 
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
 private:
     Ui::WgRenameTool *ui;
     RenameToolService m_renameService; // 工具服务实例
@@ -55,6 +57,7 @@ private slots:
     void OnPreviewReadySlot(const QVector<RenamePreviewDTO> &previewList);
     void OnRenameFinishedSlot(const QVector<RenameResultDTO> &resultList);
     void OnErrorSlot(const QString &errorMessage);
+
 };
 
 class PreviewTable : public BaseTable

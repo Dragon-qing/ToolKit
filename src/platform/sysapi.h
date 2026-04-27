@@ -4,7 +4,7 @@
 
 #include "datadef.h"
 
-#define SYS_VERSION "0.3.3"
+#define SYS_VERSION "0.4.0"
 
 typedef enum _Path_Type{
     BIN_PATH = 0,   // bin目录

@@ -64,6 +64,11 @@ QPushButton[type="primary"]:pressed {
     background-color: #1d4ed8;
 }
 
+QPushButton[type="primary"]:focus {
+    outline: none;
+    border: none;
+}
+
 /* 次按钮 */
 QPushButton[type="secondary"] {
     background-color: #ffffff;
@@ -74,6 +79,11 @@ QPushButton[type="secondary"] {
 
 QPushButton[type="secondary"]:hover {
     background-color: #f3f4f6;
+}
+
+QPushButton[type="secondary"]:focus {
+    outline: none;
+    border: none;
 }
 
 /* 危险按钮（清空） */
@@ -316,7 +326,7 @@ QTableWidget QLineEdit {
 
 /* ================== 对话框 ================== */
 QDialog{
-    background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop:0 #95e1d3, stop: 1 #ffffff);
+    background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop:0 #85daf2, stop: 1 #ffffff);
 }
 
 /* ================== TabWidget ================== */

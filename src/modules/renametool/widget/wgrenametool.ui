@@ -107,7 +107,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_exportrule">
+         <widget class="QPushButton" name="pushButton_import">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
@@ -123,7 +123,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_importrule">
+         <widget class="QPushButton" name="pushButton_export">
           <property name="font">
            <font>
             <family>Microsoft YaHei UI</family>
@@ -804,7 +804,7 @@
                 <property name="font">
                  <font>
                   <family>Microsoft YaHei UI</family>
-                  <pointsize>9</pointsize>
+                  <pointsize>10</pointsize>
                  </font>
                 </property>
                 <item>
@@ -814,7 +814,7 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>遗弃原扩展名</string>
+                  <string>修改原扩展名</string>
                  </property>
                 </item>
                </widget>
@@ -910,12 +910,12 @@
                </widget>
               </item>
               <item row="5" column="0">
-               <widget class="QCheckBox" name="checkBox_recursive">
+               <widget class="QCheckBox" name="checkBox_caseSensitive">
                 <property name="layoutDirection">
                  <enum>Qt::RightToLeft</enum>
                 </property>
                 <property name="text">
-                 <string>递归子文件夹</string>
+                 <string>大小写敏感</string>
                 </property>
                </widget>
               </item>
@@ -939,7 +939,7 @@
        <property name="type" stdset="0">
         <string>card</string>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,5,0">
+       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,5,0">
         <item>
          <widget class="QCheckBox" name="checkBox_preview">
           <property name="font">
@@ -953,19 +953,6 @@
           </property>
           <property name="checked">
            <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="checkBox_3">
-          <property name="font">
-           <font>
-            <family>Microsoft YaHei UI</family>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>重命名后保持文件时间</string>
           </property>
          </widget>
         </item>
