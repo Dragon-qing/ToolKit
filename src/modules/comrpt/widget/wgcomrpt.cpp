@@ -843,7 +843,9 @@ void WgComRpt::on_drawBtn_clicked()
     ui->plot->clearGraphs();
     ui->plot->addGraph();
     ui->plot->xAxis->setLabel(ui->xAxisComboBox->currentText());
+    ui->plot->xAxis->setLabelFont(QFont(FONT_STYLE, 10));
     ui->plot->yAxis->setLabel(ui->yAxisComboBox->currentText());
+    ui->plot->yAxis->setLabelFont(QFont(FONT_STYLE, 10));
 
     // 获取点位数据
     QVector<double> xVec;

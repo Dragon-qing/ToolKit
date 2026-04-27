@@ -148,7 +148,9 @@ void UnionPlot::SetAxisLabel(QStringList xlabelList, QStringList ylabelList)
     {
         QCustomPlot *plot = m_plotList.at(i);
         plot->xAxis->setLabel(xlabelList.at(i));
+        plot->xAxis->setLabelFont(QFont(FONT_STYLE, 10));
         plot->yAxis->setLabel(ylabelList.at(i));
+        plot->yAxis->setLabelFont(QFont(FONT_STYLE, 10));
     }
 }
 
