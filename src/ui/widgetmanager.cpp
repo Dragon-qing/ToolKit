@@ -15,6 +15,7 @@
 #include "wgrenametool.h"
 
 #include "dlgabout.h"
+#include "helpservice.h"
 
 #include "widgetmanager.h"
 #include "ui_widgetmanager.h"
@@ -200,7 +201,9 @@ void WidgetManager::CallHelpDlgSlot()
     if (wg != NULL)
     {
         QStringList contentList = wg->GetHelpText();
-        m_pDlgHelp->SetContent(contentList);
+        HelpService::Instance().Clear();
+        HelpService::Instance().ParseHelpContent(contentList);
+        m_pDlgHelp->Refresh();
     }
     m_pDlgHelp->show();
 }

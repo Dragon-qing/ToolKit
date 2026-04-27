@@ -1,4 +1,4 @@
-QT       += core gui sql
+QT       += core gui sql svg
 QT       += xml
 
 
@@ -45,6 +45,8 @@ INCLUDEPATH += \
     src/modules/comrpt/widget \
     src/modules/comrpt/model \
     src/modules/help/widget \
+    src/modules/help/model \
+    src/modules/help/service \
     src/modules/logviewer/widget \
     src/modules/logviewer/model \
     src/modules/renametool/widget \
@@ -109,6 +111,7 @@ SOURCES += \
     ./src/modules/comrpt/widget/unionplot.cpp \
     # help模块
     ./src/modules/help/widget/dlghelp.cpp \
+    ./src/modules/help/service/helpservice.cpp \
     # logviewer模块
     ./src/modules/logviewer/model/datalog.cpp \
     ./src/modules/logviewer/widget/wglog.cpp \
@@ -169,7 +172,9 @@ HEADERS += \
     ./src/modules/comrpt/widget/wgcomrpt.h \
     ./src/modules/comrpt/widget/unionplot.h \
     # help模块
+    ./src/modules/help/model/helpmodel.h \
     ./src/modules/help/widget/dlghelp.h \
+    ./src/modules/help/service/helpservice.h \
     # logviewer模块
     ./src/modules/logviewer/model/datalog.h \
     ./src/modules/logviewer/widget/wglog.h \

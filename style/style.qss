@@ -378,3 +378,33 @@ QDialog#DlgAbout QFrame#frame_func QLabel {
     font-family: "Microsoft YaHei UI";
     font-size: 16px;
 }
+/* ================== 帮助页面 ================== */
+QDialog#DlgHelp QFrame#backgrd {
+    background-color: #FFFFFF;
+}
+
+QDialog#DlgHelp QTreeView {
+    background-color: #F0F2F5;
+    border: none;
+    border-right: 1px solid #D0D5DD;
+    outline: none;
+}
+
+QDialog#DlgHelp QTreeView::item {
+    color: #6B7280;
+    padding: 8px 14px;
+    border: none;
+}
+
+QDialog#DlgHelp QTreeView::item:selected {
+    background-color: #DCE6F7;
+    color: #185FA5;
+    border-left: 3px solid #378ADD;
+    padding-left: 11px;
+    font-weight: bold;
+}
+
+QDialog#DlgHelp QTreeView::item:hover:!selected {
+    background-color: #E8EAED;
+    color: #374151;
+}

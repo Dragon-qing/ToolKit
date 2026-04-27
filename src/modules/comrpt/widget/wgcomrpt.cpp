@@ -589,18 +589,16 @@ void WgComRpt::AddUnionPlot(UnionPlot *plot)
 QStringList WgComRpt::GetHelpText()
 {
     QStringList list;
-    list << QObject::TR("<p align=\"center\"><b>---单图---</b></p>");
-    list << QObject::TR("鼠标滚轮：图像放大/缩小");
-    list << QObject::TR("Ctrl+鼠标滚轮：纵轴放大/缩小");
-    list << QObject::TR("Shift+鼠标滚轮：横轴放大/缩小");
-    list << QObject::TR("Ctrl+Z: 复位");
-    list << QObject::TR("Ctrl+R: 显示加载的数据计算结果");
-    list << QObject::TR("<p align=\"center\"><b>---预设图---</b></p>");
-    list << QObject::TR("Ctrl+i: 增加辅助线");
-    list << QObject::TR("+/-: 放大缩小纵轴");
-    list << QObject::TR("Ctrl+ +/-: 放大缩小横轴轴");
-    list << QObject::TR("Ctrl+F: 放大鼠标位置的图像");
-    list << QObject::TR("Ctrl+Z: 复位");
+    list << QObject::TR("[单图]鼠标滚轮：图像放大/缩小");
+    list << QObject::TR("[单图]Ctrl+鼠标滚轮：纵轴放大/缩小");
+    list << QObject::TR("[单图]Shift+鼠标滚轮：横轴放大/缩小");
+    list << QObject::TR("[单图]Ctrl+Z: 复位");
+    list << QObject::TR("[单图]Ctrl+R: 显示加载的数据计算结果");
+    list << QObject::TR("[预设图]Ctrl+i: 增加辅助线");
+    list << QObject::TR("[预设图]+/-: 放大缩小纵轴");
+    list << QObject::TR("[预设图]Ctrl+ +/-: 放大缩小横轴轴");
+    list << QObject::TR("[预设图]Ctrl+F: 放大鼠标位置的图像");
+    list << QObject::TR("[预设图]Ctrl+Z: 复位");
     return list;
 }
 
