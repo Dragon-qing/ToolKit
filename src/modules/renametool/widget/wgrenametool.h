@@ -21,8 +21,8 @@ class WgRenameTool : public BaseWidget
     Q_OBJECT
 
 public:
-    enum class RulesPage{
-        COMMON = 0,     // 常用
+    enum RulesPage{
+        SEQUENCE = 0,     // 常用
         SEARCH_REPLACE, // 查找替换
 
         PAGE_NUM // 页数

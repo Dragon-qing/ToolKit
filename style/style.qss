@@ -64,6 +64,11 @@ QPushButton[type="primary"]:pressed {
     background-color: #1d4ed8;
 }
 
+QPushButton[type="primary"]:focus {
+    outline: none;
+    border: none;
+}
+
 /* 次按钮 */
 QPushButton[type="secondary"] {
     background-color: #ffffff;
@@ -74,6 +79,11 @@ QPushButton[type="secondary"] {
 
 QPushButton[type="secondary"]:hover {
     background-color: #f3f4f6;
+}
+
+QPushButton[type="secondary"]:focus {
+    outline: none;
+    border: none;
 }
 
 /* 危险按钮（清空） */

@@ -38,6 +38,10 @@ WgRenameTool::WgRenameTool(QWidget *parent)
     ui->widget_originview->layout()->addWidget(m_originFilesTable);
     m_pPrompt = new DlgPrompt(DlgPrompt::OK_BUTTON, this);
     this->setAcceptDrops(true);
+    ui->tabWidget->setCurrentIndex(RulesPage::SEQUENCE);
+    //HACK: 隐藏导入导出规则按钮，后续完善规则管理功能时再显示
+    ui->pushButton_export->setVisible(false);
+    ui->pushButton_import->setVisible(false);
     
     InitRenderWidget();
     connect(&m_renameService, &RenameToolService::PreviewReadySignal, this, &WgRenameTool::OnPreviewReadySlot);
@@ -127,8 +131,8 @@ void WgRenameTool::InitRenderWidget()
     ui->frame_preview->setGraphicsEffect(makeShadow());
     ui->frame_rules->setGraphicsEffect(makeShadow());
     ui->frame_bottom->setGraphicsEffect(makeShadow());
-    ui->pushButton_exportrule->setGraphicsEffect(makeShadow());
-    ui->pushButton_importrule->setGraphicsEffect(makeShadow());
+    ui->pushButton_export->setGraphicsEffect(makeShadow());
+    ui->pushButton_import->setGraphicsEffect(makeShadow());
     ui->pushButton_reset->setGraphicsEffect(makeShadow());
 
     QIcon icon(":/img/renametool.svg");
@@ -177,15 +181,14 @@ void WgRenameTool::on_pushButton_start_clicked()
         return;
     }
 
-    if (ui->comboBox_fullname->currentIndex() == 0) {
-        task.applyRulesToFullName = false;
-    } else {
-        task.applyRulesToFullName = true;
-    }
-
     task.previewMode = ui->checkBox_preview->isChecked();
 
-    if (ui->tabWidget->currentIndex() == 0) { // 序号规则
+    if (ui->tabWidget->currentIndex() == RulesPage::SEQUENCE) { // 序号规则
+        if (ui->comboBox_fullname->currentIndex() == 0) {
+            task.applyRulesToFullName = false;
+        } else {
+            task.applyRulesToFullName = true;
+        }
         RenameRuleDTO rule1;
         rule1.type = RenameRuleType::Replace;
         rule1.findText = "{name}";
@@ -198,9 +201,19 @@ void WgRenameTool::on_pushButton_start_clicked()
         rule2.step = ui->spinBox_step->value();
         rule2.padding = ui->spinBox_padding->value();
         task.rules << rule2;
-    } else if (ui->tabWidget->currentIndex() == 1) { // 查找替换
-        // TODO: 支持查找替换
-        return;
+    } else if (ui->tabWidget->currentIndex() == RulesPage::SEARCH_REPLACE) { // 查找替换
+        if (ui->comboBox_ext->currentIndex() == 0) {
+            task.applyRulesToFullName = false;
+        } else {
+            task.applyRulesToFullName = true;
+        }
+        RenameRuleDTO rule;
+        rule.type = RenameRuleType::Replace;
+        rule.useRegex = ui->checkBox_regex->isChecked();
+        rule.caseSensitive = ui->checkBox_caseSensitive->isChecked();
+        rule.findText = ui->lineEdit_f->text();
+        rule.replaceText = ui->lineEdit_r->text();
+        task.rules << rule;
     } else {
         m_pPrompt->ExecAndRet(TR("请选择一个规则"));
         return;
@@ -212,7 +225,27 @@ void WgRenameTool::on_pushButton_start_clicked()
 
 void WgRenameTool::on_pushButton_reset_clicked()
 {
+    m_originFilesTable->ClearOriginFiles();
+    m_originFilesTable->ReDraw();
+    m_previewTable->SetPreviewList({});
+    m_previewTable->ReDraw();
+    m_selectedFileSet.clear();
+
     UpdateSelectedCount();
+
+    if (ui->tabWidget->currentIndex() == RulesPage::SEQUENCE) { // 序号规则
+        ui->lineEdit_sequence->clear();
+        ui->spinBox_start->setValue(0);
+        ui->spinBox_step->setValue(1);
+        ui->spinBox_padding->setValue(1);
+        ui->comboBox_fullname->setCurrentIndex(0);
+    } else if (ui->tabWidget->currentIndex() == RulesPage::SEARCH_REPLACE) { // 查找替换
+        ui->lineEdit_f->clear();
+        ui->lineEdit_r->clear();
+        ui->checkBox_regex->setChecked(true);
+        ui->checkBox_caseSensitive->setChecked(false);
+        ui->comboBox_ext->setCurrentIndex(0);
+    }
 }
 
 void WgRenameTool::on_pushButton_addfile_clicked()
