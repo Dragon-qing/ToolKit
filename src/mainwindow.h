@@ -30,5 +30,6 @@ private:
     Bit32 m_nTimer2;    // 20ms定时器
 
     void RegistStruct(); // 注册自定义结构体
+    void RegistUI(); // 注册UI
 };
 #endif // MAINWINDOW_H

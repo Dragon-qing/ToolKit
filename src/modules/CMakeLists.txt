@@ -3,7 +3,6 @@ add_library(modules_lib INTERFACE)
 add_subdirectory(about)
 add_subdirectory(archive)
 add_subdirectory(comrpt)
-add_subdirectory(help)
 add_subdirectory(logviewer)
 add_subdirectory(renametool)
 add_subdirectory(typroacleaner)
@@ -14,7 +13,6 @@ target_link_libraries(modules_lib INTERFACE
     about_lib
     archive_lib
     comrpt_lib
-    help_lib
     logviewer_lib
     renametool_lib
     typroacleaner_lib

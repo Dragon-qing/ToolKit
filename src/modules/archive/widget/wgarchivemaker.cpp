@@ -19,8 +19,6 @@
 #include "toolfactory.h"
 
 #include "wgarchivemaker.h"
-#include <qfont.h>
-#include <qpalette.h>
 #include "ui_wgarchivemaker.h"
 
 WgArchiveMaker::WgArchiveMaker(QWidget *parent) :
