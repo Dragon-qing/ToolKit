@@ -4,23 +4,17 @@
  * @date 2024/08/11
  * @author Dragonqing
  */
-#include "qhotkey.h"
+#include <QMenuBar>
+#include <algorithm>
 
 #include "common.h"
-#include "wgtyproaimgcleaner.h"
-#include "wgarchivemaker.h"
-#include "wgxmleditor.h"
-#include "wglog.h"
-#include "wgcomrpt.h"
-#include "wgrenametool.h"
-
-#include "dlgabout.h"
 #include "helpservice.h"
+#include "uifactory.h"
+
+#include "qhotkey.h"
 
 #include "widgetmanager.h"
 #include "ui_widgetmanager.h"
-
-#define GENERATE_ITEM(classname, parent) new classname(parent)
 
 WidgetManager::WidgetManager(QWidget *parent) :
     QWidget(parent),
@@ -68,17 +62,38 @@ QWidget *WidgetManager::GetCurrentWidget()
 
 void WidgetManager::InitWidgetContainer()
 {
-    Menu_Type type = TOOLS_TYPE;
-    // 工具菜单组
-    AddWidget(GENERATE_ITEM(WgArchiveMaker, this), type, TR("压缩包制作"));
-    AddWidget(GENERATE_ITEM(WgXmlEditor, this), type, TR("XML编辑器"));
-    // AddWidget(new WgTyproaImgCleaner(this), TR("Typroa图片清理"));
-    AddWidget(GENERATE_ITEM(WgComRpt, this), type, TR("调机数据分析"));
-    AddWidget(GENERATE_ITEM(WgRenameTool, this), type, TR("文件重命名"));
-    type = HELP_TYPE;
-    // 帮助菜单组
-    AddWidget(GENERATE_ITEM(WgLog, this), type, TR("日志"));
-    AddDialog(GENERATE_ITEM(DlgAbout, this), type, TR("关于"));
+    QList<UIEntry> entries = UIFactory::Instance().Entries();
+
+    std::stable_sort(entries.begin(), entries.end(),
+        [](const UIEntry& lhs, const UIEntry& rhs) {
+            if (lhs.menu != rhs.menu)
+            {
+                return static_cast<int>(lhs.menu) < static_cast<int>(rhs.menu);
+            }
+            if (lhs.order != rhs.order)
+            {
+                return lhs.order < rhs.order;
+            }
+            if (lhs.type != rhs.type)
+            {
+                return static_cast<int>(lhs.type) < static_cast<int>(rhs.type);
+            }
+            return lhs.key < rhs.key;
+        });
+
+    for (const auto& e : entries)
+    {
+        if (e.type == UIItemType::Page)
+        {
+            QWidget* w = UIFactory::Instance().CreatePage(e.key, this);
+            AddWidget(w, static_cast<Menu_Type>(e.menu), e.actionText);
+        }
+        else
+        {
+            QDialog* d = UIFactory::Instance().CreateDialog(e.key, this);
+            AddDialog(d, static_cast<Menu_Type>(e.menu), e.actionText);
+        }
+    }
 }
 
 void WidgetManager::AddWidget(QWidget *widget, Menu_Type menuType, const QString &name)

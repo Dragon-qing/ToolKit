@@ -3,6 +3,7 @@ add_library(ui_lib)
 target_sources(ui_lib PRIVATE
     widgetmanager.cpp
     widgetmanager.ui
+    uifactory.cpp
 )
 
 target_include_directories(ui_lib PUBLIC 
@@ -14,6 +15,5 @@ target_link_libraries(ui_lib PUBLIC
     core_lib
     qhotkey
     thirdparty_lib
-    modules_lib
+    components_lib
 )
-
