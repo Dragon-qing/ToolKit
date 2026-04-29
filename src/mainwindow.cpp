@@ -70,6 +70,14 @@ void MainWindow::RegistStruct()
 
 void MainWindow::RegistUI()
 {
+    // 确保UI只被注册一次
+    static bool s_uiRegistered = false;
+    if (s_uiRegistered)
+    {
+        return;
+    }
+    s_uiRegistered = true;
+
     // 工具菜单组
     REGISTER_UI_PAGE("wg_archivemaker", UIMenuType::Tools, QObject::TR("压缩包制作"), WgArchiveMaker, 0)
     REGISTER_UI_PAGE("wg_xmleditor", UIMenuType::Tools, QObject::TR("XML编辑器"), WgXmlEditor, 1)
