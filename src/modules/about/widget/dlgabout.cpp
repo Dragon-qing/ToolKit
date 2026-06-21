@@ -60,8 +60,3 @@ void DlgAbout::Init()
     });
 
 }
-
-void DlgAbout::on_pushButton_close_clicked()
-{
-    this->close();
-}

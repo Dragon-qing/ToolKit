@@ -22,9 +22,6 @@ private:
     
     // 初始化界面
     void Init();
-
-private slots:
-    void on_pushButton_close_clicked();
 };
 
 #endif // DLGABOUT_H
